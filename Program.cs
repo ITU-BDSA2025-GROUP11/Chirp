@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Chirp.CLI;
+﻿namespace Chirp.CLI;
 using System;
 using System.IO;
 
@@ -26,7 +23,9 @@ class Program
             string message = lines[1].Trim('"'); 
             long timestamp = long.Parse(lines[2].TrimStart(','));
             
-            Console.WriteLine($"{timestamp} @ {author}: {message}");
+            DateTime realTime = DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+            
+            Console.WriteLine($"{realTime} @ {author}: {message}");
             
             
         }
