@@ -1,13 +1,36 @@
-﻿List<string> cheeps = new() { "Hello, ADBSA students!", "Welcome to the course!", "I hope you had a good summer." };
-
-foreach (var cheep in cheeps)
+﻿namespace Chirp.CLI
 {
-    Console.WriteLine(cheep);
-    Thread.Sleep(1000);
-    // PLEASE PLEASE PLEASE
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+           
+            string path = "C:/Users/there/Documents/GitHub/Chirp/chirp_cli_db.csv";
+            StreamReader reader = null;
+
+            if (File.Exists(path))
+            {
+                reader = new StreamReader(File.OpenRead(path));
+                
+                reader.ReadLine();
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    string[] word = line.Replace(",", "").Split('"');
+                    foreach (var v in word) { // Formater ordenligt
+                        Console.Write(v + " ");
+                    }
+                    Console.WriteLine();
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("gg bror");
+            }
+        }
+    }
 }
 
-class Program
-{
     
-}
+
