@@ -16,7 +16,8 @@ class Program
 {
     public static void Main()
     {
-        // List<string[]> userToChirps = new List<string[]>();
+        List<string> log = new List<string>();
+        
         try
         {
             using (StreamReader sr =
@@ -31,33 +32,31 @@ class Program
                         continue;
                     }
                     string[] chirpInfo = line.Split('"');
-                    string username = chirpInfo[0];
-                    string message = chirpInfo[1];
-                    DateTimeOffset date = epoch2Datestring(Int32.Parse(chirpInfo[2].Trim(',')));
-                    string time = epoch2Timestring(Int32.Parse(chirpInfo[2].Trim(',')));
-                    Console.WriteLine(date);
                     
+                    string username = chirpInfo[0].Trim(',');
+                    string message = chirpInfo[1].Trim('"');
+                    string timeStamp = epoch2Datestring(Int32.Parse(chirpInfo[2].Trim(','))).ToString().Substring(0,19);
+                    //Console.WriteLine(date);
+                    log.Add(username + " @ " + timeStamp + ": " + message);
                 }
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
+           // Console.WriteLine("The file could not be read:");
+           // Console.WriteLine(e.Message);
         }
-        
+
+        foreach (string s in log)
+        {
+            Console.WriteLine(s);
+        }
     }
     
     private static DateTimeOffset epoch2Datestring(int epoch)
     {
         //return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString();
        return DateTimeOffset.FromUnixTimeSeconds(epoch).UtcDateTime;
-        
-        
-    }
-
-    private static string epoch2Timestring(int epoch)
-    {
-        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString();
+       
     }
 }
