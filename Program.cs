@@ -6,3 +6,8 @@ foreach (var cheep in cheeps)
     Thread.Sleep(1000);
     // PLEASE PLEASE PLEASE
 }
+
+class Program
+{
+    
+}
