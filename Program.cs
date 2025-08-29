@@ -1,8 +1,28 @@
-﻿List<string> cheeps = new() { "Hello, ADBSA students!", "Welcome to the course!", "I hope you had a good summer." };
+﻿using System;
+using System.IO;
 
-foreach (var cheep in cheeps)
+namespace Chirp.CLI;
+using System;
+using System.IO;
+
+class Program
 {
-    Console.WriteLine(cheep);
-    Thread.Sleep(1000);
-    // PLEASE PLEASE PLEASE
+    public static void Main()
+    {
+        const string path = "C:\\Users\\joakim\\Desktop\\Chirp\\chirp_cli_db.csv";
+        StreamReader sr = new(path);
+        
+        string? line =  sr.ReadLine();
+
+        while (line != null)
+        {
+            Console.WriteLine(line);
+            
+            line = sr.ReadLine();
+        }
+    }
 }
+
+    
+
+    
