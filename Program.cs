@@ -1,23 +1,8 @@
-﻿/*List<string> cheeps = new() { "Hello, ADBSA students!", "Welcome to the course!", "I hope you had a good summer." };
-foreach (var cheep in cheeps)
-{
-    Console.WriteLine(cheep);
-    Thread.Sleep(1000);
-    // PLEASE PLEASE PLEASE
-    
-    
-}*/
-using System;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-
-class Program
+﻿class Program
 {
     public static void Main()
     {
         List<string> log = new List<string>();
-        
         try
         {
             using (StreamReader sr =
@@ -36,7 +21,7 @@ class Program
                     string username = chirpInfo[0].Trim(',');
                     string message = chirpInfo[1].Trim('"');
                     string timeStamp = epoch2Datestring(Int32.Parse(chirpInfo[2].Trim(','))).ToString().Substring(0,19);
-                    //Console.WriteLine(date);
+                
                     log.Add(username + " @ " + timeStamp + ": " + message);
                 }
             }
@@ -46,7 +31,6 @@ class Program
            // Console.WriteLine("The file could not be read:");
            // Console.WriteLine(e.Message);
         }
-
         foreach (string s in log)
         {
             Console.WriteLine(s);
