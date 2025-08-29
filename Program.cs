@@ -1,8 +1,23 @@
-﻿List<string> cheeps = new() { "Hello, ADBSA students!", "Welcome to the course!", "I hope you had a good summer." };
+﻿
+using System.IO;
 
-foreach (var cheep in cheeps)
+String author;
+String dateTime;
+String message;
+
+try
 {
-    Console.WriteLine(cheep);
-    Thread.Sleep(1000);
-    // PLEASE PLEASE PLEASE
+    // Open the text file using a stream reader.
+    using StreamReader reader = new("/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv");
+
+    // Read the stream as a string.
+    string text = reader.ReadToEnd();
+
+    // Write the text to the console.
+    Console.WriteLine(text);
+}
+catch (IOException e)
+{
+    Console.WriteLine("The file could not be read:");
+    Console.WriteLine(e.Message);
 }
