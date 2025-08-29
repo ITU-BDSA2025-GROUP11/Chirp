@@ -12,13 +12,23 @@ class Program
         const string path = "C:\\Users\\joakim\\Desktop\\Chirp\\chirp_cli_db.csv";
         StreamReader sr = new(path);
         
-        string? line =  sr.ReadLine();
-
+        sr.ReadLine();
+        
+        //string? line =  sr.ReadLine();
+        string line = "HEJ";
+        
         while (line != null)
         {
-            Console.WriteLine(line);
-            
             line = sr.ReadLine();
+            string[] lines = line.Split('"');
+            
+            string author = lines[0].TrimEnd(',');;
+            string message = lines[1].Trim('"'); 
+            long timestamp = long.Parse(lines[2].TrimStart(','));
+            
+            Console.WriteLine($"{timestamp} @ {author}: {message}");
+            
+            
         }
     }
 }
