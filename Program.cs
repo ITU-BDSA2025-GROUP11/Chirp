@@ -1,8 +1,16 @@
-﻿using System.Text;
+﻿/*if (args[0] == "say")
+{
+    var message = args[1];
+    var frequency = int.Parse(args[2]);
+    foreach (var i in Enumerable.Range(1, frequency))
+        Console.Write(message + " ");
+}*/
+
+using System.Text;
 
 class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
         List<string> log = new List<string>();
         try
@@ -37,8 +45,31 @@ class Program
         {
             Console.WriteLine(s);
         }
+        
+        
+        Console.WriteLine("Do you want to add a new cheep? Type 'cheep + [message]'");
+        
+        string prompt = Console.ReadLine();
+        string[] newMessage;
 
-        Console.WriteLine("Want to add a new cheep? Y/N");
+        if (prompt != null)
+        {
+            newMessage = prompt.Split(' ');
+            
+            if (newMessage[0] == "cheep")
+            {
+                var message = newMessage[1];
+               // Console.WriteLine(message);
+               
+               string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
+               string username = Environment.UserName;
+               string timeStamp = DateTime.Now.ToString();
+               Console.WriteLine(Format(username, message, timeStamp));
+               File.AppendAllText(path, Format(username, message, timeStamp) + Environment.NewLine);
+            }
+        }
+        
+        /*Console.WriteLine("Want to add a new cheep? Y/N");
         string confirmation =  Console.ReadLine();
         if (confirmation.ToLower() == "y")
         {
@@ -50,10 +81,10 @@ class Program
         else
         {
             Console.WriteLine("Invalid input");
-        }
+        }*/
     }
 
-    private static void newCheep()
+    /*private static void newCheep()
     {
         string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
         string message = Console.ReadLine();
@@ -67,7 +98,7 @@ class Program
         // StreamWriter sw = new StreamWriter("/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv");
         // String line = Console.ReadLine();
 
-    }
+    }*/
 
     private static DateTimeOffset Epoch2Datestring(int epoch)
     {
