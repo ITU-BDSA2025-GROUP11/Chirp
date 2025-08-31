@@ -55,10 +55,16 @@ class Program
         if (prompt != null)
         {
             newMessage = prompt.Split(' ');
-            
+
+            var message = "";
             if (newMessage[0] == "cheep")
             {
-                var message = newMessage[1];
+                for (int i = 1; i <= newMessage.Length-1; i++)
+                {
+                    message = message + ' ' + message[i];
+                }
+
+               // var message = newMessage[1];
                // Console.WriteLine(message);
                
                string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
