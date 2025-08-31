@@ -1,14 +1,4 @@
-﻿/*if (args[0] == "say")
-{
-    var message = args[1];
-    var frequency = int.Parse(args[2]);
-    foreach (var i in Enumerable.Range(1, frequency))
-        Console.Write(message + " ");
-}*/
-
-using System.Text;
-
-class Program
+﻿class Program
 {
     public static void Main(string[] args)
     {
@@ -38,8 +28,8 @@ class Program
         }
         catch (Exception e)
         {
-           // Console.WriteLine("The file could not be read:");
-           // Console.WriteLine(e.Message);
+            // Console.WriteLine("The file could not be read:");
+            // Console.WriteLine(e.Message);
         }
         foreach (string s in log)
         {
@@ -59,57 +49,24 @@ class Program
             var message = "";
             if (newMessage[0] == "cheep")
             {
-                for (int i = 1; i <= newMessage.Length-1; i++)
+                for (int i = 1; i < newMessage.Length; i++)
                 {
-                    message = message + ' ' + message[i];
-                }
-
-               // var message = newMessage[1];
-               // Console.WriteLine(message);
-               
-               string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
-               string username = Environment.UserName;
-               string timeStamp = DateTime.Now.ToString();
-               Console.WriteLine(Format(username, message, timeStamp));
-               File.AppendAllText(path, Format(username, message, timeStamp) + Environment.NewLine);
+                    message = message + newMessage[i]+ ' ';
+                } 
+                
+                string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
+                string username = Environment.UserName;
+                string timeStamp = DateTime.Now.ToString();
+                Console.WriteLine(Format(username, message, timeStamp));
+                File.AppendAllText(path, Format(username, message, timeStamp) + Environment.NewLine);
             }
         }
         
-        /*Console.WriteLine("Want to add a new cheep? Y/N");
-        string confirmation =  Console.ReadLine();
-        if (confirmation.ToLower() == "y")
-        {
-            newCheep();
-        }else if (confirmation.ToLower() == "n")
-        {
-            Console.WriteLine("End of program");
-        }
-        else
-        {
-            Console.WriteLine("Invalid input");
-        }*/
     }
-
-    /*private static void newCheep()
-    {
-        string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
-        string message = Console.ReadLine();
-        string username = Environment.UserName;
-        string timeStamp = DateTime.Now.ToString();
-        //using (StreamWriter sw = File.AppendAllText(path))
-        
-        Console.WriteLine(Format(username, message, timeStamp));
-        File.AppendAllText(path, Format(username, message, timeStamp));
-        	
-        // StreamWriter sw = new StreamWriter("/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv");
-        // String line = Console.ReadLine();
-
-    }*/
-
+    
     private static DateTimeOffset Epoch2Datestring(int epoch)
     {
-        //return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString();
-       return DateTimeOffset.FromUnixTimeSeconds(epoch).UtcDateTime;
+        return DateTimeOffset.FromUnixTimeSeconds(epoch).UtcDateTime;
     }
 
     private static string Format(string username, string message ,string timeStamp)
