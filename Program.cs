@@ -56,14 +56,14 @@ class Program
     private static void newCheep()
     {
         string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
-        using (StreamWriter sw = File.AppendText(path))
-        {
-            string message = Console.ReadLine();
-            string username = Environment.UserName;
-            string timeStamp = DateTime.Now.ToString();
-            Console.WriteLine(Format(username, message, timeStamp));
-
-        }	
+        string message = Console.ReadLine();
+        string username = Environment.UserName;
+        string timeStamp = DateTime.Now.ToString();
+        //using (StreamWriter sw = File.AppendAllText(path))
+        
+        Console.WriteLine(Format(username, message, timeStamp));
+        File.AppendAllText(path, Format(username, message, timeStamp));
+        	
         // StreamWriter sw = new StreamWriter("/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv");
         // String line = Console.ReadLine();
 
