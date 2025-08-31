@@ -1,4 +1,6 @@
-﻿class Program
+﻿using System.Text;
+
+class Program
 {
     public static void Main()
     {
@@ -20,9 +22,9 @@
                     
                     string username = chirpInfo[0].Trim(',');
                     string message = chirpInfo[1].Trim('"');
-                    string timeStamp = epoch2Datestring(Int32.Parse(chirpInfo[2].Trim(','))).ToString().Substring(0,19);
+                    string timeStamp = Epoch2Datestring(Int32.Parse(chirpInfo[2].Trim(','))).ToString().Substring(0,19);
                 
-                    log.Add(username + " @ " + timeStamp + ": " + message);
+                    log.Add(Format(username, message, timeStamp));
                 }
             }
         }
@@ -35,12 +37,46 @@
         {
             Console.WriteLine(s);
         }
+
+        Console.WriteLine("Want to add a new cheep? Y/N");
+        string confirmation =  Console.ReadLine();
+        if (confirmation.ToLower() == "y")
+        {
+            newCheep();
+        }else if (confirmation.ToLower() == "n")
+        {
+            Console.WriteLine("End of program");
+        }
+        else
+        {
+            Console.WriteLine("Invalid input");
+        }
     }
-    
-    private static DateTimeOffset epoch2Datestring(int epoch)
+
+    private static void newCheep()
+    {
+        string path = "/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv";
+        using (StreamWriter sw = File.AppendText(path))
+        {
+            string message = Console.ReadLine();
+            string username = Environment.UserName;
+            string timeStamp = DateTime.Now.ToString();
+            Console.WriteLine(Format(username, message, timeStamp));
+
+        }	
+        // StreamWriter sw = new StreamWriter("/Users/emilie/Documents/ITU/3. semester/Software Architecture/Chirp/chirp_cli_db.csv");
+        // String line = Console.ReadLine();
+
+    }
+
+    private static DateTimeOffset Epoch2Datestring(int epoch)
     {
         //return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString();
        return DateTimeOffset.FromUnixTimeSeconds(epoch).UtcDateTime;
-       
+    }
+
+    private static string Format(string username, string message ,string timeStamp)
+    {
+        return username + " @ " + timeStamp + ": " + message;
     }
 }
