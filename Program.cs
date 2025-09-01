@@ -6,11 +6,15 @@ class Program
     
     static void Main(String[] args)
     {
-        
+        if (args[0] == "cheep")
+        { 
+            Cheep(args[1]);
+            
+        } else PrintFromFile();
     }
 
     // this method is too long needs to be refactored
-    static void printFromFile()
+    static void PrintFromFile()
     {
             
         string author;
@@ -21,18 +25,18 @@ class Program
             // Open the text file using a stream reader.
         
             StreamReader reader = new("/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv");
-            string line = reader.ReadLine();
+            var line = reader.ReadLine();
             while (!reader.EndOfStream)
             {
                 line = reader.ReadLine();
                 // Read the stream as a string.
-                string[] textArray = line.Split('"');
+                String[] textArray = line.Split('"');
                 author = textArray[0].Replace(",", "");
                 dateTime = textArray[2].Replace(",", "");
-                dateTime = epoch2dateString(dateTime) + " " + epoch2timeString(dateTime);
+                dateTime = Epoch2dateString(dateTime) + " " + Epoch2timeString(dateTime);
                 message = textArray[1];
         
-                string finalString = author + " @ " + dateTime + " " + message;
+                var finalString = author + " @ " + dateTime + " " + message;
         
                 // Write the text to the console.
                 Console.WriteLine(finalString);
@@ -47,20 +51,20 @@ class Program
         }
     }
 
-    static string epoch2dateString(string dateTime) 
+    static string Epoch2dateString(string dateTime) 
     {
         int epoch = Int32.Parse(dateTime);
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString(); 
     }
-    static string epoch2timeString(string dateTime) 
+    static string Epoch2timeString(string dateTime) 
     {
         int epoch = Int32.Parse(dateTime);
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
     }
 
-    static void cheep()
+    static void Cheep(string cheep)
     {
-        
+        Console.WriteLine(cheep);
     }
     
 }
