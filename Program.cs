@@ -6,6 +6,12 @@ class Program
     
     static void Main()
     {
+    
+    }
+
+    static void printFromFile()
+    {
+            
         string author;
         string dateTime;
         string message;
@@ -51,6 +57,12 @@ class Program
         int epoch = Int32.Parse(dateTime);
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
     }
+
+    static void cheep(String[] args)
+    {
+        
+    }
+    
 }
 
 
