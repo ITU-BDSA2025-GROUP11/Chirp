@@ -4,9 +4,9 @@ using System.IO;
 class Program
 {
     
-    static void Main()
+    static void Main(String[] args)
     {
-    
+        
     }
 
     // this method is too long needs to be refactored
@@ -58,7 +58,7 @@ class Program
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
     }
 
-    static void cheep(String[] args)
+    static void cheep()
     {
         
     }
