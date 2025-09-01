@@ -9,6 +9,7 @@ class Program
     
     }
 
+    // this method is too long needs to be refactored
     static void printFromFile()
     {
             
@@ -37,7 +38,6 @@ class Program
                 Console.WriteLine(finalString);
                 
             }
-
            
         }
         catch (IOException e)
