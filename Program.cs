@@ -3,46 +3,56 @@ using System.IO;
 
 class Program
 {
-    
+    private static string author;
+    private static string dateTime;
+    private static string message;
     static void Main(String[] args)
     {
         if (args[0] == "cheep")
         { 
             Cheep(args[1]);
             
-        } else PrintFromFile();
+        } else ReadFromFile();
     }
 
     // this method is too long needs to be refactored
-    static void PrintFromFile()
+    static void PrintFromFile(String line)
     {
-            
-        string author;
-        string dateTime;
-        string message;
+        try
+        {
+            String[] textArray = line.Split('"');
+            author = textArray[0].Replace(",", "");
+            dateTime = textArray[2].Replace(",", "");
+            dateTime = Epoch2dateString(dateTime) + " " + Epoch2timeString(dateTime);
+            message = textArray[1];
+
+            var finalString = author + " @ " + dateTime + " " + message;
+
+            Console.WriteLine(finalString);
+        }
+        catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+        
+    }
+
+    private static void ReadFromFile()
+    {
         try
         {
             // Open the text file using a stream reader.
         
             StreamReader reader = new("/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv");
-            var line = reader.ReadLine();
+            string? line = reader.ReadLine();
             while (!reader.EndOfStream)
             {
                 line = reader.ReadLine();
                 // Read the stream as a string.
-                String[] textArray = line.Split('"');
-                author = textArray[0].Replace(",", "");
-                dateTime = textArray[2].Replace(",", "");
-                dateTime = Epoch2dateString(dateTime) + " " + Epoch2timeString(dateTime);
-                message = textArray[1];
-        
-                var finalString = author + " @ " + dateTime + " " + message;
-        
                 // Write the text to the console.
-                Console.WriteLine(finalString);
-                
+                PrintFromFile(line);
             }
-           
         }
         catch (IOException e)
         {
@@ -51,18 +61,18 @@ class Program
         }
     }
 
-    static string Epoch2dateString(string dateTime) 
+    static String Epoch2dateString(String dateTime) 
     {
         int epoch = Int32.Parse(dateTime);
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString(); 
     }
-    static string Epoch2timeString(string dateTime) 
+    static String Epoch2timeString(String dateTime) 
     {
         int epoch = Int32.Parse(dateTime);
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
     }
 
-    static void Cheep(string cheep)
+    static void Cheep(String cheep)
     {
         Console.WriteLine(cheep);
     }
