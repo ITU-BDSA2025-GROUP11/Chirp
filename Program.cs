@@ -3,12 +3,15 @@ using System.IO;
 
 class Program
 {
-    private static string author;
-    private static string dateTime;
-    private static string message;
+    private static String path;
+    private static String author;
+    private static String dateTime;
+    private static String message;
     static void Main(String[] args)
     {
-        if (args[0] == "cheep")
+        // path needs to be fixed
+        path = "/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv";
+        if (args.Length > 1)
         { 
             Cheep(args[1]);
             
@@ -17,18 +20,22 @@ class Program
     static void Cheep(String cheep)
     {
         Console.WriteLine(cheep);
+        WriteToFile(cheep);
     }
     static void WriteToFile(String cheep)
     {
-        StreamWriter 
+        using (StreamWriter sw = File.AppendText(path))
+        {
+            cheep = '"' + cheep + '"';
+            sw.WriteLine(cheep);
+        }	
         
     }
     private static void ReadFromFile()
     {
         try
         {
-            // Open the text file using a stream reader.
-            StreamReader reader = new("/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv");
+            StreamReader reader = new(path);
             string? line = reader.ReadLine();
             while (!reader.EndOfStream)
             {
@@ -44,8 +51,6 @@ class Program
             Console.WriteLine(e.Message);
         }
     }
-
-    // this method is too long needs to be refactored
     static void PrintFromFile(String line)
     {
         try
@@ -68,8 +73,6 @@ class Program
         
     }
 
-   
-
     static String Epoch2dateString(String dateTime) 
     {
         int epoch = Int32.Parse(dateTime);
@@ -80,17 +83,5 @@ class Program
         int epoch = Int32.Parse(dateTime);
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
     }
-
-    
-
-    
     
 }
-
-
-
-
-
-
-
-
