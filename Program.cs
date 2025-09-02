@@ -11,7 +11,7 @@ class Program
     static void Main(String[] args)
     {
         // path needs to be fixed
-        path = "/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv";
+        path = "chirp_cli_db.csv";
         if (args.Length > 1)
         { 
             Cheep(args[1]);
