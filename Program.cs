@@ -7,6 +7,7 @@ class Program
     private static String author;
     private static String dateTime;
     private static String message;
+    private static long epochTime;
     static void Main(String[] args)
     {
         // path needs to be fixed
@@ -28,12 +29,12 @@ class Program
         {
             cheep = '"' + cheep + '"';
             author = Environment.UserName;
-            sw.WriteLine(author + ',' + cheep);
-            
+            epochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            sw.WriteLine(author + ',' + cheep + ',' + epochTime);
         }	
         
     }
-    private static void ReadFromFile()
+    static private void ReadFromFile()
     {
         try
         {
