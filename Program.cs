@@ -27,7 +27,9 @@ class Program
         using (StreamWriter sw = File.AppendText(path))
         {
             cheep = '"' + cheep + '"';
-            sw.WriteLine(cheep);
+            author = Environment.UserName;
+            sw.WriteLine(author + ',' + cheep);
+            
         }	
         
     }
