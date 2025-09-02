@@ -14,6 +14,36 @@ class Program
             
         } else ReadFromFile();
     }
+    static void Cheep(String cheep)
+    {
+        Console.WriteLine(cheep);
+    }
+    static void WriteToFile(String cheep)
+    {
+        StreamWriter 
+        
+    }
+    private static void ReadFromFile()
+    {
+        try
+        {
+            // Open the text file using a stream reader.
+            StreamReader reader = new("/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv");
+            string? line = reader.ReadLine();
+            while (!reader.EndOfStream)
+            {
+                line = reader.ReadLine();
+                // Read the stream as a string.
+                // Write the text to the console.
+                PrintFromFile(line);
+            }
+        }
+        catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+    }
 
     // this method is too long needs to be refactored
     static void PrintFromFile(String line)
@@ -38,28 +68,7 @@ class Program
         
     }
 
-    private static void ReadFromFile()
-    {
-        try
-        {
-            // Open the text file using a stream reader.
-        
-            StreamReader reader = new("/Users/miljajensen/3s/bdsa/Chirp/chirp_cli_db.csv");
-            string? line = reader.ReadLine();
-            while (!reader.EndOfStream)
-            {
-                line = reader.ReadLine();
-                // Read the stream as a string.
-                // Write the text to the console.
-                PrintFromFile(line);
-            }
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
-        }
-    }
+   
 
     static String Epoch2dateString(String dateTime) 
     {
@@ -72,10 +81,9 @@ class Program
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
     }
 
-    static void Cheep(String cheep)
-    {
-        Console.WriteLine(cheep);
-    }
+    
+
+    
     
 }
 
