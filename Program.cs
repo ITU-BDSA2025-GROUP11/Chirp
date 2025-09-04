@@ -1,51 +1,71 @@
 ﻿
+using System.Collections;
+using System.Globalization;
 using System.IO;
+using CsvHelper;
 
 class Program
 {
     private static String path;
     private static String author;
-    private static String dateTime;
     private static String message;
     private static long epochTime;
-    static void Main(String[] args)
+    private static List<Cheep> cheeps;
+    private static void Main(String[] args)
     {
         // path needs to be fixed
-        path = "chirp_cli_db.csv";
-        if (args.Length > 1)
+        path = "/home/therese/RiderProjects/Chirp/chirp_cli_db.csv";
+        if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
         { 
-            Cheep(args[1]);
+            SaveCheep(args[0]);
             
-        } else ReadFromFile();
+        } else ReadFromFile(); //Ellers læser den fra filen
     }
-    static void Cheep(String cheep)
+    private static void SaveCheep(string input)
     {
-        Console.WriteLine(cheep);
-        WriteToFile(cheep);
+        WriteToFile(input);
     }
-    static void WriteToFile(String cheep)
+
+    private static void WriteToFile(string input)
     {
-        using (StreamWriter sw = File.AppendText(path))
-        {
-            cheep = '"' + cheep + '"';
-            author = Environment.UserName;
-            epochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            sw.WriteLine(author + ',' + cheep + ',' + epochTime);
-        }	
-        
+        using var sw = File.AppendText(path);
+        using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
+        csv.WriteRecord(new Cheep(Environment.UserName,input, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+        csv.NextRecord();
     }
-    static private void ReadFromFile()
+    private static void ReadFromFile()
     {
         try
         {
+            cheeps = new List<Cheep>();
+            
             StreamReader reader = new(path);
-            string? line = reader.ReadLine();
-            while (!reader.EndOfStream)
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            csv.Read();
+            csv.ReadHeader();
+            while (csv.Read())
             {
-                line = reader.ReadLine();
-                // Read the stream as a string.
-                // Write the text to the console.
-                PrintFromFile(line);
+                var record = csv.GetRecord<Cheep>(); //Loader recordsene ind???? - hvordan virker dette :(
+                cheeps.Add(record);
+            } 
+            PrintFromFile(cheeps);
+        }
+        catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+    }
+    public static void PrintFromFile(List<Cheep> cheeps)
+    {
+        try
+        {
+            foreach (var cheep in cheeps)
+            {
+                //Denne kan måske gøres pænere...
+                string formattedTime = (Epoch2dateString(cheep.Timestamp) + " " + Epoch2timeString(cheep.Timestamp) + ":");
+                Console.WriteLine($"{cheep.Author} @ {formattedTime} {cheep.Message}");
             }
         }
         catch (IOException e)
@@ -53,38 +73,18 @@ class Program
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
-    }
-    static void PrintFromFile(String line)
-    {
-        try
-        {
-            String[] textArray = line.Split('"');
-            author = textArray[0].Replace(",", "");
-            dateTime = textArray[2].Replace(",", "");
-            dateTime = Epoch2dateString(dateTime) + " " + Epoch2timeString(dateTime);
-            message = textArray[1];
-
-            var finalString = author + " @ " + dateTime + " " + message;
-
-            Console.WriteLine(finalString);
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
-        }
         
     }
 
-    static String Epoch2dateString(String dateTime) 
+    public record Cheep(string Author, string Message, long Timestamp);
+
+    static String Epoch2dateString(long dateTime) 
     {
-        int epoch = Int32.Parse(dateTime);
-        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString(); 
+        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToShortDateString(); 
     }
-    static String Epoch2timeString(String dateTime) 
+    static String Epoch2timeString(long dateTime) 
     {
-        int epoch = Int32.Parse(dateTime);
-        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
+        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString(); 
     }
     
 }
