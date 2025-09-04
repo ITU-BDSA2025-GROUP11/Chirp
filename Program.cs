@@ -1,8 +1,90 @@
-﻿List<string> cheeps = new() { "Hello, ADBSA students!", "Welcome to the course!", "I hope you had a good summer." };
+﻿
+using System.IO;
 
-foreach (var cheep in cheeps)
+class Program
 {
-    Console.WriteLine(cheep);
-    Thread.Sleep(1000);
-    // PLEASE PLEASE PLEASE
+    private static String path;
+    private static String author;
+    private static String dateTime;
+    private static String message;
+    private static long epochTime;
+    static void Main(String[] args)
+    {
+        // path needs to be fixed
+        path = "chirp_cli_db.csv";
+        if (args.Length > 1)
+        { 
+            Cheep(args[1]);
+            
+        } else ReadFromFile();
+    }
+    static void Cheep(String cheep)
+    {
+        Console.WriteLine(cheep);
+        WriteToFile(cheep);
+    }
+    static void WriteToFile(String cheep)
+    {
+        using (StreamWriter sw = File.AppendText(path))
+        {
+            cheep = '"' + cheep + '"';
+            author = Environment.UserName;
+            epochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            sw.WriteLine(author + ',' + cheep + ',' + epochTime);
+        }	
+        
+    }
+    static private void ReadFromFile()
+    {
+        try
+        {
+            StreamReader reader = new(path);
+            string? line = reader.ReadLine();
+            while (!reader.EndOfStream)
+            {
+                line = reader.ReadLine();
+                // Read the stream as a string.
+                // Write the text to the console.
+                PrintFromFile(line);
+            }
+        }
+        catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+    }
+    static void PrintFromFile(String line)
+    {
+        try
+        {
+            String[] textArray = line.Split('"');
+            author = textArray[0].Replace(",", "");
+            dateTime = textArray[2].Replace(",", "");
+            dateTime = Epoch2dateString(dateTime) + " " + Epoch2timeString(dateTime);
+            message = textArray[1];
+
+            var finalString = author + " @ " + dateTime + " " + message;
+
+            Console.WriteLine(finalString);
+        }
+        catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+        
+    }
+
+    static String Epoch2dateString(String dateTime) 
+    {
+        int epoch = Int32.Parse(dateTime);
+        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortDateString(); 
+    }
+    static String Epoch2timeString(String dateTime) 
+    {
+        int epoch = Int32.Parse(dateTime);
+        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToLongTimeString(); 
+    }
+    
 }
