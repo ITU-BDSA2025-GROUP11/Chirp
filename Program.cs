@@ -15,9 +15,9 @@ class Program
     private const string usage = @"Chirp CLI.
 
 Usage:
-    chirp.exe chirp <message>
-    chirp.exe read
-    chirp.exe (-h | --help)
+    dotnet run chirp <message>   ->   chirp a message
+    dotnet run read   ->   read stored messages
+    dotnet run (-h | --help)   ->   recieve help
 
 options: 
     -h --help     Show this screen.
@@ -76,7 +76,7 @@ options:
         try
         {
             // CLI
-            var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0");
+            var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0", exit: true);
 
             if (arguments["chirp"].IsTrue)
             {
