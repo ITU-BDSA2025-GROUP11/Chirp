@@ -6,8 +6,14 @@ namespace SimpleDB;
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
     private static String path;
-    private static List<Cheep> cheeps;
-    
+    private static List<T> cheeps;
+
+    public CSVDatabase()
+    {
+        path = "chirp_cli_db.csv";
+        cheeps = new List<T>();
+    }
+
     /// <summary>
     /// Method to read from a csv-database (it loads previously stored cheeps)
     /// </summary>
@@ -20,14 +26,33 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     public IEnumerable<T> Read(int? limit = null)
     {
        
+        try
+        {
+            StreamReader reader = new(path);
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            csv.Read();
+            csv.ReadHeader();
+            while (csv.Read())
+            {
+                var record = csv.GetRecord<T>(); //Loader recordsene ind???? - hvordan virker dette 🙁
+                cheeps.Add(record);
+            }
+            //UserInterface.PrintCheeps(cheeps);
+        }catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+        return  cheeps;
     }
+    
 /// <summary>
 /// Method to store a message in a csv-database. 
 /// </summary>
 /// <param name="record"></param>
     public void Store(T record)
     {
-        path= "chirp_cli_db.csv";
         using var sw = File.AppendText(path);
         using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
         

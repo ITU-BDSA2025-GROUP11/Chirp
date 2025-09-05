@@ -15,25 +15,62 @@ class Program
 
     private static void Main(String[] args)
     {
-        
-       /* Note, after this refactoring, your Chirp.CLI project is likely quite "slim" and contains only code for
-        retrieving command-line arguments and for printing output, i.e., it contains the application's user interface.*/
-       
+
+        /* Note, after this refactoring, your Chirp.CLI project is likely quite "slim" and contains only code for
+         retrieving command-line arguments and for printing output, i.e., it contains the application's user interface.*/
+
         // path = "chirp_cli_db.csv";
 
-        CsvDatabase = new CSVDatabase<Cheep>(); 
+        CsvDatabase = new CSVDatabase<Cheep>();
 
         if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
         {
             //WriteToFile(args[0]);
-                var userInput = args[0];
-                Cheep cheep = new Cheep(Environment.UserName, userInput, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                CsvDatabase.Store(cheep);
+            var userInput = args[0];
+            Cheep cheep = new Cheep(Environment.UserName, userInput, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            CsvDatabase.Store(cheep);
         }
-        
-        
+        else
+        {
+
+        }
+
+    }
+
+    class UserInterface()
+    {
+        public static void PrintCheeps(List<Program.Cheep> cheeps)
+        {
+            try
+            {
+                foreach (var cheep in cheeps)
+                {
+                    //Denne kan måske gøres pænere...
+                    string formattedTime =
+                        (Epoch2dateString(cheep.Timestamp) + " " + Epoch2timeString(cheep.Timestamp) + ":");
+                    Console.WriteLine($"{cheep.Author} @ {formattedTime} {cheep.Message}");
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+
+            static String Epoch2dateString(long dateTime)
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToShortDateString();
+            }
+
+            static String Epoch2timeString(long dateTime)
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString();
+            }
+
+        }
     }
 }
+
 /*
 
     private static void WriteToFile(string input)
@@ -69,37 +106,5 @@ class Program
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
-    }
-
-class UserInterface()
-{
-    public static void PrintCheeps(List<Program.Cheep> cheeps)
-    {
-        try
-        {
-            foreach (var cheep in cheeps)
-            {
-                //Denne kan måske gøres pænere...
-                string formattedTime =
-                    (Epoch2dateString(cheep.Timestamp) + " " + Epoch2timeString(cheep.Timestamp) + ":");
-                Console.WriteLine($"{cheep.Author} @ {formattedTime} {cheep.Message}");
-            }
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
-        }
-
-        static String Epoch2dateString(long dateTime)
-        {
-            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToShortDateString();
-        }
-
-        static String Epoch2timeString(long dateTime)
-        {
-            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString();
-        }
-
     }
 }*/
