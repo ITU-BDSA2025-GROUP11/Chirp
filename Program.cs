@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Globalization;
+using System.IO;
 using CsvHelper;
 using DocoptNet;
 
