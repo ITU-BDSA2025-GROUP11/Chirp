@@ -19,7 +19,6 @@ class Program
         Console.WriteLine("Welcome to Chirp!");
         if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
         {
-            //WriteToFile(args[0]);
             var userInput = args[0];
             Cheep cheep = new Cheep(Environment.UserName, userInput, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             CsvDatabase.Store(cheep);
@@ -28,7 +27,5 @@ class Program
         {
             CsvDatabase.Read();
         }
-        Console.WriteLine("Programme finished");
     }
-    
 }
