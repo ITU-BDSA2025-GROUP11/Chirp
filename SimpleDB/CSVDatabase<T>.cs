@@ -31,8 +31,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         using var sw = File.AppendText(path);
         using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
         
-        csv.WriteRecord(new Cheep(Environment.UserName, input, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+        csv.WriteRecord(record);
         csv.NextRecord();
-        
     }
 }

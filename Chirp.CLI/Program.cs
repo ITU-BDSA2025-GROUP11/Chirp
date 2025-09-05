@@ -11,28 +11,33 @@ class Program
     private static String message;
     private static long epochTime;
     private static List<Cheep> cheeps;
+    private static CSVDatabase<Cheep> CsvDatabase;
 
     private static void Main(String[] args)
     {
+        
        /* Note, after this refactoring, your Chirp.CLI project is likely quite "slim" and contains only code for
         retrieving command-line arguments and for printing output, i.e., it contains the application's user interface.*/
        
         // path = "chirp_cli_db.csv";
 
-        /*if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
-        {
-            WriteToFile(args[0]);
+        CsvDatabase = new CSVDatabase<Cheep>(); 
 
+        if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
+        {
+            //WriteToFile(args[0]);
+                var userInput = args[0];
+                Cheep cheep = new Cheep(Environment.UserName, userInput, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                CsvDatabase.Store(cheep);
         }
-        else ReadFromFile(); //Ellers læser den fra filen
-        */
+        
+        
     }
 }
 /*
 
     private static void WriteToFile(string input)
     {
-
         using var sw = File.AppendText(path);
         using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
         csv.WriteRecord(new Cheep(Environment.UserName, input, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
