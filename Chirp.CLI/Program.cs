@@ -11,37 +11,42 @@ class Program
     private static String message;
     private static long epochTime;
     private static List<Cheep> cheeps;
+
     private static void Main(String[] args)
     {
-        path ="chirp_cli_db.csv";
+       /* Note, after this refactoring, your Chirp.CLI project is likely quite "slim" and contains only code for
+        retrieving command-line arguments and for printing output, i.e., it contains the application's user interface.*/
+       
+        // path = "chirp_cli_db.csv";
 
-        if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
-        { 
-            SaveCheep(args[0]);
-            
-        } else ReadFromFile(); //Ellers læser den fra filen
+        /*if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
+        {
+            WriteToFile(args[0]);
+
+        }
+        else ReadFromFile(); //Ellers læser den fra filen
+        */
     }
-    private static void SaveCheep(string input) //Behøver denne at eksistere?
-    {
-        WriteToFile(input);
-    }
+}
+/*
 
     private static void WriteToFile(string input)
     {
 
-        /using var sw = File.AppendText(path);
+        using var sw = File.AppendText(path);
         using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
         csv.WriteRecord(new Cheep(Environment.UserName, input, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
         csv.NextRecord();
-        
+
     }
+}
 
     private static void ReadFromFile()
     {
         try
         {
             cheeps = new List<Cheep>();
-            
+
             StreamReader reader = new(path);
             var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
@@ -51,7 +56,7 @@ class Program
             {
                 var record = csv.GetRecord<Cheep>(); //Loader recordsene ind???? - hvordan virker dette 🙁
                 cheeps.Add(record);
-            } 
+            }
             UserInterface.PrintCheeps(cheeps);
         }
         catch (IOException e)
@@ -90,6 +95,6 @@ class UserInterface()
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString();
         }
-        
+
     }
-}
+}*/
