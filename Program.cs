@@ -15,9 +15,9 @@ class Program
     private const string usage = @"Chirp CLI.
 
 Usage:
-    dotnet run chirp <message>   ->   chirp a message
-    dotnet run read   ->   read stored messages
-    dotnet run (-h | --help)   ->   recieve help
+    chirp.exe chirp <message>
+    chirp.exe read
+    chirp.exe (-h | --help)
 
 options: 
     -h --help     Show this screen.
