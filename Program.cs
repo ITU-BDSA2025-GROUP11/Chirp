@@ -13,7 +13,7 @@ class Program
     private static void Main(String[] args)
     {
         // path needs to be fixed
-        path = @"E:\GitHub\Chirp\chirp_cli_db.csv";
+        path ="chirp_cli_db.csv";
 
         if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
         { 
@@ -90,7 +90,6 @@ class UserInterface()
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString();
         }
-
-
+        
     }
 }
