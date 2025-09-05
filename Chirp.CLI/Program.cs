@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using CsvHelper;
+using SimpleDB;
 
 class Program
 {
@@ -12,7 +13,6 @@ class Program
     private static List<Cheep> cheeps;
     private static void Main(String[] args)
     {
-        // path needs to be fixed
         path ="chirp_cli_db.csv";
 
         if (args.Length > 0) //Hvis man selv skriver en besked i terminalen
@@ -28,11 +28,14 @@ class Program
 
     private static void WriteToFile(string input)
     {
-        using var sw = File.AppendText(path);
+
+        /using var sw = File.AppendText(path);
         using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
-        csv.WriteRecord(new Cheep(Environment.UserName,input, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+        csv.WriteRecord(new Cheep(Environment.UserName, input, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
         csv.NextRecord();
+        
     }
+
     private static void ReadFromFile()
     {
         try
@@ -57,9 +60,6 @@ class Program
             Console.WriteLine(e.Message);
         }
     }
-    
-    public record Cheep(string Author, string Message, long Timestamp);
-}
 
 class UserInterface()
 {
