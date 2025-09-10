@@ -1,7 +1,7 @@
 using System.Globalization;
 using CsvHelper;
 
-namespace SimpleDB;
+namespace Chirp.CSVDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
@@ -10,7 +10,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
     public CSVDatabase()
     {
-        path = "chirp_cli_db.csv";
+        path = "/home/therese/Documents/BDSA/Chirp/chirp_cli_db.csv";
         cheeps = new List<T>();
     }
 
