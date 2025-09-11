@@ -1,5 +1,6 @@
 using System.Globalization;
 using CsvHelper;
+using DocoptNet;
 
 namespace Chirp.CSVDB;
 
@@ -12,6 +13,48 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
         path = "/home/therese/Documents/BDSA/Chirp/chirp_cli_db.csv";
         cheeps = new List<T>();
+    }
+
+    public void Cli(string[] args,CSVDatabase<Cheep>  cheepDB)
+    {
+    const string usage = @"Chirp CLI.
+
+        Usage:
+            dotnet.exe chirp <message>
+            dotnet.exe read
+            dotnet.exe (-h | --help)
+
+        options: 
+            -h --help     Show this screen.
+            chirp <message>  Post a chirp
+            read    Reads chirps from file
+        ";
+    
+    try
+    {
+        // CLI
+        var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0");
+
+        if (arguments["chirp"].IsTrue)
+        {
+            Console.WriteLine("Chirping to file: \n");
+            Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            cheepDB.Store(cheep);
+        }
+        else if (arguments["read"].IsTrue)
+        {
+            Console.WriteLine("Reading chirps from file\n");
+            Read();
+        }
+    }
+    catch (DocoptInputErrorException e)
+    {
+        Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
+        Console.WriteLine("dotnet run -h or --help        Show this screen.");
+        Console.WriteLine("dotnet run chirp <message>      Post a chirp");
+        Console.WriteLine("dotnet read     Reads chirps from file\n");
+        Console.WriteLine("Have a good day :)\n");
+    }
     }
 
     /// <summary>
