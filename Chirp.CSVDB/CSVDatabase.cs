@@ -10,7 +10,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
     public CSVDatabase()
     {
-        path = "/home/therese/Documents/BDSA/Chirp/chirp_cli_db.csv";
+        path = "../chirp_cli_db.csv";
         cheeps = new List<T>();
     }
 
