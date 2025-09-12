@@ -1,0 +1,70 @@
+name: release chirp executable
+
+# on push w correct tag
+# build and test
+
+on:
+  push:
+    tags: v*
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  create-executables:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+    - name: create Linux, Windows and Mac executables
+      shell: bash
+      run: |
+          # Get the tag name
+          tag=$(git describe --tags --abbrev=0)
+
+          # Define runtimes
+          runtimes=("linux-x64" "win-x64" "osx-x64")
+
+          for target in "${runtimes[@]}"; do
+            release_name="App-$tag-$target"
+
+            echo "Building for $target..."
+            dotnet publish src/App/App.csproj \
+          	--framework netcoreapp3.1 \
+          	--runtime "$target" \
+          	-c Release \
+          	-o "$release_name"
+
+            # Pack files
+            if [ "$target" == "win-x64" ]; then
+              7z a -tzip "${release_name}.zip" "./${release_name}/*"
+            else
+              tar czvf "${release_name}.tar.gz" "$release_name"
+            fi
+
+            # Delete output dir
+            rm -r "$release_name"
+          done
+# each exec should be distributed as a .zip file
+  publish:
+      needs: create-executables
+      runs-on: ubuntu-latest
+      steps:
+        - uses: softprops/action-gh-release@v1
+          with:
+            files: "App*"
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
