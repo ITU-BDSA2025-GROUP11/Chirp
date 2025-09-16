@@ -1,6 +1,6 @@
 using Chirp.CSVDB;
 
-class Program
+public class Program
 {
     private static void Main(String[] args)
     {
@@ -8,3 +8,4 @@ class Program
         cheepDB.Cli(args, cheepDB);
     }
 }
+
