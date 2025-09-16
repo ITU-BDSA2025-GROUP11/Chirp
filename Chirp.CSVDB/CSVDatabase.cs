@@ -42,7 +42,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
         if (arguments["chirp"].IsTrue)
         {
-            Console.WriteLine("Chirping to file: \n");
+            Console.WriteLine("Chirping to file.. \n");
             Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             cheepDB.Store(cheep);
         }
