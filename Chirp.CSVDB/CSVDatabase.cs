@@ -57,7 +57,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
         Console.WriteLine("dotnet run -h or --help        Show this screen.");
         Console.WriteLine("dotnet run chirp <message>      Post a chirp");
-        Console.WriteLine("dotnet print     Prints chirps from file\n");
+        Console.WriteLine("dotnet run print     Prints chirps from file\n");
         Console.WriteLine("Have a good day :)\n");
     }
     }
