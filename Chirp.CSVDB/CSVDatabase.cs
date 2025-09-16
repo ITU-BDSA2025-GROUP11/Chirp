@@ -26,13 +26,13 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
         Usage:
             dotnet.exe chirp <message>
-            dotnet.exe read
+            dotnet.exe print
             dotnet.exe (-h | --help)
 
         options: 
             -h --help     Show this screen.
             chirp <message>  Post a chirp
-            read    Reads chirps from file
+            print    Prints chirps from file
         ";
     
     try
@@ -46,9 +46,9 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             cheepDB.Store(cheep);
         }
-        else if (arguments["read"].IsTrue)
+        else if (arguments["print"].IsTrue)
         {
-            Console.WriteLine("Reading chirps from file\n");
+            Console.WriteLine("Printing chirps from file\n");
             Read();
         }
     }
@@ -57,7 +57,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
         Console.WriteLine("dotnet run -h or --help        Show this screen.");
         Console.WriteLine("dotnet run chirp <message>      Post a chirp");
-        Console.WriteLine("dotnet read     Reads chirps from file\n");
+        Console.WriteLine("dotnet print     Prints chirps from file\n");
         Console.WriteLine("Have a good day :)\n");
     }
     }
@@ -85,12 +85,14 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
                 var record = csv.GetRecord<T>(); //Loader recordsene ind???? - hvordan virker dette 🙁
                 cheeps.Add(record);
             }
-            //UserInterface.PrintCheeps(cheeps);
+            
         }catch (IOException e)
         {
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
+        
+        PrintCheeps(cheeps.Cast<Cheep>().ToList());
         return  cheeps;
     }
     
@@ -136,4 +138,5 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString();
         }
+        
 }
