@@ -13,6 +13,7 @@ public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
 
     public IEnumerable<Cheep> Read(int? limit = null)
     {
+        var cheeps = _client.GetFromJsonAsync<List<Cheep>>("/cheeps").Result ?? new List<Cheep>();
         return limit.HasValue ? cheeps.Take(limit.Value) : cheeps;
     }
 
