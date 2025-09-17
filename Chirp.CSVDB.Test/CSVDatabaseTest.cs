@@ -19,4 +19,9 @@ public class CSVDatabaseTest : IDisposable
     {
         cheepDB = null;
     }
+    
+    //For example, add a test case that checks that an entry can be received from the database after it was stored in there.
+    [Fact]
+    public void Read_
+    
 }
