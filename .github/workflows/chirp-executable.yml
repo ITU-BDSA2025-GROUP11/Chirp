@@ -48,11 +48,15 @@ jobs:
     
     runs-on: ubuntu-latest
     steps:
+      - name: Install 7zip
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+      
+  
+  
   release:
     name: Release
     needs: prep-release
