@@ -42,9 +42,21 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
         if (arguments["chirp"].IsTrue)
         {
-            Console.WriteLine("Chirping to file.. \n");
-            Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            cheepDB.Store(cheep);
+            Console.WriteLine("Chirping to file: \n");
+            var repo = new HttpDatabaseRepository("http://localhost:5000"); // later Azure URL
+
+            if (arguments["chirp"].IsTrue)
+            {
+                Console.WriteLine("Chirping to service:\n");
+                Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                repo.Store(cheep);
+            }
+            else if (arguments["print"].IsTrue)
+            {
+                Console.WriteLine("Printing chirps from service\n");
+                var cheeps = repo.Read();
+                CSVDatabase<Cheep>.PrintCheeps(cheeps.ToList());
+            }
         }
         else if (arguments["print"].IsTrue)
         {
