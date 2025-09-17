@@ -1,4 +1,5 @@
 using Chirp.CSVDB;
+namespace Chirp.CLI;
 
 public class Program
 {
@@ -8,4 +9,3 @@ public class Program
         cheepDB.Cli(args, cheepDB);
     }
 }
-
