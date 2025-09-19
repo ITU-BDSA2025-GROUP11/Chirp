@@ -22,56 +22,56 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
     public void Cli(string[] args,CSVDatabase<Cheep>  cheepDB)
     {
-    const string usage = @"Chirp CLI.
+        const string usage = @"Chirp CLI.
 
-        Usage:
-            dotnet.exe chirp <message>
-            dotnet.exe print
-            dotnet.exe (-h | --help)
+            Usage:
+                dotnet.exe chirp <message>
+                dotnet.exe print
+                dotnet.exe (-h | --help)
 
-        options: 
-            -h --help     Show this screen.
-            chirp <message>  Post a chirp
-            print    Prints chirps from file
-        ";
+            options: 
+                -h --help     Show this screen.
+                chirp <message>  Post a chirp
+                print    Prints chirps from file
+            ";
     
-    try
-    {
-        // CLI
-        var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0");
-
-        if (arguments["chirp"].IsTrue)
+        try
         {
-            Console.WriteLine("Chirping to file: \n");
-            var repo = new HttpDatabaseRepository("http://localhost:5000"); // later Azure URL
+            // CLI
+            var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0");
 
             if (arguments["chirp"].IsTrue)
             {
-                Console.WriteLine("Chirping to service:\n");
-                Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                repo.Store(cheep);
+                Console.WriteLine("Chirping to file: \n");
+                var repo = new HttpDatabaseRepository("http://localhost:5000"); // later Azure URL
+
+                if (arguments["chirp"].IsTrue)
+                {
+                    Console.WriteLine("Chirping to service:\n");
+                    Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                    repo.Store(cheep);
+                }
+                else if (arguments["print"].IsTrue)
+                {
+                    Console.WriteLine("Printing chirps from service\n");
+                    var cheeps = repo.Read();
+                    CSVDatabase<Cheep>.PrintCheeps(cheeps.ToList());
+                }
             }
             else if (arguments["print"].IsTrue)
             {
-                Console.WriteLine("Printing chirps from service\n");
-                var cheeps = repo.Read();
-                CSVDatabase<Cheep>.PrintCheeps(cheeps.ToList());
+                Console.WriteLine("Printing chirps from file\n");
+                Read();
             }
         }
-        else if (arguments["print"].IsTrue)
+        catch (DocoptInputErrorException e)
         {
-            Console.WriteLine("Printing chirps from file\n");
-            Read();
+            Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
+            Console.WriteLine("dotnet run -h or --help        Show this screen.");
+            Console.WriteLine("dotnet run chirp <message>      Post a chirp");
+            Console.WriteLine("dotnet run print     Prints chirps from file\n");
+            Console.WriteLine("Have a good day :)\n");
         }
-    }
-    catch (DocoptInputErrorException e)
-    {
-        Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
-        Console.WriteLine("dotnet run -h or --help        Show this screen.");
-        Console.WriteLine("dotnet run chirp <message>      Post a chirp");
-        Console.WriteLine("dotnet run print     Prints chirps from file\n");
-        Console.WriteLine("Have a good day :)\n");
-    }
     }
 
     /// <summary>
@@ -108,10 +108,10 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         return  cheeps;
     }
     
-/// <summary>
-/// Method to store a message in a csv-database. 
-/// </summary>
-/// <param name="record"></param>
+    /// <summary>
+    /// Method to store a message in a csv-database. 
+    /// </summary>
+    /// <param name="record"></param>
     public void Store(T record)
     {
         using var sw = File.AppendText(path);
