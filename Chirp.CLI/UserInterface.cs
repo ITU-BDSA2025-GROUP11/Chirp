@@ -1,4 +1,5 @@
 using Chirp.CSVDB;
+using DocoptNet;
 
 namespace Chirp.CLI;
 
@@ -45,7 +46,7 @@ public static class UserInterface
             else if (arguments["print"].IsTrue)
             {
                 Console.WriteLine("Printing chirps from file\n");
-                Read();
+                CSVDatabase<Cheep>.Read();
             }
         }
         catch (DocoptInputErrorException e)
@@ -57,7 +58,7 @@ public static class UserInterface
             Console.WriteLine("Have a good day :)\n");
         }
     }
-    public static void PrintCheeps(List<Cheep> cheeps)
+    public static void PrintCheeps(IEnumerable<Cheep> cheeps)
     {
         try
         {
