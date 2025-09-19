@@ -1,6 +1,7 @@
 using Chirp.CSVDB;
+namespace Chirp.CLI;
 
-class Program
+public class Program
 {
     private static void Main(String[] args)
     {
