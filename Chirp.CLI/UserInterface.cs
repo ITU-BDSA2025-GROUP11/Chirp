@@ -1,6 +1,8 @@
 namespace Chirp.CLI;
 
-public class UserInterface
+public static class UserInterface
 {
+    
+    
     
 }
