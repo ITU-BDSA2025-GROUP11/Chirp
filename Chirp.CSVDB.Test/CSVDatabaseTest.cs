@@ -6,61 +6,13 @@ namespace Chirp.CSVDB.Test;
 /// <summary>
 /// Integration tests for the CSV DB
 /// </summary>
-public class CSVDatabaseTest : IClassFixture<WebApplicationFactory<Program>>
+public class CSVDatabaseTest
 {
-    
-   /* private readonly WebApplicationFactory<Program> _factory;
-
-    public CSVDatabaseTest(WebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-    }
-
-    [Fact]
-    public async Task TestMethod1()
-    {
-        var client = _factory.CreateClient();
-        var response = await client.GetAsync("/api/values");
-    }
-*/
-    private readonly WebApplicationFactory<Program> _factory;
-    public CSVDatabaseTest(WebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-    }
-
-    [Theory]
-    [InlineData("/")]
-    [InlineData("/Index")]
-    [InlineData("/About")]
-    [InlineData("/Privacy")]
-    [InlineData("/Contact")]
-    public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
-    {
-        // Arrange
-        var client = _factory.CreateClient();
-
-        // Act
-        var response = await client.GetAsync(url);
-
-        // Assert
-        response.EnsureSuccessStatusCode(); // Status Code 200-299
-        Assert.Equal("text/html; charset=utf-8", 
-            response.Content.Headers.ContentType.ToString());
-    }
-  /*  private CSVDatabase<Cheep> cheepDB;
-    
-    public CSVDatabaseTest() {
-        cheepDB = new CSVDatabase<Cheep>();
-    }
-
-    public void Dispose()
-    {
-        cheepDB = null;
-    }
-    
-    //For example, add a test case that checks that an entry can be received from the database after it was stored in there.
-    [Fact]
-    public void Read_
-    */
+    /*
+     * a) When you send an HTTP GET request to the /cheeps endpoint the status code of the HTTP response is 200
+     * and the response body contains a list of Cheep objects serialized to JSON.
+     * b) When you send an HTTP POST request to the /cheep endpoint with a request body containing a JSON serialized
+     * Cheep object, you receive 200 as status code of the HTTP response.
+     */
+   
 }
