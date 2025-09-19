@@ -13,6 +13,7 @@ public class IntegrationTestHttpRepository
     }
 
     [Fact]
+    //Needs to be connected to local host to suceed.
     public void CanStoreAndReadCheep()
     {
         var cheep = new Cheep("HttpUser", "Test", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
