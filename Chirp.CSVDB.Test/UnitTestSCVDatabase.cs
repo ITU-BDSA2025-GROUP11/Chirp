@@ -139,4 +139,18 @@ public class UnitTestSCVDatabase
         Assert.Equal("06:37:27", time);
     }
     //end region 
+    
+    //Error handeling 
+    //Tests if code handles a missing file without crashing. 
+    [Fact]
+    public void ReadMissingFile()
+    {
+        var missingFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".csv");
+        var database = new CSVDatabase<Cheep>(missingFile);
+
+        var cheeps = database.Read().ToList();
+
+        Assert.Empty(cheeps);
+    }
+    //Region end 
 }
