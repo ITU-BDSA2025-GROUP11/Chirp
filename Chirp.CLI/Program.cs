@@ -31,6 +31,7 @@ class Program
 
             if (arguments["chirp"].IsTrue)
             {
+                Console.WriteLine("Chirping to file: \n");
                 var repo = new HttpDatabaseRepository("https://bdsagroup11chirpremotedb-dwg6d7dngqgfhtdh.norwayeast-01.azurewebsites.net/");
                 Chirp(arguments, repo);
                 if (arguments["print"].IsTrue)
@@ -55,8 +56,6 @@ class Program
 
     private static void Chirp(IDictionary<string,ValueObject> arguments, HttpDatabaseRepository repo)
     {
-        Console.WriteLine("Chirping to file: \n");
-        
         Console.WriteLine("Chirping to service:\n");
         Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         repo.Store(cheep);
