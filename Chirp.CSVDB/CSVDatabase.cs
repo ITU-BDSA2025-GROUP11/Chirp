@@ -77,7 +77,32 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         {
             StreamReader reader = new(path);
             var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-
+            
+            csv.Read();
+            csv.ReadHeader();
+            while (csv.Read())
+            {
+                var record = csv.GetRecord<T>(); //Loader recordsene ind???? - hvordan virker dette 🙁
+                cheeps.Add(record);
+            }
+            
+        }catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
+        
+        PrintCheeps(cheeps.Cast<Cheep>().ToList());
+        return  cheeps;
+    }
+    
+    public IEnumerable<T> ReadTest(string filepath)
+    {
+        try
+        {
+            StreamReader reader = new(filepath);
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            
             csv.Read();
             csv.ReadHeader();
             while (csv.Read())
@@ -103,6 +128,19 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     public void Store(T record)
     {
         using var sw = File.AppendText(path);
+        using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
+        
+        csv.WriteRecord(record);
+        csv.NextRecord();
+    }
+
+    /// <summary>
+    /// Method to store a message in a csv-database at a selected filepath, intented for testing. 
+    /// </summary>
+    /// <param name="record"></param>
+    public void Store(T record, string filepath)
+    {
+        using var sw = File.AppendText(filepath);
         using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
         
         csv.WriteRecord(record);
@@ -139,4 +177,50 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToLongTimeString();
         }
         
+        /// <summary>
+        /// Overloaded method used for specifying the filepath of the csv file. used for testing
+        /// </summary>
+        /// <param name="record"></param>
+        public void Cli(string[] args,CSVDatabase<Cheep> cheepDB, string filepath)
+        {
+            const string usage = @"Chirp CLI.
+
+        Usage:
+            dotnet.exe chirp <message>
+            dotnet.exe print
+            dotnet.exe (-h | --help)
+
+        options: 
+            -h --help     Show this screen.
+            chirp <message>  Post a chirp
+            print    Prints chirps from file
+        ";
+    
+            try
+            {
+                // CLI
+                var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0");
+
+                if (arguments["chirp"].IsTrue)
+                {
+                    Console.WriteLine("Chirping to file.. \n");
+                    Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                    cheepDB.Store(cheep, filepath);
+                }
+                else if (arguments["print"].IsTrue)
+                {
+                    Console.WriteLine("Printing chirps from file\n");
+                    Read();
+                }
+            }
+            catch (DocoptInputErrorException e)
+            {
+                Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
+                Console.WriteLine("dotnet run -h or --help        Show this screen.");
+                Console.WriteLine("dotnet run chirp <message>      Post a chirp");
+                Console.WriteLine("dotnet run print     Prints chirps from file\n");
+                Console.WriteLine("Have a good day :)\n");
+            }
+        }
+    
 }

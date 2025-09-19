@@ -24,4 +24,10 @@
       <ProjectReference Include="..\Chirp.CLI\Chirp.CLI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="chirp_db_test.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
