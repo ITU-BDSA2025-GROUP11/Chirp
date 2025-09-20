@@ -1,4 +1,5 @@
 using Chirp.CSVDB;
+using Chirp.CLI;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();

@@ -20,7 +20,7 @@ public class CSVDatabaseIntegrationTests
     [Fact]
     public void Read_Get_Request_Returns_HTTP200()
     { 
-        string[] args = { "chirp","print" };
+        string[] args = {"chirp","print"};
         _cheepDB.Cli(args, _cheepDB);
         var responseMsg = _cheepDB.GetRepository().getResponseMsg();
 
