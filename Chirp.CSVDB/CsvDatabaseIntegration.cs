@@ -4,12 +4,12 @@ using DocoptNet;
 
 namespace Chirp.CSVDB;
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>
+public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
 {
     private readonly string path;
     private readonly List<T> cheeps;
 
-    public CSVDatabase(string filePath = "../chirp_cli_db.csv")
+    public CsvDatabaseIntegration(string filePath = "../chirp_cli_db.csv")
     {
         // Read before changing file path !! 
         // chirp_cli_db.csv is one remove from root. '../' cds to the parent folder of root and ->
@@ -20,7 +20,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         cheeps = new List<T>();
     }
 
-    public void Cli(string[] args,CSVDatabase<Cheep>  cheepDB)
+    public void Cli(string[] args,CsvDatabaseIntegration<Cheep>  cheepDB)
     {
     const string usage = @"Chirp CLI.
 
@@ -55,7 +55,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             {
                 Console.WriteLine("Printing chirps from service\n");
                 var cheeps = repo.Read();
-                CSVDatabase<Cheep>.PrintCheeps(cheeps.ToList());
+                CsvDatabaseIntegration<Cheep>.PrintCheeps(cheeps.ToList());
             }
         }
         else if (arguments["print"].IsTrue)
