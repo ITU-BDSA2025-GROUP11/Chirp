@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Net;
 using CsvHelper;
 using DocoptNet;
 
@@ -20,7 +21,7 @@ public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
         cheeps = new List<T>();
     }
 
-    public void Cli(string[] args,CsvDatabaseIntegration<Cheep>  cheepDB)
+    public void Cli(string[] args, CsvDatabaseIntegration<Cheep> cheepDB)
     {
     const string usage = @"Chirp CLI.
 
@@ -153,5 +154,9 @@ public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
     {
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToString("HH:mm:ss");;
     }
-        
+
+    public HttpDatabaseRepository GetRepository()
+    {
+        return new HttpDatabaseRepository(path);
+    }
 }

@@ -25,4 +25,9 @@ public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
             throw new Exception($"Failed to post cheep. Status: {response.StatusCode}");
         }
     }
+
+    public HttpResponseMessage getResponseMsg()
+    {
+        return _client.GetAsync("/cheep").Result;
+    }
 }

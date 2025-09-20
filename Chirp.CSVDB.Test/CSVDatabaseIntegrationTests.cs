@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Chirp.CLI;
 using Xunit;
+using System.Net.Http;
 
 namespace Chirp.CSVDB.Test;
 
@@ -9,15 +10,21 @@ namespace Chirp.CSVDB.Test;
 /// </summary>
 public class CSVDatabaseIntegrationTests
 {
-    private readonly HttpDatabaseRepository _repo;
+    private CsvDatabaseIntegration<Cheep> _cheepDB;
+   
     public CSVDatabaseIntegrationTests()
     {
-        _repo= new HttpDatabaseRepository("http://localhost:5000");
+        _cheepDB = new CsvDatabaseIntegration<Cheep>();
     }
+    
+    [Fact]
+    public void Read_Get_Request_Returns_HTTP200()
+    { 
+        string[] args = { "chirp","print" };
+        _cheepDB.Cli(args, _cheepDB);
+        var responseMsg = _cheepDB.GetRepository().getResponseMsg();
 
-    public void Get_Request_Returns_HTTP200()
-    {
-        
+        Assert.True(responseMsg.StatusCode.Equals(200));
     }
 
     /*
