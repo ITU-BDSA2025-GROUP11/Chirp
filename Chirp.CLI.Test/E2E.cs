@@ -16,8 +16,8 @@ public class E2E
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
-        process.OutputDataReceived += (_, e) => Console.WriteLine(e.Data);
-        process.ErrorDataReceived += (_, e) => Console.WriteLine("ERR: " + e.Data);
+        // process.OutputDataReceived += (_, e) => Console.WriteLine(e.Data);
+        // process.ErrorDataReceived += (_, e) => Console.WriteLine("ERR: " + e.Data);
 
         process.Start();
         process.BeginOutputReadLine();
@@ -32,46 +32,29 @@ public class E2E
         string testMessage = "MASTER HAS GIVEN DOBBY A SOCK";
         string[] chirpCLI = new string[] { "chirp", testMessage };
         string[] printCLI = new string[] { "print"};
-
+        
+        using var sw = new StringWriter();
         
         // Act
         cheepDB.Cli(chirpCLI, cheepDB);
         Thread.Sleep(5000);
+        Console.SetOut(sw);
         cheepDB.Cli(printCLI, cheepDB);
         
-        // kill process on port 5001
-        // assert output
-        // change hardcoded paths to relative
+        // Assert
+        string output = sw.ToString();
+        Assert.Contains(testMessage, output);
+        
+        // Cleanup
+        Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+        
+        if (!process.HasExited)
+        {
+            process.Kill(entireProcessTree: true);
+            process.WaitForExit();
+        }
+        process.Dispose();
+        
+        Console.WriteLine("Test completed");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-// string testMessage = "MASTER HAS GIVEN DOBBY A SOCK";
-// string[] testCLI = new string[] { "chirp", testMessage };
-
-
-//         // Act
-//         cheepDB.Cli(testCLI, cheepDB);
-//
-//         using var sw = new StringWriter();
-//         Console.SetOut(sw);
-//
-//         var records = cheepDB.ReadTest(testFilePath).Cast<Cheep>().ToList();
-//         string consoleOutput = sw.ToString();
-//
-//         var lastCheep = records.Last();
-//
-//         Assert.Equal(testMessage, lastCheep.Message);
-//
-//         Assert.Contains(testMessage, consoleOutput);
-//     }
-// }
