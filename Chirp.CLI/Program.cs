@@ -1,8 +1,10 @@
 using Chirp.CLI;
 using Chirp.CSVDB;
 using DocoptNet;
+namespace Chirp.CLI;
 
-class Program
+
+public class Program
 {
     private static void Main(String[] args)
     {
