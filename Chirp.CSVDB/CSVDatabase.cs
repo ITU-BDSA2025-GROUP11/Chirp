@@ -40,7 +40,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             csv.ReadHeader();
             while (csv.Read())
             {
-                var record = csv.GetRecord<T>(); //Loader recordsene ind???? - hvordan virker dette 🙁
+                var record = csv.GetRecord<T>();
                 cheeps.Add(record);
             }
             
@@ -49,8 +49,6 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
-        
-        PrintCheeps(cheeps.Cast<Cheep>().ToList());
         return  cheeps;
     }
     
