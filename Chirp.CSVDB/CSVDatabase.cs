@@ -6,7 +6,8 @@ namespace Chirp.CSVDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
-    private readonly string path;
+    private string path;
+    private string url;
     private readonly List<T> cheeps;
 
     public CSVDatabase(string filePath = "../chirp_cli_db.csv")
@@ -17,6 +18,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         // changing the path to your local path will break the application for everybody else :(
         
         path = filePath;
+        url = "http://localhost:5000";
         cheeps = new List<T>();
     }
 
@@ -42,8 +44,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
         if (arguments["chirp"].IsTrue)
         {
-            Console.WriteLine("Chirping to file: \n");
-            var repo = new HttpDatabaseRepository("http://localhost:5000"); // later Azure URL
+            var repo = new HttpDatabaseRepository(url); // later Azure URL
 
             if (arguments["chirp"].IsTrue)
             {
@@ -153,5 +154,14 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToString("HH:mm:ss");;
     }
-        
+    
+    public void setpath(String newpath)
+    {
+        path = newpath;
+    }
+
+public void setUrl(String newurl)
+{
+    url = newurl;
+}
 }
