@@ -12,12 +12,11 @@ public class E2E
         // ARRANGE
         var process = new Process();
         process.StartInfo.FileName = "dotnet";
-        process.StartInfo.Arguments = "run --project /Users/morty/RiderProjects/Chirp/CsvDbService.Test/CsvDbService.Test.csproj";
+        var projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "CsvDbService.Test", "CsvDbService.Test.csproj"));
+        process.StartInfo.Arguments = $"run --project {projectPath}";
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
-        // process.OutputDataReceived += (_, e) => Console.WriteLine(e.Data);
-        // process.ErrorDataReceived += (_, e) => Console.WriteLine("ERR: " + e.Data);
 
         process.Start();
         process.BeginOutputReadLine();
@@ -27,9 +26,9 @@ public class E2E
         
         CSVDatabase<Cheep> cheepDB = new CSVDatabase<Cheep>();
         cheepDB.setUrl("http://localhost:5001");
-        cheepDB.setpath("/Users/morty/RiderProjects/Chirp/CsvDbService.Test/test_data.csv");
-        
-        string testMessage = "MASTER HAS GIVEN DOBBY A SOCK";
+        var dataPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "CsvDbService.Test", "test_data.csv"));
+        cheepDB.setpath(dataPath);
+        string testMessage = "MASTER HAS GIVEN DOBBY A COCK";
         string[] chirpCLI = new string[] { "chirp", testMessage };
         string[] printCLI = new string[] { "print"};
         
