@@ -6,7 +6,7 @@ namespace Chirp.CSVDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
-    private readonly string path;
+    private string path;
     private readonly List<T> cheeps;
 
     public CSVDatabase(string filePath = "../chirp_cli_db.csv")
@@ -50,6 +50,8 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
+        
+        
         return  cheeps;
     }
     
