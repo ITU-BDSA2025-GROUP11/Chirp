@@ -11,6 +11,7 @@ public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
     public HttpDatabaseRepository(string baseUrl)
     {
         _client = new HttpClient { BaseAddress = new Uri(baseUrl)};
+        status = 0;
     }
 
     public IEnumerable<Cheep> Read(int? limit = null)
@@ -34,6 +35,8 @@ public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
             throw new Exception($"Failed to post cheep. Status: {response.StatusCode}");
         }
     }
-    
-    public HttpStatusCode LastStatusCode => status;
+    public HttpStatusCode getLastStatusCode()
+    {
+        return status;
+    }
 }

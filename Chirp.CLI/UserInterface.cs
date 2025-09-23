@@ -28,7 +28,7 @@ public static class UserInterface
             if (arguments["chirp"].IsTrue)
             {
                 Console.WriteLine("Chirping to file: \n");
-                var repo = new HttpDatabaseRepository("http://localhost:5000");
+                HttpDatabaseRepository repo = new HttpDatabaseRepository("http://localhost:5000"); 
                 Chirp(arguments, repo);
                 if (arguments["print"].IsTrue)
                 {
