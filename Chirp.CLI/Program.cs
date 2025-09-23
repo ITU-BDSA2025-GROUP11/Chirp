@@ -1,11 +1,14 @@
 using Chirp.CSVDB;
+
 namespace Chirp.CLI;
+
 
 public class Program
 {
     private static void Main(String[] args)
     {
-        CSVDatabase<Cheep> cheepDB = new CSVDatabase<Cheep>();
-        cheepDB.Cli(args, cheepDB);
+        CSVDatabase<Cheep> cheepDb = new CSVDatabase<Cheep>();
+        UserInterface.CLI(args, cheepDb);
     }
+    
 }
