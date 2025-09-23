@@ -67,4 +67,9 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         csv.WriteRecord(record);
         csv.NextRecord();
     }
+
+    public void SetPath(string dataPath)
+    {
+        path = dataPath;
+    }
 }

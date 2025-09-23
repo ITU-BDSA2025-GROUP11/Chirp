@@ -5,6 +5,7 @@ namespace Chirp.CLI;
 
 public static class UserInterface
 {
+    private static string URL;
    
     public static void CLI(string[] args,CSVDatabase<Cheep>  cheepDB)
     {
@@ -94,6 +95,12 @@ public static class UserInterface
     public static String Epoch2timeString(long dateTime)
     {
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToString("HH:mm:ss");;
+    }
+
+    public static void SetURL(string wantedURL)
+    {
+        URL = wantedURL;
+        
     }
     
 }

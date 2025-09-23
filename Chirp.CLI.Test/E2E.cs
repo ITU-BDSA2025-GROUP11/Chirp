@@ -25,9 +25,9 @@ public class E2E
         Thread.Sleep(10000);
         
         CSVDatabase<Cheep> cheepDB = new CSVDatabase<Cheep>();
-        cheepDB.setUrl("http://localhost:5001");
+        UserInterface.SetURL("http://localhost:5001");
         var dataPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "CsvDbService.Test", "test_data.csv"));
-        cheepDB.setpath(dataPath);
+        cheepDB.SetPath(dataPath);
         string testMessage = "MASTER HAS GIVEN DOBBY A COCK";
         string[] chirpCLI = new string[] { "chirp", testMessage };
         string[] printCLI = new string[] { "print"};
@@ -35,10 +35,10 @@ public class E2E
         using var sw = new StringWriter();
         
         // Act
-        cheepDB.Cli(chirpCLI, cheepDB);
+        UserInterface.CLI(chirpCLI, cheepDB);
         Thread.Sleep(5000);
         Console.SetOut(sw);
-        cheepDB.Cli(printCLI, cheepDB);
+        UserInterface.CLI(printCLI, cheepDB);
         
         // Assert
         string output = sw.ToString();
