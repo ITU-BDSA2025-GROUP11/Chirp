@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 
 namespace Chirp.CSVDB;
@@ -5,6 +6,7 @@ namespace Chirp.CSVDB;
 public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
 {
     private readonly HttpClient _client;
+    private HttpStatusCode status;
 
     public HttpDatabaseRepository(string baseUrl)
     {
@@ -14,6 +16,8 @@ public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
     public IEnumerable<Cheep> Read(int? limit = null)
     {
         var cheeps = _client.GetFromJsonAsync<List<Cheep>>("/cheeps").Result ?? new List<Cheep>();
+        // HttpResponseMessage response = _client.GetFromJsonAsync("/cheeps").Result;   
+
         return limit.HasValue ? cheeps.Take(limit.Value) : cheeps;
     }
 
@@ -24,10 +28,5 @@ public class HttpDatabaseRepository : IDatabaseRepository<Cheep>
         {
             throw new Exception($"Failed to post cheep. Status: {response.StatusCode}");
         }
-    }
-
-    public HttpResponseMessage getResponseMsg()
-    {
-        return _client.GetAsync("/cheep").Result;
     }
 }

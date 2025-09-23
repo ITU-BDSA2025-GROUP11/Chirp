@@ -102,5 +102,4 @@ public static class UserInterface
         URL = wantedURL;
         
     }
-    
 }
