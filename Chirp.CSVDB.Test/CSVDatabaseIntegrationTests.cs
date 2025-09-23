@@ -1,10 +1,7 @@
 using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Chirp.CLI;
-using Xunit;
-using System.Net.Http;
-
+using Newtonsoft.Json;
 namespace Chirp.CSVDB.Test;
+
 
 /// <summary>
 /// Integration tests for the CSV DB
@@ -13,7 +10,6 @@ public class CSVDatabaseIntegrationTests
 {
     private CSVDatabase<Cheep> _cheepDB;
     private HttpDatabaseRepository repo;
-    
    
     public CSVDatabaseIntegrationTests()
     {
@@ -32,7 +28,34 @@ public class CSVDatabaseIntegrationTests
     }
 
     [Fact]
-    public void Store_Post_Request_Returns_Success()
+    public void Read_Returns_Cheeps_Serialized_To_JSON()
+    {
+        var repo = new HttpDatabaseRepository("http://localhost:5000");
+
+        var cheeps = repo.Read();
+        var jsonFormat = false;
+
+        foreach (var cheep in cheeps)
+        {
+            try
+            {
+                DeserializeObject(cheep);
+                jsonFormat = true;;
+            }
+
+            //https://www.newtonsoft.com/json/help/html/serializingjson.htm
+            /* if ((cheep.ToString().StartsWith("{") && cheep.ToString().EndsWith("}"))){
+                 if (parts[0].)
+                 {
+
+                 }
+             }*/
+        }
+        
+    }
+
+    [Fact]
+    public void Store_Post_CheepAsJSON_Request_Returns_Success()
     {
         var repo = new HttpDatabaseRepository("http://localhost:5000");
         
@@ -40,12 +63,10 @@ public class CSVDatabaseIntegrationTests
         int secondsSinceEpoch = (int)t.TotalSeconds;
         
         Cheep cheep = new Cheep("Author", "Test", secondsSinceEpoch);
-        repo.Store(cheep);
+        repo.Store(cheep); //cheep is serialized as JSON
         Assert.Equal(HttpStatusCode.OK, repo.getLastStatusCode());
     }
     
-    
-
     /*
      * a) When you send an HTTP GET request to the /cheeps endpoint the status code of the HTTP response is 200
      * and the response body contains a list of Cheep objects serialized to JSON.
