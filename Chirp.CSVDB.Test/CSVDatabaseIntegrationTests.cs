@@ -21,9 +21,8 @@ public class CSVDatabaseIntegrationTests
     public void Read_Get_Request_Returns_HTTP200()
     { 
       string[] args = {"chirp","print"};
-     ;
-        var responseMsg =  UserInterface.CLI(args, _cheepDB).getResponseMsg();
-
+      UserInterface.CLI(args,_cheepDB);
+      
        // Assert.True(responseMsg.StatusCode.Equals(200));*/
     }
 
