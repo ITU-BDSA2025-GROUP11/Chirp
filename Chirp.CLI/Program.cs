@@ -5,7 +5,8 @@ public class Program
 {
     private static void Main(String[] args)
     {
-        CsvDatabaseIntegration<Cheep> cheepDB = new CsvDatabaseIntegration<Cheep>();
-        cheepDB.Cli(args, cheepDB);
+        CSVDatabase<Cheep> cheepDb = new CSVDatabase<Cheep>();
+        UserInterface.CLI(args, cheepDb);
     }
+    
 }

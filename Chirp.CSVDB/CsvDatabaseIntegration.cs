@@ -1,16 +1,15 @@
 using System.Globalization;
-using System.Net;
 using CsvHelper;
 using DocoptNet;
 
 namespace Chirp.CSVDB;
 
-public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
+public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
-    private readonly string path;
+    private string path;
     private readonly List<T> cheeps;
 
-    public CsvDatabaseIntegration(string filePath = "../chirp_cli_db.csv")
+    public CSVDatabase(string filePath = "../chirp_cli_db.csv")
     {
         // Read before changing file path !! 
         // chirp_cli_db.csv is one remove from root. '../' cds to the parent folder of root and ->
@@ -19,60 +18,6 @@ public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
         
         path = filePath;
         cheeps = new List<T>();
-    }
-
-    public void Cli(string[] args, CsvDatabaseIntegration<Cheep> cheepDB)
-    {
-    const string usage = @"Chirp CLI.
-
-        Usage:
-            dotnet.exe chirp <message>
-            dotnet.exe print
-            dotnet.exe (-h | --help)
-
-        options: 
-            -h --help     Show this screen.
-            chirp <message>  Post a chirp
-            print    Prints chirps from file
-        ";
-    
-    try
-    {
-        // CLI
-        var arguments = new Docopt().Apply(usage, args, version: "Chirp CLI 1.0");
-
-        if (arguments["chirp"].IsTrue)
-        {
-            Console.WriteLine("Chirping to file: \n");
-            var repo = new HttpDatabaseRepository("http://localhost:5000"); // later Azure URL
-
-            if (arguments["chirp"].IsTrue)
-            {
-                Console.WriteLine("Chirping to service:\n");
-                Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                repo.Store(cheep);
-            }
-            else if (arguments["print"].IsTrue)
-            {
-                Console.WriteLine("Printing chirps from service\n");
-                var cheeps = repo.Read();
-                CsvDatabaseIntegration<Cheep>.PrintCheeps(cheeps.ToList());
-            }
-        }
-        else if (arguments["print"].IsTrue)
-        {
-            Console.WriteLine("Printing chirps from file\n");
-            Read();
-        }
-    }
-    catch (DocoptInputErrorException e)
-    {
-        Console.WriteLine("No CLI args detected\n\nYou have the following CLI options:\n");
-        Console.WriteLine("dotnet run -h or --help        Show this screen.");
-        Console.WriteLine("dotnet run chirp <message>      Post a chirp");
-        Console.WriteLine("dotnet run print     Prints chirps from file\n");
-        Console.WriteLine("Have a good day :)\n");
-    }
     }
 
     /// <summary>
@@ -96,7 +41,7 @@ public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
             csv.ReadHeader();
             while (csv.Read())
             {
-                var record = csv.GetRecord<T>(); //Loader recordsene ind???? - hvordan virker dette 🙁
+                var record = csv.GetRecord<T>();
                 cheeps.Add(record);
             }
             
@@ -106,14 +51,14 @@ public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
             Console.WriteLine(e.Message);
         }
         
-        PrintCheeps(cheeps.Cast<Cheep>().ToList());
+        
         return  cheeps;
     }
     
-/// <summary>
-/// Method to store a message in a csv-database. 
-/// </summary>
-/// <param name="record"></param>
+    /// <summary>
+    /// Method to store a message in a csv-database. 
+    /// </summary>
+    /// <param name="record"></param>
     public void Store(T record)
     {
         using var sw = File.AppendText(path);
@@ -123,40 +68,8 @@ public sealed class CsvDatabaseIntegration<T> : IDatabaseRepository<T>
         csv.NextRecord();
     }
 
-
-//Følgende metoder skal refaktorises ifm. opgave 2C:
-    public static void PrintCheeps(List<Cheep> cheeps)
+    public void SetPath(string dataPath)
     {
-        try
-        {
-            foreach (var cheep in cheeps)
-            {
-                //Denne kan måske gøres pænere...
-                string formattedTime =
-                    (Epoch2dateString(cheep.Timestamp) + " " + Epoch2timeString(cheep.Timestamp) + ":");
-                Console.WriteLine($"{cheep.Author} @ {formattedTime} {cheep.Message}");
-            }
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
-        }
-    }
-    public static String Epoch2dateString(long dateTime)
-    {
-        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToString("dd-MM-yyyy");
-    }
-    
-        
-
-    public static String Epoch2timeString(long dateTime)
-    {
-        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateTime).ToString("HH:mm:ss");;
-    }
-
-    public HttpDatabaseRepository GetRepository()
-    {
-        return new HttpDatabaseRepository(path);
+        path = dataPath;
     }
 }

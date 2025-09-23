@@ -71,7 +71,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.305
+          dotnet-version: 8.0.x
 
       - name: Publish and package
         shell: bash 
