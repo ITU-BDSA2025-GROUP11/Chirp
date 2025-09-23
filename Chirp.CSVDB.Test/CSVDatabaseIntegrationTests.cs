@@ -22,7 +22,7 @@ public class CSVDatabaseIntegrationTests
     }
     
     [Fact]
-    public void Read_Get_Request_Returns_HTTP200()
+    public void Read_Get_Request_Returns_Success()
     { 
         var repo = new HttpDatabaseRepository("http://localhost:5000");
 
@@ -30,7 +30,22 @@ public class CSVDatabaseIntegrationTests
 
         Assert.Equal(HttpStatusCode.OK, repo.getLastStatusCode());
     }
+
+    [Fact]
+    public void Store_Post_Request_Returns_Success()
+    {
+        var repo = new HttpDatabaseRepository("http://localhost:5000");
+        
+        TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+        int secondsSinceEpoch = (int)t.TotalSeconds;
+        
+        Cheep cheep = new Cheep("Author", "Test", secondsSinceEpoch);
+        repo.Store(cheep);
+        Assert.Equal(HttpStatusCode.OK, repo.getLastStatusCode());
+    }
     
+    
+
     /*
      * a) When you send an HTTP GET request to the /cheeps endpoint the status code of the HTTP response is 200
      * and the response body contains a list of Cheep objects serialized to JSON.
