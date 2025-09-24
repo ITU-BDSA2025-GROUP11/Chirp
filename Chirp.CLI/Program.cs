@@ -1,7 +1,5 @@
 using Chirp.CSVDB;
-
 namespace Chirp.CLI;
-
 
 public class Program
 {
