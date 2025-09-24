@@ -31,27 +31,15 @@ public class CSVDatabaseIntegrationTests
     public void Read_Returns_Cheeps_Serialized_To_JSON()
     {
         var repo = new HttpDatabaseRepository("http://localhost:5000");
-
-        var cheeps = repo.Read();
-        var jsonFormat = false;
-
-        foreach (var cheep in cheeps)
-        {
-            try
-            {
-                DeserializeObject(cheep);
-                jsonFormat = true;;
-            }
-
-            //https://www.newtonsoft.com/json/help/html/serializingjson.htm
-            /* if ((cheep.ToString().StartsWith("{") && cheep.ToString().EndsWith("}"))){
-                 if (parts[0].)
-                 {
-
-                 }
-             }*/
-        }
+        var original = new Cheep("testuser", "Integration test", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         
+        repo.Store(original);
+        var cheeps = repo.Read();
+        var lastCheep = cheeps.Last();
+        
+        Assert.Equal(original.Author, lastCheep.Author);
+        Assert.Equal(original.Message, lastCheep.Message);
+        Assert.Equal(original.Timestamp, lastCheep.Timestamp);
     }
 
     [Fact]
