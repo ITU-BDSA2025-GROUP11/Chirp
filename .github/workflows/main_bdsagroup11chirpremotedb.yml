@@ -55,7 +55,7 @@ jobs:
 
 
       - name: dotnet publish
-        run: dotnet publish ./CsvDbService -c Release -o ./publish
+        run: dotnet publish ./CsvDbService -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
 
 
@@ -67,7 +67,7 @@ jobs:
 
           name: .net-app
 
-          path: ./publish
+          path: ${{env.DOTNET_ROOT}}/myapp
 
 
 
