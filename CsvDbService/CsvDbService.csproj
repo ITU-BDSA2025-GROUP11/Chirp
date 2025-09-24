@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chirp.CSVDB\Chirp.CSVDB.csproj" />
+      <ProjectReference Include="..\Chirp.CLI\Chirp.CLI.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

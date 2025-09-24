@@ -31,7 +31,6 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     /// </returns>
     public IEnumerable<T> Read(int? limit = null)
     {
-        
         try
         {
             StreamReader reader = new(path);
@@ -50,8 +49,6 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             Console.WriteLine("The file could not be read:");
             Console.WriteLine(e.Message);
         }
-        
-        
         return  cheeps;
     }
     
