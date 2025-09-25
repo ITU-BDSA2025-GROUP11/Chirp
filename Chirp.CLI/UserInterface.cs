@@ -28,7 +28,7 @@ public static class UserInterface
             if (arguments["chirp"].IsTrue)
             {
                 Console.WriteLine("Chirping to file: \n");
-                var repo = new HttpDatabaseRepository( "https://bdsagroup11chirpremotedb-dwg6d7dngqgfhtdh.norwayeast-01.azurewebsites.net/");
+                var repo = new HttpDatabaseRepository( "https://bdsagroup11chirpremotedb-dwg6d7dngqgfhtdh.norwayeast-01.azurewebsites.net");
                 Chirp(arguments, repo);
                 if (arguments["print"].IsTrue)
                 {
