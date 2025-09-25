@@ -21,4 +21,4 @@ app.MapPost("/cheep", (Cheep cheep) =>
     return Results.Ok();
 });
 
-app.Run("http://localhost:5000");
+app.Run();
