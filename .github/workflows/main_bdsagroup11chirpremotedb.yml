@@ -49,14 +49,11 @@ jobs:
 
 
       - name: Build with dotnet
-
-        run: dotnet build ./CsvDbService --configuration Release
-
+        run: dotnet build Chirp/CsvDbService/ --configuration Release
 
 
       - name: dotnet publish
-        run: dotnet publish ./CsvDbService -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
+        run: dotnet publish Chirp/CsvDbService/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
 
       - name: Upload artifact for deployment job
