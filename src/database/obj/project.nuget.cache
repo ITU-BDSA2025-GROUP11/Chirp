@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "zFKTbBXDEEM=",
+  "success": true,
+  "projectFilePath": "/Users/morty/RiderProjects/Chirp/src/database/database.csproj",
+  "expectedPackageFiles": [
+    "/Users/morty/.nuget/packages/microsoft.netcore.app.ref/8.0.19/microsoft.netcore.app.ref.8.0.19.nupkg.sha512",
+    "/Users/morty/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.19/microsoft.aspnetcore.app.ref.8.0.19.nupkg.sha512",
+    "/Users/morty/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.19/microsoft.netcore.app.host.osx-arm64.8.0.19.nupkg.sha512"
+  ],
+  "logs": []
+}
