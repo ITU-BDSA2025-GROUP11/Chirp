@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace clientTest;
 
 public class UnitTest1
