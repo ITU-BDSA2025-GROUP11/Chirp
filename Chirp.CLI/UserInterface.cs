@@ -28,7 +28,7 @@ public static class UserInterface
             if (arguments["chirp"].IsTrue)
             {
                 Console.WriteLine("Chirping to file: \n");
-                var repo = new HttpDatabaseRepository( "https://bdsagroup11chirpremotedb-dwg6d7dngqgfhtdh.norwayeast-01.azurewebsites.net");
+                var repo = new HttpDatabaseRepository( "https://bdsagroup11chirpremotedb.azurewebsites.net");
                 Chirp(arguments, repo);
                 if (arguments["print"].IsTrue)
                 {
@@ -50,7 +50,7 @@ public static class UserInterface
         }
     }
 
-    private static void Chirp(IDictionary<string,ValueObject> arguments, HttpDatabaseRepository repo)
+    public static void Chirp(IDictionary<string,ValueObject> arguments, HttpDatabaseRepository repo)
     {
         Console.WriteLine("Chirping to service:\n");
         Cheep cheep = new Cheep(Environment.UserName, arguments["<message>"] + "", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
