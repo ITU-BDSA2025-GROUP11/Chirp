@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/css/style.css",
+      "PackagePath": "staticwebassets/css/style.css"
+    },
+    {
+      "Id": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/favicon/favicon.ico",
+      "PackagePath": "staticwebassets/favicon/favicon.ico"
+    },
+    {
+      "Id": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/images/icon1.png",
+      "PackagePath": "staticwebassets/images/icon1.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.Chirp.Razor.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.Chirp.Razor.props",
+      "PackagePath": "build\\Chirp.Razor.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.Chirp.Razor.props",
+      "PackagePath": "buildMultiTargeting\\Chirp.Razor.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.Chirp.Razor.props",
+      "PackagePath": "buildTransitive\\Chirp.Razor.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

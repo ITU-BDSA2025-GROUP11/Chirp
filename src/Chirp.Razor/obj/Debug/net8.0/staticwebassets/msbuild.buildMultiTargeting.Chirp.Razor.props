@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Chirp.Razor.props" />
+</Project>
