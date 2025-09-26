@@ -51,6 +51,7 @@ jobs:
         with:
           app-name: 'bdsagroup11chirpremotedb'
           slot-name: 'Production'
-          package: .net-app
+          package: .
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7585F2A668684A71929D805F97F52279 }}
+
