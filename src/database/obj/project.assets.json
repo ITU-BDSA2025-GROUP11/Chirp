@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/Users/morty/.nuget/packages/": {}
+    "C:\\Users\\Joakim\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/morty/RiderProjects/Chirp/src/database/database.csproj",
+      "projectUniqueName": "E:\\GitHub\\Chirp\\src\\database\\database.csproj",
       "projectName": "database",
-      "projectPath": "/Users/morty/RiderProjects/Chirp/src/database/database.csproj",
-      "packagesPath": "/Users/morty/.nuget/packages/",
-      "outputPath": "/Users/morty/RiderProjects/Chirp/src/database/obj/",
+      "projectPath": "E:\\GitHub\\Chirp\\src\\database\\database.csproj",
+      "packagesPath": "C:\\Users\\Joakim\\.nuget\\packages\\",
+      "outputPath": "E:\\GitHub\\Chirp\\src\\database\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/morty/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Joakim\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -66,11 +66,15 @@
             "version": "[8.0.19, 8.0.19]"
           },
           {
-            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "name": "Microsoft.NETCore.App.Host.win-x64",
             "version": "[8.0.19, 8.0.19]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.19, 8.0.19]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
             "version": "[8.0.19, 8.0.19]"
           }
         ],
@@ -79,7 +83,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/morty/.dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

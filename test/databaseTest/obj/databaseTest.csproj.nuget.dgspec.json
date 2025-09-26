@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/morty/RiderProjects/Chirp/test/databaseTest/databaseTest.csproj": {}
+    "E:\\GitHub\\Chirp\\test\\databaseTest\\databaseTest.csproj": {}
   },
   "projects": {
-    "/Users/morty/RiderProjects/Chirp/test/databaseTest/databaseTest.csproj": {
+    "E:\\GitHub\\Chirp\\test\\databaseTest\\databaseTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/morty/RiderProjects/Chirp/test/databaseTest/databaseTest.csproj",
+        "projectUniqueName": "E:\\GitHub\\Chirp\\test\\databaseTest\\databaseTest.csproj",
         "projectName": "databaseTest",
-        "projectPath": "/Users/morty/RiderProjects/Chirp/test/databaseTest/databaseTest.csproj",
-        "packagesPath": "/Users/morty/.nuget/packages/",
-        "outputPath": "/Users/morty/RiderProjects/Chirp/test/databaseTest/obj/",
+        "projectPath": "E:\\GitHub\\Chirp\\test\\databaseTest\\databaseTest.csproj",
+        "packagesPath": "C:\\Users\\Joakim\\.nuget\\packages\\",
+        "outputPath": "E:\\GitHub\\Chirp\\test\\databaseTest\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/morty/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Joakim\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -80,6 +80,10 @@
             {
               "name": "Microsoft.NETCore.App.Ref",
               "version": "[8.0.19, 8.0.19]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.19, 8.0.19]"
             }
           ],
           "frameworkReferences": {
@@ -87,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/morty/.dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

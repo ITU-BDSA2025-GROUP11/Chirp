@@ -8,19 +8,19 @@
     "net9.0": []
   },
   "packageFolders": {
-    "/Users/morty/.nuget/packages/": {}
+    "C:\\Users\\Joakim\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/morty/RiderProjects/Chirp/src/Chirp.Razor/Chirp.Razor.csproj",
+      "projectUniqueName": "E:\\GitHub\\Chirp\\src\\Chirp.Razor\\Chirp.Razor.csproj",
       "projectName": "Chirp.Razor",
-      "projectPath": "/Users/morty/RiderProjects/Chirp/src/Chirp.Razor/Chirp.Razor.csproj",
-      "packagesPath": "/Users/morty/.nuget/packages/",
-      "outputPath": "/Users/morty/RiderProjects/Chirp/src/Chirp.Razor/obj/",
+      "projectPath": "E:\\GitHub\\Chirp\\src\\Chirp.Razor\\Chirp.Razor.csproj",
+      "packagesPath": "C:\\Users\\Joakim\\.nuget\\packages\\",
+      "outputPath": "E:\\GitHub\\Chirp\\src\\Chirp.Razor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/morty/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Joakim\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -68,7 +68,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/morty/.dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
