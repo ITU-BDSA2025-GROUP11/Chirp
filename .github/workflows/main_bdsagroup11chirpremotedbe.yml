@@ -26,9 +26,6 @@ jobs:
       - name: Build with dotnet
         run: dotnet build src/CsvDbService/CsvDbService.csproj -c Release -p:Server=true -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -64,3 +61,4 @@ jobs:
           package: .
 
           
+
