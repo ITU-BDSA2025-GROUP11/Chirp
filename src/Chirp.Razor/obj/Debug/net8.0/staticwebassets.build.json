@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "Qo7wcO9KxesR00ZQmWIWjenl9Lmls83aO+rD4uwZui8=",
+  "Source": "Chirp.Razor",
+  "BasePath": "_content/Chirp.Razor",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Chirp.Razor/wwwroot",
+      "Source": "Chirp.Razor",
+      "ContentRoot": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/",
+      "BasePath": "_content/Chirp.Razor",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/css/style.css",
+      "SourceId": "Chirp.Razor",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/",
+      "BasePath": "_content/Chirp.Razor",
+      "RelativePath": "css/style.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/style.css"
+    },
+    {
+      "Identity": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/favicon/favicon.ico",
+      "SourceId": "Chirp.Razor",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/",
+      "BasePath": "_content/Chirp.Razor",
+      "RelativePath": "favicon/favicon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/favicon/favicon.ico"
+    },
+    {
+      "Identity": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/images/icon1.png",
+      "SourceId": "Chirp.Razor",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/morty/RiderProjects/RazorChirp/src/Chirp.Razor/wwwroot/",
+      "BasePath": "_content/Chirp.Razor",
+      "RelativePath": "images/icon1.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/icon1.png"
+    }
+  ]
+}
