@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Chirp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7efaf289002909648456d7e8294f87d7ff12d14c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Chirp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Chirp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
