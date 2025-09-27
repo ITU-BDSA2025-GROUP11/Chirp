@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
@@ -11,7 +15,7 @@ public class CheepService : ICheepService
     // These would normally be loaded from a database for example
     private static readonly List<CheepViewModel> _cheeps = new()
     {
-        new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
+        new CheepViewModel("Milja", "The code is from our group repo", UnixTimeStampToDateTimeString(1690892208)),
         new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
     };
 
