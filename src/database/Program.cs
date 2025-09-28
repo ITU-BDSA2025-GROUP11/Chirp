@@ -1,3 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using database;
 
-Console.WriteLine("Hello, World!");
+DBFacade facade = new DBFacade(null);
+facade.initDB();
