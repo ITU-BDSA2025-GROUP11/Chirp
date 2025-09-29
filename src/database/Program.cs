@@ -1,5 +1,17 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using database;
 
-using System;
+// if facade initiated with null, a tempDB is created
+DBFacade facade = new DBFacade(null);
 
-Console.WriteLine("Hello, World!");
+facade.initDB();
+facade.Post("MACHO MAN RANDY SAVAGE");
+
+// if get argument is null, all tweeets are returned
+// if argument is author, only those tweets are returned 
+var cheeps = facade.Get(null);
+
+// below is just a test print 
+foreach (var cheep in cheeps)
+{
+    Console.WriteLine(cheep);
+}
