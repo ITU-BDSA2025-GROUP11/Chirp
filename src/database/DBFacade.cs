@@ -5,33 +5,34 @@ using Microsoft.Data.Sqlite;
 public class DBFacade
 {
     private string? DBpath;
+    private bool tempDb; 
 
     public DBFacade(string? DBpath)
     {
         this.DBpath = DBpath;
+        tempDb = false;
     }
-
+    
     public void initDB()
     {
         if (string.IsNullOrEmpty(DBpath))
         {
             DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            tempDb = true;
         }
         
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
             
             SetupTables(connection);
-            
-            initDump(connection);
-            
-            
-            
+
+            if (tempDb) {initDump(connection);}
+
+
+
             Console.WriteLine("Database was successfully created in location:");
             Console.WriteLine(DBpath);
-            
-            while (true) {
-            }
+        
         }
     }
 
@@ -66,24 +67,27 @@ public class DBFacade
 
     private void initDump(SqliteConnection connection)
     {
+        int commandCount = 0;
+        
         string dumpPath = Path.Combine(FindSolutionFolder(), "data", "dump.sql");
-        
-        dumpPath = File.ReadAllText(dumpPath);
-        string[] sqlCommands = dumpPath.Split(";",  StringSplitOptions.RemoveEmptyEntries);
-     
-        using var transaction = connection.BeginTransaction();
-        
-        foreach (var sqlCommand in sqlCommands)
-        {
-            var sqlCommandTrimmed = sqlCommand.Trim();
-            
-            if (string.IsNullOrEmpty(sqlCommandTrimmed)) continue;
+        var dumplines = File.ReadLines(dumpPath);
 
+        using var transaction = connection.BeginTransaction();
+
+        foreach (var line in dumplines)
+        {
+            commandCount++;
+            
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            
+            var lineTrimmed = line.Trim();
+            
             using var command = connection.CreateCommand();
-            command.CommandText = sqlCommandTrimmed;
+            command.CommandText = lineTrimmed;
             command.ExecuteNonQuery();
         }
         transaction.Commit();
+        Console.WriteLine($"executed {commandCount} commands");
     }
 
     private String FindSolutionFolder()
@@ -96,5 +100,62 @@ public class DBFacade
         }
     
         return directory?.FullName ?? throw new Exception("Could not find solution folder");
+    }
+
+    public void Post(String post)
+    {
+        using (var connection = new SqliteConnection($"Data Source={DBpath}")) {
+            connection.Open();
+            
+            string SqlCommand = "INSERT INTO message (author_id, text, pub_date) VALUES (@AuthorId, @Text, @PubDate)";
+
+            using (var command = new SqliteCommand(SqlCommand, connection))
+            {
+                command.Parameters.AddWithValue("@AuthorId", Environment.UserName);
+                command.Parameters.AddWithValue("@Text", post);
+
+                long unixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                command.Parameters.AddWithValue("@PubDate", unixTime);
+
+                command.ExecuteNonQuery();
+            }
+        } 
+    }
+
+    public List<String> Get(String? author)
+    {
+        List<String> list  = new List<String>();
+        
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
+            String SqlCommand;
+
+            if (author == null)
+            {
+                SqlCommand = "SELECT text FROM message";
+            }
+            else
+            {
+                SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
+            }
+
+            using (var command = new SqliteCommand(SqlCommand, connection))
+            {
+                if (author != null)
+                {
+                    command.Parameters.AddWithValue("@AuthorId", author);
+                }
+                
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(reader.GetString(0));
+                    }
+                }
+            }
+        }
+        return list;
     }
 }
