@@ -5,35 +5,40 @@ using Microsoft.Data.Sqlite;
 public class DBFacade
 {
     private string? DBpath;
-    private bool tempDb; 
 
-    public DBFacade(string? DBpath)
+    public DBFacade(string? DBpath = null)
     {
         this.DBpath = DBpath;
-        tempDb = false;
+        initDB();
     }
-    
-    public void initDB()
+
+    public void initDB() //SOMETHING IS WRONG HERE
     {
-        if (string.IsNullOrEmpty(DBpath))
-        {
-            DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
-            tempDb = true;
-        }
-        
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
-        {
-            
-            SetupTables(connection);
 
-            if (tempDb) {initDump(connection);}
+            if (string.IsNullOrEmpty(DBpath))
+            {
+                DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
 
+                SetupTables(connection);
+                initDump(connection);
 
+                Console.WriteLine($"A temporary database has been created: {DBpath}");
+            }
+            else
+            {
+                if (!File.Exists(DBpath))
+                {
+                    File.Create(DBpath);
+                    SetupTables(connection);
 
-            Console.WriteLine("Database was successfully created in location:");
-            Console.WriteLine(DBpath);
-        
-        }
+                    Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
+                }
+                else
+                {
+                    Console.WriteLine($"Connected to existing database: {DBpath}");
+                }
+            }
     }
 
     private void SetupTables(SqliteConnection connection)
@@ -50,8 +55,9 @@ public class DBFacade
                 pw_hash text not null
                  );
             ";
+       
         command.ExecuteNonQuery();
-            
+
         command.CommandText = @"
                 drop table if exists message;
                 create table message (
@@ -61,14 +67,14 @@ public class DBFacade
                 pub_date integer
                     );
             ";
-            
+
         command.ExecuteNonQuery();
     }
 
     private void initDump(SqliteConnection connection)
     {
         int commandCount = 0;
-        
+
         string dumpPath = Path.Combine(FindSolutionFolder(), "data", "dump.sql");
         var dumplines = File.ReadLines(dumpPath);
 
@@ -77,15 +83,16 @@ public class DBFacade
         foreach (var line in dumplines)
         {
             commandCount++;
-            
+
             if (string.IsNullOrWhiteSpace(line)) continue;
-            
+
             var lineTrimmed = line.Trim();
-            
+
             using var command = connection.CreateCommand();
             command.CommandText = lineTrimmed;
             command.ExecuteNonQuery();
         }
+
         transaction.Commit();
         Console.WriteLine($"executed {commandCount} commands");
     }
@@ -93,20 +100,21 @@ public class DBFacade
     private String FindSolutionFolder()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        
+
         while (directory != null && !directory.GetFiles("*.sln").Any())
         {
             directory = directory.Parent;
         }
-    
+
         return directory?.FullName ?? throw new Exception("Could not find solution folder");
     }
 
     public void Post(String post)
     {
-        using (var connection = new SqliteConnection($"Data Source={DBpath}")) {
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
             connection.Open();
-            
+
             string SqlCommand = "INSERT INTO message (author_id, text, pub_date) VALUES (@AuthorId, @Text, @PubDate)";
 
             using (var command = new SqliteCommand(SqlCommand, connection))
@@ -119,43 +127,79 @@ public class DBFacade
 
                 command.ExecuteNonQuery();
             }
-        } 
+        }
     }
 
-    public List<String> Get(String? author)
+    public List<CheepViewModel> Get() //Print alt 
     {
-        List<String> list  = new List<String>();
-        
+        List<CheepViewModel> list = new List<CheepViewModel>();
+
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
             connection.Open();
-            String SqlCommand;
 
-            if (author == null)
-            {
-                SqlCommand = "SELECT text FROM message";
-            }
-            else
-            {
-                SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
-            }
+            String SqlCommand = @"SELECT username, text, pub_date FROM user
+            LEFT OUTER JOIN message ON user_id = message.author_id";
+
+            // query author, text og timeestamp istedet for bare text
+            // put record
+            // put record i liste
+            // returner liste
 
             using (var command = new SqliteCommand(SqlCommand, connection))
             {
-                if (author != null)
+                using (var reader = command.ExecuteReader())
                 {
-                    command.Parameters.AddWithValue("@AuthorId", author);
+                    while (reader.Read())
+                    {
+                        //what in the hulemand har vi lavet :(
+                        String user = reader.GetString(0);
+                        String text = reader.GetString(1);
+                        String date = reader.GetString(2);
+
+                        list.Add(new CheepViewModel(user, text, date));
+                    }
                 }
+            }
+        }
+
+        return list;
+    }
+
+    //for kun fat i en enkelt Author
+    public List<CheepViewModel> Get(String? author)
+    {
+
+        List<CheepViewModel> list = new List<CheepViewModel>();
+
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
+
+            String SqlCommand = @"Select username, text, pub_date from user
+            left outer join message on user_id = message.author_id
+            where username = @Author_id";
+            
+            using (var command = new SqliteCommand(SqlCommand, connection))
+            {
+                command.Parameters.AddWithValue("@Author_id", author);
                 
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        list.Add(reader.GetString(0));
+                        //what in the hulemand har vi lavet :(
+                        String user = reader.GetString(0);
+                        String text = reader.GetString(1);
+                        String date = reader.GetString(2);
+
+                        list.Add(new CheepViewModel(user, text, date));
                     }
                 }
             }
         }
+
         return list;
+        
     }
 }
