@@ -124,7 +124,7 @@ public class DBFacade
 
     public List<String> Get(String? author)
     {
-        List<String> list  = new List<String>();
+        List<CheepViewModel> list  = new List<CheepViewModel>();
         
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
@@ -140,6 +140,11 @@ public class DBFacade
                 SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
             }
 
+            // query author, text og timeestamp istedet for bare text
+            // put record
+            // put record i liste
+            // returner liste
+            
             using (var command = new SqliteCommand(SqlCommand, connection))
             {
                 if (author != null)
