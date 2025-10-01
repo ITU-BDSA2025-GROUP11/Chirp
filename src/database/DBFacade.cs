@@ -130,12 +130,10 @@ public class DBFacade
         {
             connection.Open();
             
-            
-            
-            String SqlCommand = @"SELECT * FROM message
-            left outer join user on user_id = message.author_id
+            String SqlCommand = "Select username, text, pub_date from user
+            left outer join message on user_id = message.author_id";
 
-                                  ";
+                                  
             
 
             // query author, text og timeestamp istedet for bare text
