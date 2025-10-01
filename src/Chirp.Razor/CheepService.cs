@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using database;
+
 
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
@@ -12,12 +14,20 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
+    DBFacade facade = new DBFacade(null);
+    
+    public CheepService()
+    {
+        facade.initDB();
+    }
+
     // These would normally be loaded from a database for example
     private static readonly List<CheepViewModel> _cheeps = new()
         {
-            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
+           // new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
+           // new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
         };
+    
 
     public List<CheepViewModel> GetCheeps()
     {
