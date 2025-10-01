@@ -31,7 +31,8 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps()
     {
-        return _cheeps;
+        facade.Get();
+        // return _cheeps;
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
