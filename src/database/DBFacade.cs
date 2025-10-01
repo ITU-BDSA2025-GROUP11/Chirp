@@ -157,38 +157,42 @@ public class DBFacade
         return list;  
     }
     
-    public List<String> Get(String? author) //Print fra speciel author
-    {
-        List<CheepViewModel> list  = new List<CheepViewModel>();
+    //for kun fat i en enkelt Author
+    public List<String> Get(String author) //Print fra speciel author
+    
+    List<CheepViewModel> list  = new List<CheepViewModel>();
         
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+    {
+        connection.Open();
+            
+        String SqlCommand = @"Select username, text, pub_date from user
+left outer join message on user_id = message.author_id
+where username = @Author_id;";
+            
+        // query author, text og timeestamp istedet for bare text
+        // put record
+        // put record i liste
+        // returner liste
+            
+        using (var command = new SqliteCommand(SqlCommand, connection))
         {
-            connection.Open();
-            
-            String SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
-            
-            // query author, text og timeestamp istedet for bare text
-            // put record
-            // put record i liste
-            // returner liste
-            
-            using (var command = new SqliteCommand(SqlCommand, connection))
+            command.Parameters.AddWithValue(@Author_id, author)
+            command.ExecuteNonQuery();
+            using (var reader = command.ExecuteReader())
             {
-                if (author != null)
-                {
-                    command.Parameters.AddWithValue("@AuthorId", author);
-                }
-                
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        list.Add(reader.GetString(0));
-                    }
+                while (reader.Read())
+                { //what in the hulemand har vi lavet :(
+                    String user = reader.GetString(0);
+                    String text = reader.GetString(1);
+                    String date = reader.GetString(2);
+                        
+                    list.Add(new CheepViewModel(user, text, date));
                 }
             }
         }
-        return list;
     }
+return list;  
+
     
 }
