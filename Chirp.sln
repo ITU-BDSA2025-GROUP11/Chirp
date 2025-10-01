@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "databaseTest", "test\databa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{9186783D-1D6E-4C84-8BC3-84ABE3ABA6AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "src\Models\Models.csproj", "{E7F7C9CE-10EF-4C7F-BB70-35D112CCE377}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +42,9 @@ Global
 		{9186783D-1D6E-4C84-8BC3-84ABE3ABA6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9186783D-1D6E-4C84-8BC3-84ABE3ABA6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9186783D-1D6E-4C84-8BC3-84ABE3ABA6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7F7C9CE-10EF-4C7F-BB70-35D112CCE377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7F7C9CE-10EF-4C7F-BB70-35D112CCE377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7F7C9CE-10EF-4C7F-BB70-35D112CCE377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7F7C9CE-10EF-4C7F-BB70-35D112CCE377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

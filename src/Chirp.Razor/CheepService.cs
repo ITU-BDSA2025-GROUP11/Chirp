@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using database;
+using Models;
 
 
-public record CheepViewModel(string Author, string Message, string Timestamp);
+//public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
@@ -14,24 +15,40 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    DBFacade facade = new DBFacade(null);
+    static DBFacade facade = new DBFacade(null);
+    private static List<CheepViewModel> _cheeps;
     
     public CheepService()
     {
         facade.initDB();
+        
     }
 
     // These would normally be loaded from a database for example
-    private static readonly List<CheepViewModel> _cheeps = new()
-        {
-           // new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-           // new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-        };
-    
+    // private static readonly List<CheepViewModel> _cheeps = new()
+    //     {
+    //        // new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
+    //        // new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
+    //        //return facade.Get();
+    //        
+    //     };
+
+    // private static List<CheepViewModel> StringToCheepList(list<String> list)
+    // {
+    //     cheeps = new List<CheepViewModel>();
+    //     foreach (string cheepString in list)
+    //     {
+    //         cheepString.Split(" ");
+    //         var user;
+    //         var message;
+    //         var timestamp;
+    //     }
+    // }
+
 
     public List<CheepViewModel> GetCheeps()
     {
-        facade.Get();
+       return facade.Get();
         // return _cheeps;
     }
 

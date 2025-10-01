@@ -1,3 +1,5 @@
+using Models;
+
 namespace database;
 
 using Microsoft.Data.Sqlite;
@@ -156,8 +158,8 @@ public class DBFacade
                         String user = reader.GetString(0);
                         String text = reader.GetString(1);
                         String date = reader.GetString(2);
-
-                        list.Add(new CheepViewModel(user, text, date));
+                        
+                        list.Add(new  CheepViewModel(user, text, date));
                     }
                 }
             }
