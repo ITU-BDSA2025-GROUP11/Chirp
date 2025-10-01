@@ -169,7 +169,6 @@ public class DBFacade
     //for kun fat i en enkelt Author
     public List<CheepViewModel> Get(String? author)
     {
-        //Print fra speciel author
 
         List<CheepViewModel> list = new List<CheepViewModel>();
 
@@ -178,14 +177,9 @@ public class DBFacade
             connection.Open();
 
             String SqlCommand = @"Select username, text, pub_date from user
-left outer join message on user_id = message.author_id
-where username = @Author_id";
-
-            // query author, text og timeestamp istedet for bare text
-            // put record
-            // put record i liste
-            // returner liste
-
+            left outer join message on user_id = message.author_id
+            where username = @Author_id";
+            
             using (var command = new SqliteCommand(SqlCommand, connection))
             {
                 command.Parameters.AddWithValue("@Author_id", author);
