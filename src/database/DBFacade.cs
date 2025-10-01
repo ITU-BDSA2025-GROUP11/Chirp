@@ -122,7 +122,7 @@ public class DBFacade
         } 
     }
 
-    public List<String> Get() //Print alt 
+    public List<CheepViewModel> Get() //Print alt 
     {
         List<CheepViewModel> list  = new List<CheepViewModel>();
         
@@ -130,12 +130,9 @@ public class DBFacade
         {
             connection.Open();
             
-            String SqlCommand = "Select username, text, pub_date from user
-            left outer join message on user_id = message.author_id";
-
-                                  
+            String SqlCommand = @"SELECT username, text, pub_date FROM user
+            LEFT OUTER JOIN message ON user_id = message.author_id";
             
-
             // query author, text og timeestamp istedet for bare text
             // put record
             // put record i liste
@@ -146,8 +143,12 @@ public class DBFacade
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
-                    {
-                        list.Add(reader.GetString(0));
+                    { //what in the hulemand har vi lavet :(
+                        String user = reader.GetString(0);
+                        String text = reader.GetString(1);
+                        String date = reader.GetString(2);
+                        
+                        list.Add(new CheepViewModel(user, text, date));
                     }
                 }
             }
@@ -162,13 +163,9 @@ public class DBFacade
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
             connection.Open();
-            String SqlCommand;
-
-           
-            {
-                SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
-            }
-
+            
+            String SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
+            
             // query author, text og timeestamp istedet for bare text
             // put record
             // put record i liste
