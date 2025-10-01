@@ -5,36 +5,37 @@ using Microsoft.Data.Sqlite;
 public class DBFacade
 {
     private string? DBpath;
-    private bool tempDb; 
 
-    public DBFacade(string? DBpath)
+    public DBFacade(string? DBpath = null)
     {
         this.DBpath = DBpath;
-        tempDb = false;
+        initDB();
     }
     
-    public void initDB()
-    {
-        if (string.IsNullOrEmpty(DBpath))
-        {
-            DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
-            tempDb = true;
-        }
-        
+    public void initDB() {
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
-        {
             
-            SetupTables(connection);
+            if (string.IsNullOrEmpty(DBpath)) {
+                DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+                
+                SetupTables(connection);
+                initDump(connection);
 
-            if (tempDb) {initDump(connection);}
-
-
-
-            Console.WriteLine("Database was successfully created in location:");
-            Console.WriteLine(DBpath);
-        
-        }
-    }
+                Console.WriteLine($"A temporary database has been created: {DBpath}");
+            } else {
+                if (!File.Exists(DBpath))
+                {
+                    File.Create(DBpath);
+                    SetupTables(connection);
+                    
+                    Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
+                }
+                else
+                {
+                    Console.WriteLine($"Connected to existing database: {DBpath}");
+                }
+            }
+    }   
 
     private void SetupTables(SqliteConnection connection)
     {
