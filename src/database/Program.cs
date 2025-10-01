@@ -9,7 +9,7 @@ facade.Post("MACHO MAN RANDY SAVAGE");
 
 // if get argument is null, all tweeets are returned
 // if argument is author, only those tweets are returned 
-var cheeps = facade.Get(null);
+var cheeps = facade.Get();
 
 // below is just a test print 
 foreach (var cheep in cheeps)
