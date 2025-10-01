@@ -122,6 +122,48 @@ public class DBFacade
         } 
     }
 
+    public List<String> Get()
+    {
+        List<CheepViewModel> list  = new List<CheepViewModel>();
+        
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
+            String SqlCommand;
+
+            if (author == null)
+            {
+                SqlCommand = "SELECT text FROM message";
+            }
+            else
+            {
+                SqlCommand = "SELECT text FROM message WHERE author_id = @AuthorId";
+            }
+
+            // query author, text og timeestamp istedet for bare text
+            // put record
+            // put record i liste
+            // returner liste
+            
+            using (var command = new SqliteCommand(SqlCommand, connection))
+            {
+                if (author != null)
+                {
+                    command.Parameters.AddWithValue("@AuthorId", author);
+                }
+                
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(reader.GetString(0));
+                    }
+                }
+            }
+        }
+        return list;  
+    }
+    
     public List<String> Get(String? author)
     {
         List<CheepViewModel> list  = new List<CheepViewModel>();
@@ -163,4 +205,5 @@ public class DBFacade
         }
         return list;
     }
+    
 }
