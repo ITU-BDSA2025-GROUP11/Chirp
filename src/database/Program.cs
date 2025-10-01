@@ -1,14 +1,15 @@
 ﻿using database;
 
 // if facade initiated with null, a tempDB is created
-DBFacade facade = new DBFacade(null);
+string? dbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH");
 
-facade.initDB();
+DBFacade facade = new DBFacade(dbPath);
+
 facade.Post("MACHO MAN RANDY SAVAGE");
 
 // if get argument is null, all tweeets are returned
 // if argument is author, only those tweets are returned 
-var cheeps = facade.Get(null);
+var cheeps = facade.Get("Jacqualine Gilcoine");
 
 // below is just a test print 
 foreach (var cheep in cheeps)
