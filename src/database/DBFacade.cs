@@ -17,30 +17,40 @@ public class DBFacade
     public void initDB() //SOMETHING IS WRONG HERE
     {
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
 
-            if (string.IsNullOrEmpty(DBpath))
-            {
-                DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            SetupTables(connection);
+            initDump(connection);
 
-                SetupTables(connection);
-                initDump(connection);
-
-                Console.WriteLine($"A temporary database has been created: {DBpath}");
-            }
-            else
-            {
-                if (!File.Exists(DBpath))
-                {
-                    File.Create(DBpath);
-                    SetupTables(connection);
-
-                    Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
-                }
-                else
-                {
-                    Console.WriteLine($"Connected to existing database: {DBpath}");
-                }
-            }
+            Console.WriteLine($"A temporary database has been created: {DBpath}");
+            // if (string.IsNullOrEmpty(DBpath))
+            // {
+            //     DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            //
+            //     SetupTables(connection);
+            //     initDump(connection);
+            //
+            //     Console.WriteLine($"A temporary database has been created: {DBpath}");
+            // }
+            // else
+            // {
+            //     if (!File.Exists(DBpath))
+            //     {
+            //         File.Create(DBpath);
+            //         SetupTables(connection);
+            //
+            //         Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
+            //     }
+            //     else
+            //     {
+            //         Console.WriteLine($"Connected to existing database: {DBpath}");
+            //     }
+            // } 
+        }
+            
+            
+           
     }
 
     private void SetupTables(SqliteConnection connection)
@@ -154,12 +164,7 @@ public class DBFacade
                 {
                     while (reader.Read())
                     {
-                        //what in the hulemand har vi lavet :(
-                        String user = reader.GetString(0);
-                        String text = reader.GetString(1);
-                        String date = reader.GetString(2);
-                        
-                        list.Add(new  CheepViewModel(user, text, date));
+                        list.Add(GetCheepFromTable(reader));
                     }
                 }
             }
@@ -190,12 +195,7 @@ public class DBFacade
                 {
                     while (reader.Read())
                     {
-                        //what in the hulemand har vi lavet :(
-                        String user = reader.GetString(0);
-                        String text = reader.GetString(1);
-                        String date = reader.GetString(2);
-
-                        list.Add(new CheepViewModel(user, text, date));
+                        list.Add(GetCheepFromTable(reader));
                     }
                 }
             }
@@ -203,5 +203,56 @@ public class DBFacade
 
         return list;
         
+    }
+
+    public List<CheepViewModel> Get32LatestCheeps()
+    {
+        List<CheepViewModel> page1 = new List<CheepViewModel>();
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
+            var sqlStatement = @"SELECT * FROM message
+                                 INNER JOIN user ON message.author_id=user.user_id
+                                 ORDER BY message.pub_date DESC LIMIT 32";
+            using (var command = new SqliteCommand(sqlStatement, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        page1.Add(GetCheepFromTable(reader));   
+                    }
+                }
+            }
+        }
+        return page1;
+    }
+    
+    
+/// <summary>
+/// this method provides a generic and reusable way of passing various sql commands/statements to dbfacade
+/// </summary>
+/// <param name="query"></param>
+    public void ExecuteQuery(String query)
+    {
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
+
+            String sqlStatement = @query;
+            using (var command = new SqliteCommand(sqlStatement, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    
+                }
+            }
+
+        }
+    }
+
+    private CheepViewModel GetCheepFromTable(SqliteDataReader reader)
+    {
+        return new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetString(2));
     }
 }
