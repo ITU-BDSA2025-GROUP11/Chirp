@@ -12,35 +12,41 @@ public class DBFacade
     {
         this.DBpath = DBpath;
         initDB();
+        
     }
 
     public void initDB() //SOMETHING IS WRONG HERE
     {
+        if (string.IsNullOrEmpty(DBpath))
+        {
+            DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+        }
+
+        bool newDb = !File.Exists(DBpath);
+        
+        if (newDb)
+        {
+            using (File.Create(DBpath)) { }
+        }
+
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
 
-            if (string.IsNullOrEmpty(DBpath))
+            if (newDb)
             {
-                DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
-
+                // Only set up tables if this is the first time the DB is created
                 SetupTables(connection);
                 initDump(connection);
 
-                Console.WriteLine($"A temporary database has been created: {DBpath}");
+                Console.WriteLine($"Created new DB at {DBpath}");
             }
             else
             {
-                if (!File.Exists(DBpath))
-                {
-                    File.Create(DBpath);
-                    SetupTables(connection);
-
-                    Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
-                }
-                else
-                {
-                    Console.WriteLine($"Connected to existing database: {DBpath}");
-                }
+                Console.WriteLine($"Connected to existing database: {DBpath}");
             }
+        }
+        Console.WriteLine($"[DEBUG] Using database at: {DBpath}");
     }
 
     private void SetupTables(SqliteConnection connection)
@@ -49,7 +55,7 @@ public class DBFacade
         using var command = connection.CreateCommand();
 
         command.CommandText = @"
-                drop table if exists user; 
+                create table if exists user; 
                 create table user (
                 user_id integer primary key autoincrement,
                 username text not null,
@@ -61,7 +67,7 @@ public class DBFacade
         command.ExecuteNonQuery();
 
         command.CommandText = @"
-                drop table if exists message;
+                create table if exists message;
                 create table message (
                 message_id integer primary key autoincrement,
                 author_id integer not null,
@@ -168,7 +174,7 @@ public class DBFacade
         return list;
     }
 
-    //for kun fat i en enkelt Author
+    //får kun fat i en enkelt Author
     public List<CheepViewModel> Get(String? author)
     {
 
@@ -200,8 +206,6 @@ public class DBFacade
                 }
             }
         }
-
         return list;
-        
     }
 }

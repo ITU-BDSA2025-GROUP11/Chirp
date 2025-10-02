@@ -15,7 +15,7 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    static DBFacade facade = new DBFacade(null);
+    private readonly DBFacade facade = new DBFacade(null);
     private static List<CheepViewModel> _cheeps;
     
     public CheepService()
