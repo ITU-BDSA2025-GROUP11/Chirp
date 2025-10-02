@@ -205,50 +205,55 @@ public class DBFacade
         
     }
 
-    public List<CheepViewModel> Get32LatestCheeps()
+    // public List<CheepViewModel> Get()
+    // {
+    //     List<CheepViewModel> page = new List<CheepViewModel>();
+    //     using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+    //     {
+    //         connection.Open();
+    //         var sqlStatement = @"SELECT * FROM message
+    //                              INNER JOIN user ON message.author_id=user.user_id
+    //                              ORDER BY message.pub_date DESC LIMIT 32";
+    //         using (var command = new SqliteCommand(sqlStatement, connection))
+    //         {
+    //             using (var reader = command.ExecuteReader())
+    //             {
+    //                 while (reader.Read())
+    //                 {
+    //                     page1.Add(GetCheepFromTable(reader));   
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return page1;
+    // }
+    
+    
+    /// <summary>
+    /// this method provides a generic and reusable way of passing various sql commands/statements to dbfacade
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    public List<CheepViewModel> ExecuteQuery(String query)
     {
-        List<CheepViewModel> page1 = new List<CheepViewModel>();
+        List<CheepViewModel> page = new List<CheepViewModel>();
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
             connection.Open();
-            var sqlStatement = @"SELECT * FROM message
-                                 INNER JOIN user ON message.author_id=user.user_id
-                                 ORDER BY message.pub_date DESC LIMIT 32";
+
+            var sqlStatement = @query;
             using (var command = new SqliteCommand(sqlStatement, connection))
             {
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        page1.Add(GetCheepFromTable(reader));   
+                        page.Add(GetCheepFromTable(reader));
                     }
                 }
             }
         }
-        return page1;
-    }
-    
-    
-/// <summary>
-/// this method provides a generic and reusable way of passing various sql commands/statements to dbfacade
-/// </summary>
-/// <param name="query"></param>
-    public void ExecuteQuery(String query)
-    {
-        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
-        {
-            connection.Open();
-
-            String sqlStatement = @query;
-            using (var command = new SqliteCommand(sqlStatement, connection))
-            {
-                using (var reader = command.ExecuteReader())
-                {
-                    
-                }
-            }
-
-        }
+        return page;
     }
 
     private CheepViewModel GetCheepFromTable(SqliteDataReader reader)
