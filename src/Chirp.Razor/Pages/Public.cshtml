@@ -1,4 +1,4 @@
-﻿@page "/{int}"
+﻿@page "/{id:int?}"
 @model Chirp.Razor.Pages.PublicModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -36,7 +36,7 @@
         @for (var i = 1; i <= Model.PageCount; i++)
         {
             <li class="nav @(i == Model.CurrentPage ? "active" : "")">
-                <a asp-page="/pagination" asp-route-currentpage="@i" class="page-link">@i</a>
+                <a asp-page="/pagination" asp-route-id="@i" class="page-link">@i</a>
             </li>
         }
     </ul>
