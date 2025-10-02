@@ -36,7 +36,7 @@
         @for (var i = 1; i <= Model.PageCount; i++)
         {
             <li class="nav @(i == Model.CurrentPage ? "active" : "")">
-                <a asp-page="/pagination" asp-route-id="@i" class="page-link">@i</a>
+                <a href="?id=@i" class="page-link">@i</a>
             </li>
         }
     </ul>
