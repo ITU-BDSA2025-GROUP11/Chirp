@@ -16,10 +16,9 @@ public class DBFacade
 
     public void initDB() //SOMETHING IS WRONG HERE
     {
+        DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
-            DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
-
             SetupTables(connection);
             initDump(connection);
 
