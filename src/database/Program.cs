@@ -3,7 +3,7 @@
 // if facade initiated with null, a tempDB is created
 string? dbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH");
 
-DBFacade facade = new DBFacade(dbPath);
+DBFacade facade = new DBFacade();
 
 facade.Post("MACHO MAN RANDY SAVAGE");
 

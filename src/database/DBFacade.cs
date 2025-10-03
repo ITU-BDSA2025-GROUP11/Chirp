@@ -1,5 +1,3 @@
-using Models;
-
 namespace database;
 
 using Microsoft.Data.Sqlite;
@@ -8,44 +6,41 @@ public class DBFacade
 {
     private string? DBpath;
 
-    public DBFacade(string? DBpath = null)
+    public DBFacade()
     {
-        this.DBpath = DBpath;
+        DBpath = Environment.GetEnvironmentVariable("CHIRPDBPATH");
         initDB();
     }
 
-    public void initDB() //SOMETHING IS WRONG HERE
+    public void initDB()
     {
         DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+        
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
-            SetupTables(connection);
-            initDump(connection);
-
-            Console.WriteLine($"A temporary database has been created: {DBpath}");
-            // if (string.IsNullOrEmpty(DBpath))
-            // {
-            //     DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
-            //
-            //     SetupTables(connection);
-            //     initDump(connection);
-            //
-            //     Console.WriteLine($"A temporary database has been created: {DBpath}");
-            // }
-            // else
-            // {
-            //     if (!File.Exists(DBpath))
-            //     {
-            //         File.Create(DBpath);
-            //         SetupTables(connection);
-            //
-            //         Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
-            //     }
-            //     else
-            //     {
-            //         Console.WriteLine($"Connected to existing database: {DBpath}");
-            //     }
-            // } 
+            if (string.IsNullOrEmpty(DBpath))
+            {
+                DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            
+                SetupTables(connection);
+                initDump(connection);
+            
+                Console.WriteLine($"A temporary database has been created: {DBpath}");
+            }
+            else
+            {
+                if (!File.Exists(DBpath))
+                {
+                    File.Create(DBpath);
+                    SetupTables(connection);
+            
+                    Console.WriteLine($"Database was not found at: {DBpath} created new database and setup tables");
+                }
+                else
+                {
+                    Console.WriteLine($"Connected to existing database: {DBpath}");
+                }
+            } 
         }
             
             
