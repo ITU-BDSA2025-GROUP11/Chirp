@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using database;
+using Models;
+
 public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps();
@@ -28,7 +30,7 @@ public class CheepService : ICheepService
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
     {
         // filter by the provided author name
-        return _cheeps.Where(x => x.Author == author).ToList();
+        return facade.Get(author);
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
