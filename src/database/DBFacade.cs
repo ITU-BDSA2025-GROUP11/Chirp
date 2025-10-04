@@ -203,6 +203,42 @@ public class DBFacade
         return list;
         
     }
+    
+    
+    public List<CheepViewModel> Get32InPubOrder(String? author, int currentPage = 1)
+    {
+
+        List<CheepViewModel> list = new List<CheepViewModel>();
+
+        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
+        {
+            connection.Open();
+
+            String sqlCommand = @"with author_messages as (" +
+                                " select username, text, pub_date from user" + 
+                                " left outer join message on user_id = message.author_id" + 
+                                " where username = @Author_id)" +
+                                " select * from author_messages" +
+                                " order by pub_date DESC limit 32 offset 32 * @currentPage";
+            
+            using (var command = new SqliteCommand(sqlCommand, connection))
+            {
+                //command.Parameters.AddWithValue("@Author_id", author);
+                
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(GetCheepFromTable(reader));
+                    }
+                }
+            }
+        }
+
+        return list;
+        
+    }
+    
 
     // public List<CheepViewModel> Get()
     // {
@@ -247,7 +283,8 @@ public class DBFacade
                 {
                     while (reader.Read())
                     {
-                        page.Add(GetCheepFromTable(reader));
+                        // the logic with the ordinals needs to be fixed
+                        page.Add(new CheepViewModel(reader.GetString(5), reader.GetString(2), reader.GetString(3)));
                     }
                 }
             }
