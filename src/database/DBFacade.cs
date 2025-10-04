@@ -14,7 +14,7 @@ public class DBFacade
         initDB();
     }
 
-    public void initDB() //SOMETHING IS WRONG HERE
+    public void initDB()
     {
         DBpath = Path.Combine(Path.GetTempPath(), "chirp.db");
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
@@ -141,7 +141,7 @@ public class DBFacade
         }
     }
 
-    public List<CheepViewModel> Get() //Print alt 
+    public List<CheepViewModel> Get()  
     {
         List<CheepViewModel> list = new List<CheepViewModel>();
 
@@ -149,13 +149,8 @@ public class DBFacade
         {
             connection.Open();
 
-            String SqlCommand = @"SELECT username, text, pub_date FROM user
+            String SqlCommand = @"SELECT username, text, pub_date, user_id FROM user
             LEFT OUTER JOIN message ON user_id = message.author_id";
-
-            // query author, text og timeestamp istedet for bare text
-            // put record
-            // put record i liste
-            // returner liste
 
             using (var command = new SqliteCommand(SqlCommand, connection))
             {
@@ -171,8 +166,6 @@ public class DBFacade
 
         return list;
     }
-
-    //for kun fat i en enkelt Author
     public List<CheepViewModel> Get(String? author)
     {
 
@@ -182,13 +175,12 @@ public class DBFacade
         {
             connection.Open();
 
-            String SqlCommand = @"Select username, text, pub_date from user
-            left outer join message on user_id = message.author_id
-            where username = @Author_id";
+            String SqlCommand = @"Select username, text, pub_date, user_id from user
+            left outer join message on user_id = message.author_id";
             
             using (var command = new SqliteCommand(SqlCommand, connection))
             {
-                command.Parameters.AddWithValue("@Author_id", author);
+                command.Parameters.AddWithValue("@Author_name", author); 
                 
                 using (var reader = command.ExecuteReader())
                 {
@@ -204,96 +196,82 @@ public class DBFacade
         
     }
     
-    
-    public List<CheepViewModel> Get32InPubOrder(String? author, int currentPage = 1)
+    public List<CheepViewModel> GetLatestInPubOrder(string? author, int currentPage = 1, int pageSize = 32)
     {
-
-        List<CheepViewModel> list = new List<CheepViewModel>();
+        List<CheepViewModel> page = new List<CheepViewModel>();
 
         using (var connection = new SqliteConnection($"Data Source={DBpath}"))
         {
+            var sqlCommand = author == null 
+                                            ? @"SELECT username, text, pub_date, user_id FROM message" +
+                                              " INNER JOIN user ON message.author_id=user.user_id" +
+                                              " ORDER BY message.pub_date DESC LIMIT " + pageSize + " OFFSET " + pageSize + " * " + currentPage 
+                                            : @"with author_messages as (" +
+                                              " select username, text, pub_date, user_id from user" + 
+                                              " left outer join message on user_id = message.author_id" + 
+                                              " where username = @author_id)" +
+                                              " select * from author_messages" +
+                                              " order by pub_date DESC limit " + pageSize + " OFFSET " + pageSize + " * " + currentPage;
             connection.Open();
-
-            String sqlCommand = @"with author_messages as (" +
-                                " select username, text, pub_date from user" + 
-                                " left outer join message on user_id = message.author_id" + 
-                                " where username = @Author_id)" +
-                                " select * from author_messages" +
-                                " order by pub_date DESC limit 32 offset 32 * @currentPage";
+           
             
             using (var command = new SqliteCommand(sqlCommand, connection))
             {
-                //command.Parameters.AddWithValue("@Author_id", author);
+                if (author != null) command.Parameters.AddWithValue("@Author_id", author);
                 
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        list.Add(GetCheepFromTable(reader));
+                        page.Add(GetCheepFromTable(reader));
                     }
                 }
             }
         }
 
-        return list;
+        return page;
         
     }
     
-
-    // public List<CheepViewModel> Get()
+    // /// <summary>
+    // /// this method provides a generic and reusable way of passing various sql commands/statements to dbfacade
+    // /// </summary>
+    // /// <param name="query"></param>
+    // /// <returns></returns>
+    // public List<CheepViewModel> ExecuteQuery(String query)
     // {
     //     List<CheepViewModel> page = new List<CheepViewModel>();
     //     using (var connection = new SqliteConnection($"Data Source={DBpath}"))
     //     {
     //         connection.Open();
-    //         var sqlStatement = @"SELECT * FROM message
-    //                              INNER JOIN user ON message.author_id=user.user_id
-    //                              ORDER BY message.pub_date DESC LIMIT 32";
+    //
+    //         var sqlStatement = @query;
     //         using (var command = new SqliteCommand(sqlStatement, connection))
     //         {
     //             using (var reader = command.ExecuteReader())
     //             {
     //                 while (reader.Read())
     //                 {
-    //                     page1.Add(GetCheepFromTable(reader));   
+    //                     // the logic with the ordinals needs to be fixed
+    //                     page.Add(new CheepViewModel(reader.GetString(5), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
     //                 }
     //             }
     //         }
     //     }
-    //     return page1;
+    //     return page;
     // }
-    
-    
-    /// <summary>
-    /// this method provides a generic and reusable way of passing various sql commands/statements to dbfacade
-    /// </summary>
-    /// <param name="query"></param>
-    /// <returns></returns>
-    public List<CheepViewModel> ExecuteQuery(String query)
-    {
-        List<CheepViewModel> page = new List<CheepViewModel>();
-        using (var connection = new SqliteConnection($"Data Source={DBpath}"))
-        {
-            connection.Open();
-
-            var sqlStatement = @query;
-            using (var command = new SqliteCommand(sqlStatement, connection))
-            {
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        // the logic with the ordinals needs to be fixed
-                        page.Add(new CheepViewModel(reader.GetString(5), reader.GetString(2), reader.GetString(3)));
-                    }
-                }
-            }
-        }
-        return page;
-    }
 
     private CheepViewModel GetCheepFromTable(SqliteDataReader reader)
     {
-        return new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetString(2));
+        return new CheepViewModel(reader.GetString(0), reader.GetString(1),reader.GetString(2), reader.GetString(3));
+    }
+    
+    private static string UnixTimeStampToDateTimeString(long unixTimeStamp)
+    {
+        //var unixTimeStampDouble = (long)unixTimeStamp; 
+        // Unix timestamp is seconds past epoch
+        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(unixTimeStamp);
+        return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
 }
