@@ -217,7 +217,7 @@ public class DBFacade
             
             using (var command = new SqliteCommand(sqlCommand, connection))
             {
-                if (author != null) command.Parameters.AddWithValue("@Author_id", author);
+                if (author != null) command.Parameters.AddWithValue("@author_id", author);
                 
                 using (var reader = command.ExecuteReader())
                 {
