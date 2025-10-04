@@ -18,10 +18,10 @@ public class UserTimelineModel : PaginationModel
         
     }
 
-    public ActionResult OnGet(string author, int ? timelinepage)
+    public ActionResult OnGet(string author, string authorID, int ? timelinepage)
     {
         CurrentPage = timelinepage ?? 1;
-        CurrentPageCheeps = _service.GetPaginatedCheepsFromAuthor(author, CurrentPage);
+        CurrentPageCheeps = _service.GetPaginatedCheeps(CurrentPage, PageSize, author);
         Cheeps = _service.GetCheepsFromAuthor(author);
         return Page();
     }
