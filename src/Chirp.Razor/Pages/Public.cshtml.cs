@@ -11,7 +11,7 @@ public class PublicModel : PaginationModel
     public List<CheepViewModel> Cheeps => _service.GetCheeps();
     public List<CheepViewModel> CurrentPageCheeps { get; set; }
     public int NumberOfCheeps => Cheeps.Count;
-    public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
+    public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
     public PublicModel(ICheepService service)
     {
@@ -22,5 +22,10 @@ public class PublicModel : PaginationModel
         CurrentPage = publicpage ?? 1;
         CurrentPageCheeps = _service.GetPaginatedCheeps(CurrentPage, PageSize);
         return Page();
+    }
+
+    public int GetTotalPages(int numberOfCheeps, int pageSize)
+    {
+        return (int)Math.Ceiling((double)numberOfCheeps / pageSize);
     }
 }
