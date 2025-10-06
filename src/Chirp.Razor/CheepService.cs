@@ -7,8 +7,11 @@ using Models;
 public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps();
-    public List<CheepViewModel> GetPaginatedCheeps(int currentPage, int pageSize);
+    //public List<CheepViewModel> GetPaginatedCheeps(int currentPage, string? author = null);
     public List<CheepViewModel> GetCheepsFromAuthor(string author);
+
+    public List<CheepViewModel> GetPaginatedCheeps(int currentPage = 1, int pageSize = 32, string? author = null);
+    //public List<CheepViewModel> GetPaginatedCheepsFromAuthor(string author, int currentPage = 1);
 }
 
 public class CheepService : ICheepService
@@ -29,18 +32,28 @@ public class CheepService : ICheepService
     {
         return facade.Get();
     }
-    public List<CheepViewModel> GetPaginatedCheeps(int currentPage = 1, int pageSize = 32)
+    // public List<CheepViewModel> OldGetPaginatedCheeps(int currentPage = 1, int pageSize = 32)
+    // {
+    //     return facade.ExecuteQuery("SELECT * FROM message" +
+    //                                " INNER JOIN user ON message.author_id=user.user_id" +
+    //                                $" ORDER BY message.pub_date DESC LIMIT 32 OFFSET 32 *" + currentPage);
+    // }
+
+    public List<CheepViewModel> GetPaginatedCheeps(int currentPage = 1, int  pageSize = 32, string? author = null)
     {
-        return facade.ExecuteQuery("SELECT * FROM message" +
-                                   " INNER JOIN user ON message.author_id=user.user_id" +
-                                   $" ORDER BY message.pub_date DESC LIMIT 32 OFFSET 32 *" + currentPage);
+        return facade.GetLatestInPubOrder(author, currentPage, pageSize);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string authorID)
     {
-        // filter by the provided author name
-        return facade.Get(author);
+        // filter by the provided author id
+        return facade.Get(authorID);
     }
+
+    // public List<CheepViewModel> GetPaginatedCheepsFromAuthor(string authorID, int currentPage = 1)
+    // {
+    //     return facade.Get32InPubOrder(authorID, currentPage);
+    // }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {

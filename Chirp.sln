@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "src\Models\Models.csproj", "{7888F31B-BC24-4ED7-94B8-962DF6CB2CB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagesTest", "test\PagesTest\PagesTest.csproj", "{F28F1A1D-0CEF-4E58-AF29-4039F86BAE91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +42,9 @@ Global
 		{7888F31B-BC24-4ED7-94B8-962DF6CB2CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7888F31B-BC24-4ED7-94B8-962DF6CB2CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7888F31B-BC24-4ED7-94B8-962DF6CB2CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F28F1A1D-0CEF-4E58-AF29-4039F86BAE91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F28F1A1D-0CEF-4E58-AF29-4039F86BAE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F28F1A1D-0CEF-4E58-AF29-4039F86BAE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F28F1A1D-0CEF-4E58-AF29-4039F86BAE91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
