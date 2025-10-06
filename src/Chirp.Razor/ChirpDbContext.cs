@@ -5,7 +5,7 @@ namespace Chirp.Razor;
 
 public class ChirpDbContext : DbContext
 {
-    public ChirpDbContext(DbContextOptions<ChirpDBContext> options)
+    public ChirpDbContext(DbContextOptions<ChirpDbContext> options)
         : base(options) { }
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }
