@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "database", "src\database\database.csproj", "{CDBA4589-F790-4003-ACEF-D2AF61ACB87C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clientTest", "test\clientTest\clientTest.csproj", "{A25E8736-B3CC-4B18-B8CB-D53ACB854AA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "databaseTest", "test\databaseTest\databaseTest.csproj", "{0C507992-786C-4711-A5FB-2E6C430EDA11}"
@@ -14,10 +12,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CDBA4589-F790-4003-ACEF-D2AF61ACB87C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDBA4589-F790-4003-ACEF-D2AF61ACB87C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDBA4589-F790-4003-ACEF-D2AF61ACB87C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDBA4589-F790-4003-ACEF-D2AF61ACB87C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A25E8736-B3CC-4B18-B8CB-D53ACB854AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A25E8736-B3CC-4B18-B8CB-D53ACB854AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A25E8736-B3CC-4B18-B8CB-D53ACB854AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU

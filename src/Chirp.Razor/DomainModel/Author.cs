@@ -6,8 +6,8 @@ namespace Chirp.Razor.DomainModel;
 public class Author
 {
     [Key]
-    public string username { get; set; }
+    public required string username { get; set; }
     
-    public string email { get; set; }
-    public ICollection<Cheep> cheeps { get; set; }
+    public required string email { get; set; }
+    public required ICollection<Cheep> cheeps { get; set; }
 }
