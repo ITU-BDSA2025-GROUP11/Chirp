@@ -1,30 +1,22 @@
-using Chirp.Razor;
-using Microsoft.AspNetCore.Builder;
+using Chirp.Razor.DomainModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
+//Region build app and register DbContext
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-//builder.Services.AddSingleton<ICheepService, CheepService>();
 
+builder.Services.AddRazorPages();
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
 
+//Region MRGA
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -32,3 +24,5 @@ app.UseRouting();
 app.MapRazorPages();
 
 app.Run();
+
+

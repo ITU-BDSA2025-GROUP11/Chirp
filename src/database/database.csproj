@@ -16,8 +16,4 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="9.0.9" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\datamodel\datamodel.csproj" />
-    </ItemGroup>
-
 </Project>

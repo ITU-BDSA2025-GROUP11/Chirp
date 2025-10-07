@@ -1,5 +1,3 @@
-using Models;
-
 namespace Chirp.Razor.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
