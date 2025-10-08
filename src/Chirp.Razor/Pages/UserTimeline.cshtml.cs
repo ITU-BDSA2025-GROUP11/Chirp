@@ -7,12 +7,12 @@ namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PaginationModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepRepository _service;
     public List<Cheep> Cheeps { get; set; }
     public List<Cheep> CurrentPageCheeps { get; set; }
     public int NumberOfCheeps => Cheeps.Count;
     public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(ICheepRepository service) 
     {
         _service = service;
     }

@@ -7,13 +7,13 @@ namespace Chirp.Razor.Pages;
 
 public class PublicModel : PaginationModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepRepository _service;
     public List<Cheep> Cheeps => _service.GetCheeps();
     public List<Cheep> CurrentPageCheeps { get; set; }
     public int NumberOfCheeps => Cheeps.Count;
     public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
-    public PublicModel(ICheepService service)
+    public PublicModel(ICheepRepository service)
     {
         _service = service;
     }

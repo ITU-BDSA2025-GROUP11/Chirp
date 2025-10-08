@@ -5,11 +5,12 @@ namespace Chirp.Razor.DomainModel;
 
 public class Cheep
 {
-    public string text { get; set; }
+    public int Id { get; set; }
     
-    [Key]
-    public DateTime timeStamp { get; set; }
+    public string Text { get; set; }
     
-    [ForeignKey("username")] //this class is missing its own primary key, e.g. "CheepID", to couple with author of cheep
-    public string username { get; set; }
+    public DateTime TimeStamp { get; set; }
+    
+    public int AuthorId { get; set; } //foreign key
+    
 }

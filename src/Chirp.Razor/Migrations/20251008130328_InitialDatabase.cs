@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Chirp.Razor.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDbSchema : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,12 +15,12 @@ namespace Chirp.Razor.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    userame = table.Column<string>(type: "TEXT", nullable: false),
+                    username = table.Column<string>(type: "TEXT", nullable: false),
                     email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.userame);
+                    table.PrimaryKey("PK_Authors", x => x.username);
                 });
 
             migrationBuilder.CreateTable(
@@ -30,22 +30,22 @@ namespace Chirp.Razor.Migrations
                     timeStamp = table.Column<DateTime>(type: "TEXT", nullable: false),
                     text = table.Column<string>(type: "TEXT", nullable: false),
                     username = table.Column<string>(type: "TEXT", nullable: false),
-                    Authoruserame = table.Column<string>(type: "TEXT", nullable: true)
+                    Authorusername = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cheeps", x => x.timeStamp);
                     table.ForeignKey(
-                        name: "FK_Cheeps_Authors_Authoruserame",
-                        column: x => x.Authoruserame,
+                        name: "FK_Cheeps_Authors_Authorusername",
+                        column: x => x.Authorusername,
                         principalTable: "Authors",
-                        principalColumn: "userame");
+                        principalColumn: "username");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cheeps_Authoruserame",
+                name: "IX_Cheeps_Authorusername",
                 table: "Cheeps",
-                column: "Authoruserame");
+                column: "Authorusername");
         }
 
         /// <inheritdoc />
