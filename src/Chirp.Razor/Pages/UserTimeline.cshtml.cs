@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Chirp.Razor.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Models;
 
 namespace Chirp.Razor.Pages;
 
@@ -21,7 +21,7 @@ public class UserTimelineModel : PaginationModel
     {
         CurrentPage = timelinepage ?? 1;
         CurrentPageCheeps = _service.GetPaginatedCheeps(CurrentPage, PageSize, author);
-        Cheeps = _service.GetCheepsFromAuthor(author);
+        Cheeps = _service.GetCheeps(author);
         return Page();
     }
 }
