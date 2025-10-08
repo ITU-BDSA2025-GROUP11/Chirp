@@ -11,6 +11,8 @@ public class Cheep
     
     public DateTime TimeStamp { get; set; }
     
-    public int AuthorId { get; set; } //foreign key
+    public int AuthorId { get; set; }
     
+    [ForeignKey(nameof(AuthorId))]
+    public Author Author { get; set; } = null!;
 }
