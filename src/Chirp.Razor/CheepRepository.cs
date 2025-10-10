@@ -46,7 +46,7 @@ public class CheepRepository : ICheepRepository
         {
             return _context.Cheeps
                 .OrderByDescending(c => c.TimeStamp)
-                .Where(c => c.AuthorUsername == author)
+                .Where(c => c.Author.Username == author)
                 .Skip(pageSize * currentPage)
                 .Take(pageSize)
                 .ToList();
@@ -63,7 +63,7 @@ public class CheepRepository : ICheepRepository
 
     public void PostCheep(String text)
     {
-        _context.Cheeps.Add(new Cheep { Text = text, TimeStamp = DateTime.Now, AuthorUsername = Environment.UserName });
+        //_context.Cheeps.Add(new Cheep { Text = text, TimeStamp = DateTime.Now, Author = Environment.UserName });
         _context.SaveChanges();
     }
 }
