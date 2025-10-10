@@ -29,14 +29,12 @@ using (var scope = app.Services.CreateScope())
     var cheepRepo = scope.ServiceProvider.GetRequiredService<ICheepRepository>();
     
     // Post a test cheep
-    for (int i = 0; i < 3; i++){
         cheepRepo.PostCheep("Johnny: You betrayed me! You're not good. You, you're just a chicken. Chip-chip-chip-chip-cheep-cheep.");
         cheepRepo.PostCheep("Johnny: No, I can't. Anyway, how is your sex life?");
         cheepRepo.PostCheep("Claudette: I got the results of the test back - I definitely have breast cancer.");
         cheepRepo.PostCheep("Denny: I just like to watch you guys.");
         cheepRepo.PostCheep("Mark: What are you talking about? I just saw you!");
         cheepRepo.PostCheep("Johnny: Don't touch me, motherfucker - geddout.");
-    }
 }
 
 
