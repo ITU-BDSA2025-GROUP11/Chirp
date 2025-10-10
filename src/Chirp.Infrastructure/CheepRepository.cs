@@ -1,7 +1,8 @@
-using Chirp.Razor.DomainModel;
+using Chirp.Core.DomainModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace Chirp.Razor;
+namespace Chirp.Infrastructure;
 
 public interface ICheepRepository
 {

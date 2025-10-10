@@ -1,8 +1,5 @@
-using Chirp.Razor;
-using Chirp.Razor.DomainModel;
-using Microsoft.EntityFrameworkCore;
+using Chirp.Infrastructure;
 
-//Region build app and register DbContext
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -41,6 +38,6 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-
-
-
+namespace Chirp.Web
+{
+}
