@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
-using Chirp.Razor.DomainModel;
 using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
