@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
+using Chirp.Razor.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Models;
 
 namespace Chirp.Razor.Pages;
 
 public class PublicModel : PaginationModel
 {
-    private readonly ICheepService _service;
-    public List<CheepViewModel> Cheeps => _service.GetCheeps();
-    public List<CheepViewModel> CurrentPageCheeps { get; set; }
+    private readonly ICheepRepository _service;
+    public List<Cheep> Cheeps => _service.GetCheeps();
+    public List<Cheep> CurrentPageCheeps { get; set; }
     public int NumberOfCheeps => Cheeps.Count;
     public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
-    public PublicModel(ICheepService service)
+    public PublicModel(ICheepRepository service)
     {
         _service = service;
     }
