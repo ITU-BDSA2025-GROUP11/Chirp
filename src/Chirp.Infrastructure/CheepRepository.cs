@@ -1,6 +1,6 @@
 using Chirp.Core.DomainModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging; //Skal muligvis ikke være her... 
 
 namespace Chirp.Infrastructure;
 
@@ -10,6 +10,8 @@ public interface ICheepRepository
     public List<Cheep> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
 
     public void PostCheep(String text);
+
+    public void createUser();
 }
 
 public class CheepRepository : ICheepRepository
@@ -46,15 +48,15 @@ public class CheepRepository : ICheepRepository
         if (!string.IsNullOrEmpty(author))
         {
             return _context.Cheeps
+                .Include(c => c.Author)
                 .OrderByDescending(c => c.TimeStamp)
                 .Where(c => c.Author.Username == author)
                 .Skip(pageSize * currentPage)
                 .Take(pageSize)
                 .ToList();
-        }
-        else
-        {
+        } else {
             return _context.Cheeps
+                .Include(c => c.Author)
                 .OrderByDescending(c => c.TimeStamp)
                 .Skip(pageSize * currentPage)
                 .Take(pageSize)
@@ -64,7 +66,27 @@ public class CheepRepository : ICheepRepository
 
     public void PostCheep(String text)
     {
-        //_context.Cheeps.Add(new Cheep { Text = text, TimeStamp = DateTime.Now, Author = Environment.UserName });
+        createUser();
+        
+        // The logic regarding username / author id is just a workaround until accounts are implemented
+        var author = _context.Authors.FirstOrDefault(a => a.Username == Environment.UserName);
+        
+        _context.Cheeps.Add(new Cheep { Text = text, TimeStamp = DateTime.Now, AuthorId = author.Id });
+        _context.SaveChanges();
+    }
+
+    public void createUser()
+    {
+        // The logic regarding username / author id is just a workaround until accounts are implemented
+
+        var author = new Author
+        {
+            Username = Environment.UserName,
+            Email = $"{Environment.UserName}@mail.com",
+            Cheeps = new List<Cheep>()
+        };
+
+        _context.Authors.Add(author);
         _context.SaveChanges();
     }
 }
