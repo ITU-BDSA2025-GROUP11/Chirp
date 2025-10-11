@@ -5,13 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure
 {
-    // Interface and implementation in the same file (no typos)
     public interface ICheepRepository
     {
         List<CheepDTO> GetCheeps(string? author = null);
         List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
         void PostCheep(string text);
-        void CreateUser(); // exactly this name/signature
+        void CreateUser();
     }
 
     public class CheepRepository : ICheepRepository
@@ -68,7 +67,6 @@ namespace Chirp.Infrastructure
 
         public void PostCheep(string text)
         {
-            // Ensure a user exists, then post cheep
             CreateUser();
 
             var author = _context.Authors.FirstOrDefault(a => a.Username == Environment.UserName);
