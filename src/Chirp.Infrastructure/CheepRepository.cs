@@ -1,92 +1,110 @@
 using Chirp.Core.DomainModel;
+using Chirp.Core.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging; //Skal muligvis ikke være her... 
+using Microsoft.Extensions.Logging;
 
-namespace Chirp.Infrastructure;
-
-public interface ICheepRepository
+namespace Chirp.Infrastructure
 {
-    public List<Cheep> GetCheeps(string? author = null);
-    public List<Cheep> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
-
-    public void PostCheep(String text);
-
-    public void createUser();
-}
-
-public class CheepRepository : ICheepRepository
-{
-    readonly ChirpDbContext _context;
-    readonly ILogger _logger;
-
-    public CheepRepository(ChirpDbContext context, ILoggerFactory factory)
+    // Interface and implementation in the same file (no typos)
+    public interface ICheepRepository
     {
-        _context = context;
-        _logger = factory.CreateLogger<CheepRepository>();
+        List<CheepDTO> GetCheeps(string? author = null);
+        List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
+        void PostCheep(string text);
+        void CreateUser(); // exactly this name/signature
     }
 
-    public List<Cheep> GetCheeps(string? author = null)
+    public class CheepRepository : ICheepRepository
     {
+        private readonly ChirpDbContext _context;
+        private readonly ILogger _logger;
 
-        if (author != null)
+        public CheepRepository(ChirpDbContext context, ILoggerFactory factory)
         {
-            var _ = _context.Authors
-                .Include(a => a.Cheeps)
-                .FirstOrDefault(a => a.Username == author);
-
-            return _.Cheeps.ToList();
+            _context = context;
+            _logger = factory.CreateLogger<CheepRepository>();
         }
-        else
-        {
-            var _ = _context.Cheeps.ToList();
-            return _;
-        }
-    }
 
-    public List<Cheep> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
-    {
-        if (!string.IsNullOrEmpty(author))
+        public List<CheepDTO> GetCheeps(string? author = null)
         {
-            return _context.Cheeps
-                .Include(c => c.Author)
+            if (!string.IsNullOrEmpty(author))
+            {
+                var authorEntity = _context.Authors
+                    .Include(a => a.Cheeps)
+                    .FirstOrDefault(a => a.Username == author);
+
+                if (authorEntity == null)
+                    return new List<CheepDTO>();
+
+                return authorEntity.Cheeps
+                    .OrderByDescending(c => c.TimeStamp)
+                    .Select(c => EntityToDTO.ToDTO(c))
+                    .ToList();
+            }
+            else
+            {
+                return _context.Cheeps
+                    .Include(c => c.Author)
+                    .OrderByDescending(c => c.TimeStamp)
+                    .Select(c => EntityToDTO.ToDTO(c))
+                    .ToList();
+            }
+        }
+
+        public List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
+        {
+            IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
+
+            if (!string.IsNullOrEmpty(author))
+                query = query.Where(c => c.Author.Username == author);
+
+            return query
                 .OrderByDescending(c => c.TimeStamp)
-                .Where(c => c.Author.Username == author)
                 .Skip(pageSize * currentPage)
                 .Take(pageSize)
-                .ToList();
-        } else {
-            return _context.Cheeps
-                .Include(c => c.Author)
-                .OrderByDescending(c => c.TimeStamp)
-                .Skip(pageSize * currentPage)
-                .Take(pageSize)
+                .Select(c => EntityToDTO.ToDTO(c))
                 .ToList();
         }
-    }
 
-    public void PostCheep(String text)
-    {
-        createUser();
-        
-        // The logic regarding username / author id is just a workaround until accounts are implemented
-        var author = _context.Authors.FirstOrDefault(a => a.Username == Environment.UserName);
-        
-        _context.Cheeps.Add(new Cheep { Text = text, TimeStamp = DateTime.Now, AuthorId = author.Id });
-        _context.SaveChanges();
-    }
-
-    public void createUser()
-    {
-        // The logic regarding username / author id is just a workaround until accounts are implemented
-
-        var author = new Author
+        public void PostCheep(string text)
         {
-            Username = Environment.UserName,
-            Email = $"{Environment.UserName}@mail.com",
-            Cheeps = new List<Cheep>()
-        };
+            // Ensure a user exists, then post cheep
+            CreateUser();
 
-        _context.Authors.Add(author);
-        _context.SaveChanges();
+            var author = _context.Authors.FirstOrDefault(a => a.Username == Environment.UserName);
+            if (author == null)
+            {
+                _logger.LogWarning("No author found for user {User}", Environment.UserName);
+                return;
+            }
+
+            var newCheep = new Cheep
+            {
+                Text = text,
+                TimeStamp = DateTime.Now,
+                AuthorId = author.Id
+            };
+
+            _context.Cheeps.Add(newCheep);
+            _context.SaveChanges();
+        }
+
+        public void CreateUser()
+        {
+            var username = Environment.UserName ?? "Anonymous";
+
+            if (_context.Authors.Any(a => a.Username == username))
+                return;
+
+            var author = new Author
+            {
+                Username = username,
+                Email = $"{username}@mail.com",
+                Cheeps = new List<Cheep>()
+            };
+
+            _context.Authors.Add(author);
+            _context.SaveChanges();
+        }
     }
 }
