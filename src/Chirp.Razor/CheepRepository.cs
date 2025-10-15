@@ -1,14 +1,26 @@
 using Chirp.Razor.DomainModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Razor;
 
 public interface ICheepRepository
 {
+    
+    // states that every method should either be a command that performs an action,
+    // or a query that returns data to the caller, but not both.
+    
+    // so were not allowed  to add a new Cheep or updating/deleting, in same method that queries
+    
     public List<Cheep> GetCheeps(string? author = null);
     public List<Cheep> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
 
-    public void PostCheep(String text);
+    public void PostCheep(String text, string? author = null);
+
+    public Author? GetAuthor(String text);
+
+    public void CreateAuthor(String? text = null);
+
 }
 
 public class CheepRepository : ICheepRepository
@@ -61,9 +73,68 @@ public class CheepRepository : ICheepRepository
         }
     }
 
-    public void PostCheep(String text)
+    public void PostCheep(String text, string? author = null)
     {
-        //_context.Cheeps.Add(new Cheep { Text = text, TimeStamp = DateTime.Now, Author = Environment.UserName });
+        string validAuthor;
+        
+        if (author == null || GetAuthor(author) == null || GetAuthor(Environment.UserName) == null )
+        {
+            Console.WriteLine("AUTHOR WAS NOT FOUND \n Created New author: " + Environment.UserName);
+            CreateAuthor();
+            validAuthor = Environment.UserName;
+        }
+        else
+        {
+            validAuthor = author;
+        }
+
+        var cheep = new Cheep
+        {
+            Text = text,
+            TimeStamp = DateTime.Now,
+            Author = GetAuthor(validAuthor)
+            };
+        
+        _context.Cheeps.Add(cheep);
         _context.SaveChanges();
+    }
+
+    public void CreateAuthor(String? text = null)
+    {
+        Author author;
+        
+        if (text != null)
+        {
+             author = new Author
+            {
+                Username = text,
+                Email = text + "@email.com",
+                Cheeps = new List<Cheep>()
+            };
+        }
+        else
+        {
+            author = new Author
+            {
+                Username = Environment.UserName,
+                Email = Environment.UserName + "@email.com",
+                Cheeps = new List<Cheep>()
+            };
+        }
+        
+        _context.Authors.Add(author);
+        _context.SaveChanges();
+    }
+
+    public Author? GetAuthor(String text)
+    {
+        if (text.Contains("@"))
+        {
+            return _context.Authors
+                .FirstOrDefault(a => a.Email == text);
+        }
+        
+        return _context.Authors
+            .FirstOrDefault(a => a.Username == text);
     }
 }
