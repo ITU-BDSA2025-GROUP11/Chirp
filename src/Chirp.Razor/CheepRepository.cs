@@ -54,23 +54,18 @@ public class CheepRepository : ICheepRepository
 
     public List<Cheep> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
     {
+        var query = _context.Cheeps.AsQueryable();
+        
         if (!string.IsNullOrEmpty(author))
         {
-            return _context.Cheeps
-                .OrderByDescending(c => c.TimeStamp)
-                .Where(c => c.Author.Username == author)
-                .Skip(pageSize * currentPage)
-                .Take(pageSize)
-                .ToList();
+            query = query.Where(c => c.Author.Username == author);
         }
-        else
-        {
-            return _context.Cheeps
-                .OrderByDescending(c => c.TimeStamp)
-                .Skip(pageSize * currentPage)
-                .Take(pageSize)
-                .ToList();
-        }
+
+        return query
+            .OrderByDescending(c => c.TimeStamp)
+            .Skip(pageSize * (currentPage - 1)) // <-- important fix
+            .Take(pageSize)
+            .ToList();
     }
 
     public void PostCheep(String text, string? author = null)
