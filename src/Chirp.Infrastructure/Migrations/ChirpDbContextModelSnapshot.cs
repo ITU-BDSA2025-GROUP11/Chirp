@@ -19,7 +19,7 @@ namespace Chirp.Infrastructure.Migrations
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -27,18 +27,18 @@ namespace Chirp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("AuthorId");
 
                     b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Cheep", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CheepId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -52,7 +52,7 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("CheepId");
 
                     b.HasIndex("AuthorId");
 

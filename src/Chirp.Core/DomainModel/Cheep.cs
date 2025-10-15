@@ -2,7 +2,7 @@ namespace Chirp.Core.DomainModel;
 
 public class Cheep
 {
-    public int Id { get; set; }
+    public int CheepId { get; set; }
     
     public string Text { get; set; }
     
