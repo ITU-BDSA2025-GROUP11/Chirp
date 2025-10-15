@@ -30,7 +30,7 @@ namespace Chirp.Infrastructure
             {
                 var authorEntity = _context.Authors
                     .Include(a => a.Cheeps)
-                    .FirstOrDefault(a => a.Username == author);
+                    .FirstOrDefault(a => a.Name == author);
 
                 if (authorEntity == null)
                     return new List<CheepDTO>();
@@ -55,7 +55,7 @@ namespace Chirp.Infrastructure
             IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
 
             if (!string.IsNullOrEmpty(author))
-                query = query.Where(c => c.Author.Username == author);
+                query = query.Where(c => c.Author.Name == author);
 
             return query
                 .OrderByDescending(c => c.TimeStamp)
@@ -69,7 +69,7 @@ namespace Chirp.Infrastructure
         {
             CreateUser();
 
-            var author = _context.Authors.FirstOrDefault(a => a.Username == Environment.UserName);
+            var author = _context.Authors.FirstOrDefault(a => a.Name == Environment.UserName);
             if (author == null)
             {
                 _logger.LogWarning("No author found for user {User}", Environment.UserName);
@@ -80,7 +80,7 @@ namespace Chirp.Infrastructure
             {
                 Text = text,
                 TimeStamp = DateTime.Now,
-                AuthorId = author.Id
+                AuthorId = author.AuthorId
             };
 
             _context.Cheeps.Add(newCheep);
@@ -89,15 +89,15 @@ namespace Chirp.Infrastructure
 
         public void CreateUser()
         {
-            var username = Environment.UserName ?? "Anonymous";
+            var name = Environment.UserName ?? "Anonymous";
 
-            if (_context.Authors.Any(a => a.Username == username))
+            if (_context.Authors.Any(a => a.Name == name))
                 return;
 
             var author = new Author
             {
-                Username = username,
-                Email = $"{username}@mail.com",
+                Name = name,
+                Email = $"{name}@mail.com",
                 Cheeps = new List<Cheep>()
             };
 
