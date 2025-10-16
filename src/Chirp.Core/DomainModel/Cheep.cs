@@ -1,11 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Chirp.Razor.DomainModel;
+namespace Chirp.Core.DomainModel;
 
 public class Cheep
 {
-    public int Id { get; set; }
+    public int CheepId { get; set; }
     
     public string Text { get; set; }
     

@@ -12,10 +12,22 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="9.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="AppSettings\" />
       <Folder Include="Data\" />
+      <Folder Include="DomainModel\" />
+      <Folder Include="Pages\Shared\" />
+      <Folder Include="Properties\" />
+      <Folder Include="wwwroot\css\" />
+      <Folder Include="wwwroot\favicon\" />
+      <Folder Include="wwwroot\images\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Properties\launchSettings.json" />
     </ItemGroup>
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
