@@ -80,7 +80,8 @@ namespace Chirp.Infrastructure
             {
                 Text = text,
                 TimeStamp = DateTime.Now,
-                AuthorId = author.AuthorId
+                AuthorId = author.AuthorId,
+                Author = author
             };
 
             _context.Cheeps.Add(newCheep);
@@ -89,7 +90,7 @@ namespace Chirp.Infrastructure
 
         public void CreateUser()
         {
-            var name = Environment.UserName ?? "Anonymous";
+            var name = Environment.UserName; // ?? "Anonymous";
 
             if (_context.Authors.Any(a => a.Name == name))
                 return;
