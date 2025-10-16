@@ -8,10 +8,10 @@ namespace DatabaseTest;
 
 public class CheepRepositoryIntegrationTests
 {
+    //Tester om vi kan vi kan tilføje og hente Cheeps fra et datbase.
     [Fact]
-    public void Can_Add_And_Retrieve_Cheep()
+    public void AddAndRetrieveCheep()
     {
-        // Arrange
         var options = new DbContextOptionsBuilder<ChirpDbContext>()
             .UseSqlite("Data Source=:memory:")
             .Options;
@@ -21,15 +21,14 @@ public class CheepRepositoryIntegrationTests
         context.Database.EnsureCreated();
 
         var repo = new CheepRepository(context, new LoggerFactory());
-
-        // Act
+        
         repo.CreateUser();
-        repo.PostCheep("Joakim er faktisk pænt handsome OG meget morsom!");
+        repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor");
 
         var cheeps = repo.GetCheeps();
-
-        // Assert
+        
         Assert.Single(cheeps);
-        Assert.Equal("Joakim er faktisk pænt handsome OG meget morsom!", cheeps[0].Text);
+        Assert.Equal("Joakim er faktisk pænt handsome OG har rigtig god humor", cheeps[0].Text);
     }
 }
+
