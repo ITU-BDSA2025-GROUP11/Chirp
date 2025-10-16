@@ -7,6 +7,7 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>clientTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,10 @@
 
     <ItemGroup>
         <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Chirp.Core\Chirp.Core.csproj" />
     </ItemGroup>
 
 </Project>
