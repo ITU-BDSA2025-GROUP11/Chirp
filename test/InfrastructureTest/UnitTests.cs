@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Chirp.Tests
+namespace databasetest
 {
     public class UnitTests : IDisposable
     {
