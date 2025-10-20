@@ -63,30 +63,37 @@ public class CheepRepositoryIntegrationTests : IDisposable
     }
 
    //checks that we only get cheeps from the desired author 
-    [Fact]
-    public void Get_Cheeps_From_Author()
-    {
-        _repo.CreateUser();
-        _repo.PostCheep("Joakim’s cheep 1");
-        _repo.PostCheep("Joakim’s cheep 2");
-        
-        var otherAuthor = new Author
-        {
-            Name = "SomeoneElse",
-            Email = "someone@mail.com",
-            Cheeps = new List<Cheep>
-            {
-                new Cheep { Text = "Other’s cheep", TimeStamp = DateTime.Now }
-            }
-        };
-        _context.Authors.Add(otherAuthor);
-        _context.SaveChanges();
-        
-        var cheeps = _repo.GetCheeps(author: Environment.UserName);
-        
-        Assert.All(cheeps, c => Assert.Equal(Environment.UserName, c.Author.Username));
-        Assert.DoesNotContain(cheeps, c => c.Author.Username == "SomeoneElse");
-    }
+   [Fact]
+   public void Get_Cheeps_From_Author()
+   {
+       _repo.CreateUser();
+       _repo.PostCheep("Joakim’s cheep 1");
+       _repo.PostCheep("Joakim’s cheep 2");
+    
+       var otherAuthor = new Author
+       {
+           Name = "SomeoneElse",
+           Email = "someone@mail.com",
+           Cheeps = new List<Cheep>()
+       };
+
+       var otherCheep = new Cheep
+       {
+           Text = "Other’s cheep",
+           TimeStamp = DateTime.Now,
+           Author = otherAuthor
+       };
+
+       otherAuthor.Cheeps.Add(otherCheep);
+       _context.Authors.Add(otherAuthor);
+       _context.SaveChanges();
+    
+       var cheeps = _repo.GetCheeps(author: Environment.UserName);
+    
+       Assert.All(cheeps, c => Assert.Equal(Environment.UserName, c.Author.Username));
+       Assert.DoesNotContain(cheeps, c => c.Author.Username == "SomeoneElse");
+   }
+
    
     public void Dispose()
     {
