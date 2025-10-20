@@ -9,7 +9,7 @@ public class ChirpDbContextFactory : IDesignTimeDbContextFactory<ChirpDbContext>
     {
         var optionsBuilder = new DbContextOptionsBuilder<ChirpDbContext>();
         
-        optionsBuilder.UseSqlite("Data Source=../../data/chirp.db");
+        optionsBuilder.UseSqlite("Data Source=/Chirp.Web/Chirp.db");
         
         return new ChirpDbContext(optionsBuilder.Options);
     }

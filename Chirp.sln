@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Infrastructure", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core", "src\Chirp.Core\Chirp.Core.csproj", "{E2E002CA-3A08-482E-BBF8-4FC76419BE23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelsTest", "test\DomainModelsTest\DomainModelsTest.csproj", "{FF9ACFE8-05EF-4040-B1CD-F66BF090B142}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +42,9 @@ Global
 		{E2E002CA-3A08-482E-BBF8-4FC76419BE23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2E002CA-3A08-482E-BBF8-4FC76419BE23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2E002CA-3A08-482E-BBF8-4FC76419BE23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF9ACFE8-05EF-4040-B1CD-F66BF090B142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF9ACFE8-05EF-4040-B1CD-F66BF090B142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF9ACFE8-05EF-4040-B1CD-F66BF090B142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF9ACFE8-05EF-4040-B1CD-F66BF090B142}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
