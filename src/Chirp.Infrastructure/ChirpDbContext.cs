@@ -1,9 +1,10 @@
 using Chirp.Core.DomainModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
-public class ChirpDbContext : DbContext
+public class ChirpDbContext : IdentityDbContext<Author>
 {
     public ChirpDbContext(DbContextOptions<ChirpDbContext> options)
         : base(options) { }

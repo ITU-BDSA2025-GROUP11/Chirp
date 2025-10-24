@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Chirp.Core.DomainModel;
 
-public class Author
+public class Author : IdentityUser 
 {
     public int AuthorId { get; set; }
     

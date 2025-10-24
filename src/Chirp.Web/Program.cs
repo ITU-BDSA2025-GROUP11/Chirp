@@ -1,8 +1,13 @@
+using Chirp.Core.DomainModel;
+using Chirp.Core.DTOs;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDefaultIdentity<Author>(options =>
+        options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ChirpDbContext>();
 
 builder.Services.AddRazorPages();
 
@@ -19,6 +24,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapRazorPages();
 
