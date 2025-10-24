@@ -1,3 +1,4 @@
+using Chirp.Core.DomainModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
