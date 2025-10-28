@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Identity;
+
 
 namespace Chirp.Core.DomainModel;
 
-public class Author 
+public class Author
 {
     public int AuthorId { get; set; }
     
@@ -11,4 +11,6 @@ public class Author
     public required string Email { get; set; }
     
     public required ICollection<Cheep> Cheeps { get; set; }
+
+    public string IdentityUserId { get; set; } = default!;
 }
