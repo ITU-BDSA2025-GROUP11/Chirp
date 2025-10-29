@@ -28,4 +28,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Database\" />
+    </ItemGroup>
+
 </Project>
