@@ -12,5 +12,5 @@ public class Author
     
     public required ICollection<Cheep> Cheeps { get; set; }
 
-    public string IdentityUserId { get; set; } = default!;
+   // public string userID { get; set; } = default!;
 }
