@@ -11,16 +11,18 @@ public class ChirpDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }
     
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // This ensures Identity creates its tables correctly
         base.OnModelCreating(modelBuilder);
 
         // Add your Author -> IdentityUser relationship mapping:
-        modelBuilder.Entity<Author>()
-            .HasOne<ApplicationUser>()        // no navigation property needed
+        modelBuilder.Entity<ApplicationUser>()
+            .HasOne<Author>()        // no navigation property needed
             .WithMany()
-            .HasForeignKey(a => a.IdentityUserId)
+            .HasForeignKey(a => a.Id)
             .OnDelete(DeleteBehavior.Cascade);
     }
     

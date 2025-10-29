@@ -696,16 +696,18 @@ public static class DbInitializer
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };*/
             
-            /*IdentityUser helgeUser = new IdentityUser {Id="a", UserName = "Helge", Email = "ropf@itu.dk" }; 
-            IdentityUser adrianUser = new IdentityUser { Id="b", UserName = "Adrian", Email = "adho@itu.dk" };
+            Author helge = new Author{Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() }; 
+            Author adrian = new Author { Name = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
 
-            Author Helge = new Author=);
+            var helgeUser = new ApplicationUser {author =  helge};
+            var adrianUser = new ApplicationUser {author =  adrian};
             
-            chirpContext.Authors.Add(helge);*/
+            chirpContext.ApplicationUsers.Add(helgeUser);
+            chirpContext.ApplicationUsers.Add(adrianUser);
             
             
-            chirpContext.Authors.AddRange(authors);
-            chirpContext.Cheeps.AddRange(cheeps);
+           // chirpContext.Authors.AddRange(authors);
+           // chirpContext.Cheeps.AddRange(cheeps);
             chirpContext.SaveChanges();
         }
     }
