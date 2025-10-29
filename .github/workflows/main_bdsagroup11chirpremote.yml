@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build ./src/Chirp.Web --configuration Release
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish ./src/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -62,6 +62,8 @@ jobs:
           app-name: 'bdsagroup11chirpremote'
           slot-name: 'Production'
           package: .
+          clean: true
 
           
+
 
