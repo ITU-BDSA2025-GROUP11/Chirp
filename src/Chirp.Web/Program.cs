@@ -1,15 +1,27 @@
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddRazorPages();
 
-var connectionString = "Data Source=./Chirp.db";  //builder.Configuration.GetConnectionString("DefaultConnection");
+// commented this out to make migration work? tell if i fucked something -merl
+// var connectionString = "Data Source=./Chirp.db";  //builder.Configuration.GetConnectionString("DefaultConnection");
+var dbDir = Path.Combine(AppContext.BaseDirectory, "Database");
+Directory.CreateDirectory(dbDir);
+var dbPath = Path.Combine(dbDir, "Chirp.db");
+var connectionString = $"Data Source={dbPath}";
 
 builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ChirpDbContext>();
+
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+
 
 var app = builder.Build();
 
@@ -19,6 +31,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization(); 
 
 app.MapRazorPages();
 

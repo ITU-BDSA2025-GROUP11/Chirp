@@ -7,40 +7,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Update="Pages\Shared\_Layout.cshtml">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Update="Pages\Public.cshtml">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Update="Pages\UserTimeline.cshtml">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <AdditionalFiles Include="Pages\Public.cshtml" />
-        <AdditionalFiles Include="Pages\Shared\_Layout.cshtml" />
-        <AdditionalFiles Include="Pages\UserTimeline.cshtml" />
+        <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
+        <!-- EF Core -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <!-- Identity -->
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.7" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        <PrivateAssets>all</PrivateAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.9" />
-    </ItemGroup>
-
-    
-   
-
-
-   
 
 </Project>
