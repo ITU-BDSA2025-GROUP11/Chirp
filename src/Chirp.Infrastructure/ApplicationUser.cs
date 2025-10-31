@@ -5,6 +5,6 @@ namespace Chirp.Infrastructure;
 
 public class ApplicationUser : IdentityUser
 {
-    public Author author { get; set; }
+    public required Author? Author { get; set; }
 }
 

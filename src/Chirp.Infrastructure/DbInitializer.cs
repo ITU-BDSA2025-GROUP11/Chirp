@@ -699,8 +699,8 @@ public static class DbInitializer
             Author helge = new Author{Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() }; 
             Author adrian = new Author { Name = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
 
-            var helgeUser = new ApplicationUser {author =  helge};
-            var adrianUser = new ApplicationUser {author =  adrian};
+            var helgeUser = new ApplicationUser {Author =  helge};
+            var adrianUser = new ApplicationUser {Author =  adrian};
             
             chirpContext.ApplicationUsers.Add(helgeUser);
             chirpContext.ApplicationUsers.Add(adrianUser);

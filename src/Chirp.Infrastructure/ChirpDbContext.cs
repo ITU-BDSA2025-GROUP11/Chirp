@@ -20,9 +20,9 @@ public class ChirpDbContext : IdentityDbContext<ApplicationUser>
 
         // Add your Author -> IdentityUser relationship mapping:
         modelBuilder.Entity<ApplicationUser>()
-            .HasOne<Author>()        // no navigation property needed
-            .WithMany()
-            .HasForeignKey(a => a.Id)
+            .HasOne(u => u.Author)
+            .WithOne() // no reverse navigation property
+            .HasForeignKey<Author>(a => a.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
     }
     
