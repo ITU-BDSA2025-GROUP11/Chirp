@@ -80,7 +80,7 @@ namespace Chirp.Infrastructure
             {
                 Text = text,
                 TimeStamp = DateTime.Now,
-                AuthorId = author.Id,
+                AuthorId = author.AuthorId,
                 Author = author
             };
 

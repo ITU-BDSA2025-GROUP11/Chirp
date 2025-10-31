@@ -4,7 +4,7 @@ namespace Chirp.Core.DomainModel;
 
 public class Author
 {
-    public int Id { get; set; }
+    public string AuthorId { get; set; }
     
     public required string Name { get; set; }
     
