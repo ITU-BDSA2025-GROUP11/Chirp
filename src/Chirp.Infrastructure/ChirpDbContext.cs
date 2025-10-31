@@ -17,13 +17,13 @@ public class ChirpDbContext : IdentityDbContext<ApplicationUser>
     {
         // This ensures Identity creates its tables correctly
         base.OnModelCreating(modelBuilder);
-
+        
         // Add your Author -> IdentityUser relationship mapping:
-        modelBuilder.Entity<ApplicationUser>()
+        /*modelBuilder.Entity<ApplicationUser>()
             .HasOne(u => u.Author)
             .WithOne() // no reverse navigation property
+            .Property(u => a.AuthorId)
             .HasForeignKey<Author>(a => a.AuthorId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade);*/
     }
-    
 }

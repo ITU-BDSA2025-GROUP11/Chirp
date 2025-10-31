@@ -1,10 +1,12 @@
 
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Core.DomainModel;
 
 public class Author
 {
-    public string AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     
     public required string Name { get; set; }
     
