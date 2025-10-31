@@ -1,16 +1,14 @@
 
-
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Core.DomainModel;
 
-public class Author
+public class Author : IdentityUser
 {
-    public Guid AuthorId { get; set; }
-    
+   /* public Guid AuthorId { get; set; }
     public required string Name { get; set; }
     
-    public required string Email { get; set; }
+    public required string Email { get; set; }*/
     
     public required ICollection<Cheep> Cheeps { get; set; }
 

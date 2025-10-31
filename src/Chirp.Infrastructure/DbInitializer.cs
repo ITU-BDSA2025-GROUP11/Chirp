@@ -2,36 +2,12 @@ using Chirp.Core.DomainModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Infrastructure;
+
 public static class DbInitializer
 {
     public static void SeedDatabase(ChirpDbContext chirpContext)
     {
-        chirpContext.Database.EnsureCreated();
-        
-        Author helge = new Author{Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() }; 
-        Author adrian = new Author { Name = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
-
-        var cheeps = new List<Cheep>() { };
-            
-        var c655 = new Cheep() { CheepId = 655, Author = helge, Text = "What do you think so meanly of him?", TimeStamp = DateTime.Parse("2023-08-01 13:13:56") };
-        var c656 = new Cheep() { CheepId = 656, Author = helge, Text = "Hello, BDSA students!", TimeStamp = DateTime.Parse("2023-08-01 12:16:48") };
-        var c657 = new Cheep() { CheepId = 657, Author = adrian, Text = "Hej, velkommen til kurset.", TimeStamp = DateTime.Parse("2023-08-01 13:08:28") };
-
-        cheeps.Add(c655);
-        cheeps.Add(c656);
-        cheeps.Add(c657);
-        
-        var helgeUser = new ApplicationUser {Author =  helge};
-        var adrianUser = new ApplicationUser {Author =  adrian};
-
-        chirpContext.Authors.Add(helge);
-        chirpContext.Authors.Add(adrian);
-        chirpContext.ApplicationUsers.Add(helgeUser);
-        chirpContext.ApplicationUsers.Add(adrianUser);
-
-        chirpContext.SaveChanges();
-        
-        if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
+        if (!(chirpContext.Users.Any() && chirpContext.Cheeps.Any()))
         {
             /*var a1 = new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
             var a2 = new Author() { AuthorId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
@@ -719,26 +695,34 @@ public static class DbInitializer
             a8.Cheeps = new List<Cheep>() { c55, c124, c139, c151, c164, c263, c310, c328, c360, c375, c430, c470, c564, c576, c605 };
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };*/
-            
-            /*Author helge = new Author{Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() }; 
-            Author adrian = new Author { Name = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
-            
-            var c655 = new Cheep() { CheepId = 655, Author = helge, Text = "What do you think so meanly of him?", TimeStamp = DateTime.Parse("2023-08-01 13:13:56") };
-            var c656 = new Cheep() { CheepId = 656, Author = helge, Text = "Hello, BDSA students!", TimeStamp = DateTime.Parse("2023-08-01 12:16:48") };
-            var c657 = new Cheep() { CheepId = 657, Author = adrian, Text = "Hej, velkommen til kurset.", TimeStamp = DateTime.Parse("2023-08-01 13:08:28") };
 
-            var helgeUser = new ApplicationUser {Author =  helge};
-            var adrianUser = new ApplicationUser {Author =  adrian};
 
-            chirpContext.Authors.Add(helge);
-            chirpContext.Authors.Add(adrian);
-            chirpContext.ApplicationUsers.Add(helgeUser);
-            chirpContext.ApplicationUsers.Add(adrianUser);
+            var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
+            var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
+
+            var authors = new List<Author>() { a1, a2 };
+            var cheeps = new List<Cheep>();
+
+            var cheep1 = new Cheep() { Text = "hej",  Author = a1 };
+            var cheep2 = new Cheep() { Text = "hej fra Adrian",  Author = a2 };
             
+            cheeps.Add(cheep1);
+            cheeps.Add(cheep2);
             
-           // chirpContext.Authors.AddRange(authors);
-           // chirpContext.Cheeps.AddRange(cheeps);
-            chirpContext.SaveChanges();*/
+
+            foreach (var author in authors)
+            {
+                var password = author.UserName switch
+                {
+                    "Helge" => "LetM31n!",
+                    "Adrian" => "M32Want_Access",
+                    _ => "Hundemad"
+                };
+
+                chirpContext.Users.AddRange(authors); 
+                chirpContext.Cheeps.AddRange(cheeps);
+                chirpContext.SaveChanges();
+            }
         }
     }
 }
