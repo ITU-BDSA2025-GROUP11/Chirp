@@ -28,6 +28,8 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish ./src/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Check published output
+        run: ls -R
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -54,7 +56,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_87821CCEB0E240CEB45ED624B8ED4D39 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_53CC54D5DD90439A8828DAE50631C81B }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_366DDD1A5F1B4F03BAFE4EA56FED7A8D }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -65,4 +66,5 @@ jobs:
           clean: true
 
           
+
 
