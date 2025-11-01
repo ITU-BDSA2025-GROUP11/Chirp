@@ -67,10 +67,11 @@ jobs:
         with:
           app-name: 'bdsagroup11chirpremote'
           slot-name: 'Production'
-          package: ./publish
+          package: ./publish/myapp
           clean: true
 
           
+
 
 
 
