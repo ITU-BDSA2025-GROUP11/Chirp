@@ -1,4 +1,5 @@
-INSERT INTO user VALUES(1,'Roger Histand','Roger+Histand@hotmail.com','AZ0serCHTCtJWR+sQCF4MhhfYLyLuK9tU4bWVy0AOBU=');
+/*INSERT INTO user VALUES(1,'Roger Histand','Roger+Histand@hotmail.com','AZ0serCHTCtJWR+sQCF4MhhfYLyLuK9tU4bWVy0AOBU=');
+ 
 INSERT INTO user VALUES(2,'Luanna Muro','Luanna-Muro@ku.dk','iuN9GA9kRoMQW54696JGUML74QKYNKFaG9mFNozJzqQ=');
 INSERT INTO user VALUES(3,'Wendell Ballan','Wendell-Ballan@gmail.com','vVriphatZcCvXc0ZUS2Ckvy4gd2gHAnf8e+RiLDQYOQ=');
 INSERT INTO user VALUES(4,'Nathan Sirmon','Nathan+Sirmon@dtu.dk','ZGdhIGPBl7njqKYbQcqnjWQc9sQY87cDa+18wF7yM2g=');
@@ -672,3 +673,5 @@ INSERT INTO message VALUES(656,12,'Hej, velkommen til kurset.',1690895308);
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('user',12);
 INSERT INTO sqlite_sequence VALUES('message',657);
+  
+ */

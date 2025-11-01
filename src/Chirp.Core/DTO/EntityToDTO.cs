@@ -8,7 +8,7 @@ namespace Chirp.Core.DTOs
         {
             return new AuthorDTO
             {
-                Username = author.Name,
+                Username = author.UserName,
                 Email = author.Email
             };
         }
