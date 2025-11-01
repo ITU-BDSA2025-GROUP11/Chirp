@@ -696,7 +696,6 @@ public static class DbInitializer
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };*/
 
-
             var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
             var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
 
@@ -718,11 +717,10 @@ public static class DbInitializer
                     "Adrian" => "M32Want_Access",
                     _ => "Hundemad"
                 };
-
-                chirpContext.Users.AddRange(authors); 
-                chirpContext.Cheeps.AddRange(cheeps);
-                chirpContext.SaveChanges();
             }
+            chirpContext.Users.AddRange(authors); 
+            chirpContext.Cheeps.AddRange(cheeps);
+            chirpContext.SaveChanges();
         }
     }
 }

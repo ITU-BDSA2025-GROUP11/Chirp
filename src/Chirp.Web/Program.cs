@@ -11,7 +11,6 @@ builder.Services.AddDefaultIdentity<Author>(options =>
             "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ0123456789-.,_";
         options.SignIn.RequireConfirmedAccount = false;
     })
-        
     .AddEntityFrameworkStores<ChirpDbContext>();
 
 builder.Services.AddRazorPages();
