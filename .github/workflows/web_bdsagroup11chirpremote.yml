@@ -36,8 +36,7 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-      - name: Debug publish folder
-        run: ls -R ./publish
+    
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -51,7 +50,8 @@ jobs:
         with:
           name: .net-app
           path: ./publish
-      
+      - name: Debug publish folder
+        run: ls -R ./publish
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -71,6 +71,7 @@ jobs:
           clean: true
 
           
+
 
 
 
