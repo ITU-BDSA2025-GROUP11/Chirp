@@ -29,7 +29,7 @@ jobs:
       - name: dotnet publish
         run: dotnet publish ./src/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
       - name: Check published output
-        run: ls -R
+        run: ls -R ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -49,6 +49,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: ./publish
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -62,9 +63,10 @@ jobs:
         with:
           app-name: 'bdsagroup11chirpremote'
           slot-name: 'Production'
-          package: .
+          package: ./publish
           clean: true
 
           
+
 
 
