@@ -5,13 +5,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
 public class ChirpDbContext(DbContextOptions<ChirpDbContext> options) : IdentityDbContext<Author>(options)
-{
-  /*  public ChirpDbContext(DbContextOptions<ChirpDbContext> options)
-        : base(options) { }*/
-   // public DbSet<Author> Authors { get; set; }
+{ 
     public DbSet<Cheep> Cheeps { get; set; }
-    
-    //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
