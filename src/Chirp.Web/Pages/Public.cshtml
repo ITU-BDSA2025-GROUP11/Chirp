@@ -1,5 +1,9 @@
 ﻿@page "/{publicpage:int?}"
 @model Chirp.Razor.Pages.PublicModel
+@using Microsoft.AspNetCore.Identity
+@using Chirp.Core.DomainModel
+@inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
 .Pages.PublicModel
 @{
     ViewData["Title"] = "Chirp!";
