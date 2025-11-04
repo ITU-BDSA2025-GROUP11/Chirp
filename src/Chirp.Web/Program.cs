@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDefaultIdentity<Author>(options =>
     {
         options.User.AllowedUserNameCharacters =
-            "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ0123456789-.,_";
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.,_@";
         options.SignIn.RequireConfirmedAccount = false;
     })
     .AddEntityFrameworkStores<ChirpDbContext>();
