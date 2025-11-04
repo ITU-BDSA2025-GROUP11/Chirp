@@ -3,34 +3,56 @@
 @inject SignInManager<Author> SignInManager
 @inject UserManager<Author> UserManager
 
-<ul class="navbar-nav">
+<div class="navigation">
     <!-- LOGIN PARTIAL LOADED -->
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
+        <div>
             <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Manage/Index" title="Manage">
-                Hello @User.Identity.Name!>
-            </a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-page="/Account/Logout"
-                  asp-route-returnUrl="@Url.Page("/", new { area = "" })"
-                  asp-area="Identity" method="post">
-                <button class="nav-link btn btn-link text-dark"
-                        type="submit">Logout</button>
-            </form>
-        </li>
+               asp-page="/User">My Timeline</a> |
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/Public">Public Timeline</a> |
+            <a class="nav-link text-dark" asp-area="Identity"
+                asp-page="/Public">Logout [@(User.Identity.Name)]</a>
+        </div>
     }
     else
     {
-        <li class="nav-item">
+        <div>
             <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
+               asp-page="/Account/Register">Register</a> |
             <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Login">Login</a>
-        </li>
+               asp-page="/Account/Login">Login</a> 
+        </div>
     }
-</ul>
+</div>
+
+<!-- 
+< class="nav-item">
+<a class="nav-link text-dark" asp-area="Identity"
+   asp-page="/Account/Manage/Index" title="Manage">
+    Hello @User.Identity.Name!>
+</a>
+<
+<div class="nav-item">
+    <form class="form-inline" asp-page="/Account/Logout"
+          asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+          asp-area="Identity" method="post">
+        <button class="nav-link btn btn-link text-dark"
+                type="submit">Logout</button>
+    </form>
+</div>
+}
+else
+{
+<div class="nav-item">
+    <a class="nav-link text-dark" asp-area="Identity"
+       asp-page="/Account/Register">Register</a>
+    <a class="nav-link text-dark" asp-area="Identity"
+       asp-page="/Account/Login">Login</a>
+</div>
+<div class="nav-item">
+   
+</div>
+
+-->
