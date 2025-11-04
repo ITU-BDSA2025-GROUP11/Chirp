@@ -12,6 +12,8 @@ public class ChirpDbContext(DbContextOptions<ChirpDbContext> options) : Identity
     {
         // This ensures Identity creates its tables correctly
         base.OnModelCreating(modelBuilder);
-       
+        modelBuilder.Entity<Author>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
     }
 }
