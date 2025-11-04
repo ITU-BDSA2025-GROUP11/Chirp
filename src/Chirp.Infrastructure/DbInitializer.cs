@@ -696,32 +696,20 @@ public static class DbInitializer
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };*/
 
-            var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
-            var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
-
-            var authors = new List<Author>() { a1, a2 };
-            var cheeps = new List<Cheep>();
-
-            var cheep1 = new Cheep() { Text = "hej",  Author = a1 };
-            var cheep2 = new Cheep() { Text = "hej fra Adrian",  Author = a2 };
-            
-            cheeps.Add(cheep1);
-            cheeps.Add(cheep2);
-            
-
-            foreach (var author in authors)
-            {
-                var password = author.UserName switch
-                {
-                    "Helge" => "LetM31n!",
-                    "Adrian" => "M32Want_Access",
-                    _ => "Hundemad"
-                };
-            }
-            chirpContext.Users.AddRange(authors); 
-            chirpContext.Cheeps.AddRange(cheeps);
-            chirpContext.SaveChanges();
         }
+        
+        var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
+        var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
+            
+        var authors = new List<Author>() { a1, a2 };
+        var cheeps = new List<Cheep>();
+        
+        var passwordHasher = new PasswordHasher<Author>();
+        passwordHasher.HashPassword(a1, "LetM31n!");
+        passwordHasher.HashPassword(a2, "M32Want_Access");
+        chirpContext.Users.AddRange(authors); 
+        chirpContext.Cheeps.AddRange(cheeps);
+        chirpContext.SaveChanges();
     }
 }
 
