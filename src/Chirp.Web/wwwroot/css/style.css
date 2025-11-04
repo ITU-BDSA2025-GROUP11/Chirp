@@ -8,6 +8,15 @@ a {
   color: #26776F;
 }
 
+#Chirp-img {
+    padding: 0;
+    border: none;
+    background: none;
+    text-decoration: none;
+    display: inline-flex; /* keeps image aligned nicely */
+    align-items: center;
+}
+
 a:hover {
   color: #333;
 }
@@ -251,6 +260,8 @@ form * {
     margin: 2px 0;
 }
 
+
+
 button {
     background-color: #cc6e6e;
     border: none;
@@ -288,3 +299,5 @@ ul.nav li a {
 ul.nav li a:hover {
     background-color: #8b4949;
 }
+
+
