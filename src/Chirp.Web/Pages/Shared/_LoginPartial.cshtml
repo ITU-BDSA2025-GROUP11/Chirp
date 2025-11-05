@@ -8,14 +8,8 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <div>
-            <form class="form-inline" asp-page="Pages/UserTimeLine/[@(User.Identity.Name)]"
-                  asp-route-returnUrl="@Url.Page("/", new { area = "" })"
-                  asp-area="Identity" method="post">
-                <button class="nav-link btn btn-link text-dark"
-                        type="submit">My Timeline</button>
-            </form> |
-            <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Public">Public Timeline</a> |
+            <a href="/@(User.Identity.Name)">My timeline</a> |
+            <a href="/">Public timeline</a> |
             <form class="form-inline" asp-page="/Account/Logout"
                   asp-route-returnUrl="@Url.Page("/", new { area = "" })"
                   asp-area="Identity" method="post">
@@ -23,9 +17,6 @@
                         type="submit">Logout [@(User.Identity.Name)]</button>
             </form>
         </div>
-        
-        <!-- <a class="nav-link text-dark" asp-area="Identity"
-                asp-page="/User">My Timeline</a> -->
     }
     else
     {
