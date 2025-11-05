@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Identity
+@using Chirp.Core.DomainModel
+@inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
+
+<div class="navigation">
+    <!-- LOGIN PARTIAL LOADED -->
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div>
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/User">My Timeline</a> |
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/Public">Public Timeline</a> |
+            <form class="form-inline" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+                  asp-area="Identity" method="post">
+                <button class="nav-link btn btn-link text-dark"
+                        type="submit">Logout [@(User.Identity.Name)]</button>
+                </form>
+        </div>
+    }
+    else
+    {
+        <div>
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/Account/Register">Register</a> |
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/Account/Login">Login</a> 
+        </div>
+    }
+</div>

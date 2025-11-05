@@ -6,13 +6,23 @@
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
-<div class=page>
-    <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
+<div class="page">
+    <h1>
+        <a id="Chirp-img" asp-page="/Public">
+            <img src="/images/icon1.png" alt="Icon1"/>
+        </a> 
+        Chirp!
+    </h1>
+    
+    
+    <header>
+        <partial name="~/Pages/Shared/_LoginPartial.cshtml" />
+    </header>
 
-    <div class=body>
-            @RenderBody()
+    <div class="body">
+        @RenderBody()
     </div>
-    <div class=footer>
+    <div class="footer">
         Chirp &mdash; An ASP.NET Application
     </div>
 </div>
@@ -20,3 +30,5 @@
 </body>
 @await RenderSectionAsync("Scripts", required: false)
 </html>
+
+<!-- LAYOUT LOADED -->

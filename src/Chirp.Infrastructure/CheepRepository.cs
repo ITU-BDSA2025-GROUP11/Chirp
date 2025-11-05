@@ -28,9 +28,9 @@ namespace Chirp.Infrastructure
         {
             if (!string.IsNullOrEmpty(author))
             {
-                var authorEntity = _context.Authors
+                var authorEntity = _context.Users
                     .Include(a => a.Cheeps)
-                    .FirstOrDefault(a => a.Name == author);
+                    .FirstOrDefault(a => a.UserName == author);
 
                 if (authorEntity == null)
                     return new List<CheepDTO>();
@@ -55,7 +55,7 @@ namespace Chirp.Infrastructure
             IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
 
             if (!string.IsNullOrEmpty(author))
-                query = query.Where(c => c.Author.Name == author);
+                query = query.Where(c => c.Author.UserName == author);
 
             return query
                 .OrderByDescending(c => c.TimeStamp)
@@ -69,7 +69,7 @@ namespace Chirp.Infrastructure
         {
             CreateUser();
 
-            var author = _context.Authors.FirstOrDefault(a => a.Name == Environment.UserName);
+            var author = _context.Users.FirstOrDefault(a => a.UserName == Environment.UserName);
             if (author == null)
             {
                 _logger.LogWarning("No author found for user {User}", Environment.UserName);
@@ -80,7 +80,7 @@ namespace Chirp.Infrastructure
             {
                 Text = text,
                 TimeStamp = DateTime.Now,
-                AuthorId = author.AuthorId,
+                //AuthorId = author.AuthorId,
                 Author = author
             };
 
@@ -92,17 +92,17 @@ namespace Chirp.Infrastructure
         {
             var name = Environment.UserName; // ?? "Anonymous";
 
-            if (_context.Authors.Any(a => a.Name == name))
+            if (_context.Users.Any(a => a.UserName == name))
                 return;
 
             var author = new Author
             {
-                Name = name,
+                UserName = name,
                 Email = $"{name}@mail.com",
                 Cheeps = new List<Cheep>()
             };
 
-            _context.Authors.Add(author);
+            _context.Users.Add(author);
             _context.SaveChanges();
         }
     }

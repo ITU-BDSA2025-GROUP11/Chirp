@@ -4,6 +4,7 @@ using Chirp.Infrastructure;
 using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Razor.Pages
 {

@@ -1,14 +1,15 @@
 using Chirp.Core.DomainModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Infrastructure;
+
 public static class DbInitializer
 {
     public static void SeedDatabase(ChirpDbContext chirpContext)
     {
-        chirpContext.Database.EnsureCreated();
-        if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
+        if (!(chirpContext.Users.Any() && chirpContext.Cheeps.Any()))
         {
-            var a1 = new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
+            /*var a1 = new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
             var a2 = new Author() { AuthorId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
             var a3 = new Author() { AuthorId = 3, Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() };
             var a4 = new Author() { AuthorId = 4, Name = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>() };
@@ -693,11 +694,23 @@ public static class DbInitializer
             a7.Cheeps = new List<Cheep>() { c52, c53, c59, c96, c144, c168, c177, c189, c201, c237, c292, c309, c321, c331, c352, c397, c421, c422, c455, c540, c558, c560, c578, c603, c620 };
             a8.Cheeps = new List<Cheep>() { c55, c124, c139, c151, c164, c263, c310, c328, c360, c375, c430, c470, c564, c576, c605 };
             a11.Cheeps = new List<Cheep>() { c656 };
-            a12.Cheeps = new List<Cheep>() { c657 };
+            a12.Cheeps = new List<Cheep>() { c657 };*/
 
-            chirpContext.Authors.AddRange(authors);
-            chirpContext.Cheeps.AddRange(cheeps);
-            chirpContext.SaveChanges();
         }
+        
+        var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
+        var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
+            
+        var authors = new List<Author>() { a1, a2 };
+        var cheeps = new List<Cheep>();
+        
+        var passwordHasher = new PasswordHasher<Author>();
+        passwordHasher.HashPassword(a1, "LetM31n!");
+        passwordHasher.HashPassword(a2, "M32Want_Access");
+        chirpContext.Users.AddRange(authors); 
+        chirpContext.Cheeps.AddRange(cheeps);
+        chirpContext.SaveChanges();
     }
 }
+
+

@@ -1,8 +1,21 @@
+using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDefaultIdentity<Author>(options =>
+    {
+        options.User.AllowedUserNameCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.,_@";
+        options.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddEntityFrameworkStores<ChirpDbContext>();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+});
 
 builder.Services.AddRazorPages();
 
@@ -20,7 +33,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 app.MapRazorPages();
+//app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -38,20 +56,6 @@ using (var scope = app.Services.CreateScope())
    var context = scope.ServiceProvider.GetRequiredService<ChirpDbContext>();
     
     DbInitializer.SeedDatabase(context);
-    
-    
-    
-    // var cheepRepo = scope.ServiceProvider.GetRequiredService<ICheepRepository>();
-    //
-    // // Post a test cheep
-    // for (int i = 0; i < 3; i++){
-    //     cheepRepo.PostCheep("Johnny: You betrayed me! You're not good. You, you're just a chicken. Chip-chip-chip-chip-cheep-cheep.");
-    //     cheepRepo.PostCheep("Johnny: No, I can't. Anyway, how is your sex life?");
-    //     cheepRepo.PostCheep("Claudette: I got the results of the test back - I definitely have breast cancer.");
-    //     cheepRepo.PostCheep("Denny: I just like to watch you guys.");
-    //     cheepRepo.PostCheep("Mark: What are you talking about? I just saw you!");
-    //     cheepRepo.PostCheep("Johnny: Don't touch me, motherfucker - geddout.");
-    // }
 }
 
 app.Run();
