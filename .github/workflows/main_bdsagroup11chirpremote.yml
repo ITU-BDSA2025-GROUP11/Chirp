@@ -26,7 +26,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
-
+          
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+        
       - name: Build with dotnet
         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
 
@@ -69,3 +72,4 @@ jobs:
           clean: true
 
           
+
