@@ -46,7 +46,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
 
         var cheep = _context.Cheeps.Include(c => c.Author).First();
 
-        Assert.Equal(Environment.UserName, cheep.Author.Name);
+        Assert.Equal(Environment.UserName, cheep.Author.UserName);
         Assert.Equal("Resten af gruppen er også pænt cool", cheep.Text);
     }
 
@@ -54,7 +54,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
     [Fact]
     public void Missing_Author()
     {
-        _context.Authors.RemoveRange(_context.Authors);
+        _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
         var ex = Record.Exception(() => _repo.PostCheep("Plz no crash test"));
@@ -72,7 +72,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
     
        var otherAuthor = new Author
        {
-           Name = "SomeoneElse",
+           UserName = "SomeoneElse",
            Email = "someone@mail.com",
            Cheeps = new List<Cheep>()
        };
@@ -85,7 +85,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
        };
 
        otherAuthor.Cheeps.Add(otherCheep);
-       _context.Authors.Add(otherAuthor);
+       _context.Users.Add(otherAuthor);
        _context.SaveChanges();
     
        var cheeps = _repo.GetCheeps(author: Environment.UserName);
