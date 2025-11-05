@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  CHIRP_WEB_SRC_PATH: "src/Chirp.Web/Chirp.Web.csproj"
+  SOLUTION_PATH: "Chirp.sln"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,10 +28,10 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ${{ env.CHIRP_WEB_SRC_PATH }} -c Release --no-restore --no-build -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -62,4 +66,6 @@ jobs:
           app-name: 'bdsagroup11chirpremote'
           slot-name: 'Production'
           package: .
+          clean: true
+
           
