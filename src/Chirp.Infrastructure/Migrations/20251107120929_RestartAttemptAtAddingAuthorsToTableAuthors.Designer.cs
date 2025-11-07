@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20251107114614_CleanSlateInitialMigration")]
-    partial class CleanSlateInitialMigration
+    [Migration("20251107120929_RestartAttemptAtAddingAuthorsToTableAuthors")]
+    partial class RestartAttemptAtAddingAuthorsToTableAuthors
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
