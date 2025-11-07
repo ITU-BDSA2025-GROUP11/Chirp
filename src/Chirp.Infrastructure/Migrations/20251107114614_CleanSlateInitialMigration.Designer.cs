@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20251104114339_HelgeAdrianUsersAdd")]
-    partial class HelgeAdrianUsersAdd
+    [Migration("20251107114614_CleanSlateInitialMigration")]
+    partial class CleanSlateInitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

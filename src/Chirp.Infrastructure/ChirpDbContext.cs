@@ -4,10 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
-public class ChirpDbContext(DbContextOptions<ChirpDbContext> options) : IdentityDbContext<Author>(options)
+public class ChirpDbContext : IdentityDbContext<Author>
 { 
     public DbSet<Cheep> Cheeps { get; set; }
-    
+    public DbSet<Author> Authors { get; set; }
+    public ChirpDbContext(DbContextOptions<ChirpDbContext> options) : base(options)
+    {
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // This ensures Identity creates its tables correctly
