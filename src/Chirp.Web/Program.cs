@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//var connectionString = builder.Configuration.GetConnectionString("ChirpDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ChirpDbContextConnection' not found.");;
+var connectionString = "Data Source=./Chirp.db";
+builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDefaultIdentity<Author>(options =>
     {
         options.User.AllowedUserNameCharacters =
@@ -18,10 +20,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder.Services.AddRazorPages();
-
-var connectionString = "Data Source=./Chirp.db";  //builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 var app = builder.Build();
@@ -42,19 +40,7 @@ app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
 {
-    
-    var db = scope.ServiceProvider.GetRequiredService<ChirpDbContext>();
-    try
-    {
-        Console.WriteLine($"[DEBUG] Database used: {Path.GetFullPath(db.Database.GetDbConnection().DataSource)}");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"[ERROR] {ex}");
-    }
-    
-   var context = scope.ServiceProvider.GetRequiredService<ChirpDbContext>();
-    
+    var context = scope.ServiceProvider.GetRequiredService<ChirpDbContext>();
     DbInitializer.SeedDatabase(context);
 }
 
