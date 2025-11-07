@@ -700,9 +700,11 @@ public static class DbInitializer
         
         var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
         var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
-            
+        var c1 = new Cheep()
+            { CheepId = 1, Author = a1, Text = "test", TimeStamp = DateTime.Parse("2023-08-01 13:14:03") };
+        a1.Cheeps = new List<Cheep>() { c1 };
         var authors = new List<Author>() { a1, a2 };
-        var cheeps = new List<Cheep>();
+        var cheeps = new List<Cheep>(){c1};
         
         var passwordHasher = new PasswordHasher<Author>();
         passwordHasher.HashPassword(a1, "LetM31n!");
