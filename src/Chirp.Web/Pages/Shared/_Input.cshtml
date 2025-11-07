@@ -1,0 +1,17 @@
+﻿@inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
+
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="Input">
+        <!-- Input bar -->
+        <h3>Chirp a Cheep!</h3>
+        <form method="post" href="/">
+            <input type="text" name="Message" value="">
+            <input type="submit" value="Post">
+        </form>
+    
+    </div>
+}
