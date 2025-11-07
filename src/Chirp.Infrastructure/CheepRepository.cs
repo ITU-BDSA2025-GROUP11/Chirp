@@ -28,7 +28,7 @@ namespace Chirp.Infrastructure
         {
             if (!string.IsNullOrEmpty(author))
             {
-                var authorEntity = _context.Users
+                var authorEntity = _context.Authors
                     .Include(a => a.Cheeps)
                     .FirstOrDefault(a => a.UserName == author);
 
@@ -69,7 +69,7 @@ namespace Chirp.Infrastructure
         {
             CreateUser();
 
-            var author = _context.Users.FirstOrDefault(a => a.UserName == Environment.UserName);
+            var author = _context.Authors.FirstOrDefault(a => a.UserName == Environment.UserName);
             if (author == null)
             {
                 _logger.LogWarning("No author found for user {User}", Environment.UserName);
@@ -92,7 +92,7 @@ namespace Chirp.Infrastructure
         {
             var name = Environment.UserName; // ?? "Anonymous";
 
-            if (_context.Users.Any(a => a.UserName == name))
+            if (_context.Authors.Any(a => a.UserName == name))
                 return;
 
             var author = new Author
