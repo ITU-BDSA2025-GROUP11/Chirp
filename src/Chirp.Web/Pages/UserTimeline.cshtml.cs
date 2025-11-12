@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 
-namespace Chirp.Razor.Pages
+namespace Chirp.Web.Pages
 {
     public class UserTimelineModel : PaginationModel
     {

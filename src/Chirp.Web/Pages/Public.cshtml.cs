@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Chirp.Core.DomainModel;
 using System.Threading.Tasks;
 
-namespace Chirp.Razor.Pages
+namespace Chirp.Web.Pages
 {
     public class PublicModel : PaginationModel
     {
