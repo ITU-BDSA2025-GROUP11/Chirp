@@ -9,9 +9,8 @@ namespace Chirp.Infrastructure
     {
         List<CheepDTO> GetCheeps(string? author = null);
         List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
-        void PostCheep(string text);
-        void CreateUser();
-    }
+        void PostCheep(string text, string authorName, string authorEmail); 
+        void CreateUser(string authorName, string authorEmail);    }
 
     public class CheepRepository : ICheepRepository
     {
@@ -65,14 +64,14 @@ namespace Chirp.Infrastructure
                 .ToList();
         }
 
-        public void PostCheep(string text)
+        public void PostCheep(string text, string authorName, string authorEmail)
         {
-            CreateUser();
+            CreateUser(authorName, authorEmail);
 
-            var author = _context.Authors.FirstOrDefault(a => a.UserName == Environment.UserName);
+            var author = _context.Authors.FirstOrDefault(a => a.UserName == authorName);
             if (author == null)
             {
-                _logger.LogWarning("No author found for user {User}", Environment.UserName);
+                _logger.LogWarning("No author found for user {User}", authorName);
                 return;
             }
 
@@ -88,21 +87,22 @@ namespace Chirp.Infrastructure
             _context.SaveChanges();
         }
 
-        public void CreateUser()
+        public void CreateUser(string authorName, string authorEmail)
         {
-            var name = Environment.UserName; // ?? "Anonymous";
-
-            if (_context.Authors.Any(a => a.UserName == name))
+            if (string.IsNullOrEmpty(authorName)) 
+                return;
+            
+            if (_context.Authors.Any(a => a.UserName == authorName))
                 return;
 
             var author = new Author
             {
-                UserName = name,
-                Email = $"{name}@mail.com",
+                UserName = authorName,
+                Email = authorEmail,
                 Cheeps = new List<Cheep>()
             };
 
-            _context.Users.Add(author);
+            _context.Authors.Add(author);
             _context.SaveChanges();
         }
     }
