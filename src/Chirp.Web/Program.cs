@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-//var connectionString = builder.Configuration.GetConnectionString("ChirpDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ChirpDbContextConnection' not found.");;
-var connectionString = "Data Source=./Chirp.db";
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDefaultIdentity<Author>(options =>
     {
@@ -41,8 +41,8 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ChirpDbContext>();
-    context.Database.Migrate();
-    
+    context.Database.EnsureCreated();
+    //context.Database.Migrate();
     DbInitializer.SeedDatabase(context);
 }
 
