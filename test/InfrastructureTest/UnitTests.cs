@@ -44,7 +44,7 @@ namespace databasetest
 
         private Author CreateTestAuthor(string name = "TestUser", string email = "test@example.com")
         {
-            var author = new Author { Name = name, Email = email, Cheeps = new List<Cheep>() };
+            var author = new Author { UserName = name, Email = email, Cheeps = new List<Cheep>() };
             _context.Authors.Add(author);
             _context.SaveChanges();
             return author;
@@ -101,24 +101,24 @@ namespace databasetest
         [Fact]
         public void PostCheep_WhenCalled_AddsCheepForCurrentUser()
         {
-            _repo.CreateUser();
+            
             var currentUserName = Environment.UserName;
-
-            _repo.PostCheep("Test Cheep");
+            _repo.CreateUser(currentUserName, currentUserName + "@example.com");
+            _repo.PostCheep("Test Cheep", currentUserName, currentUserName + "@example.com");
 
             var cheeps = _context.Cheeps.Include(c => c.Author).ToList();
             Assert.Single(cheeps);
             Assert.Equal("Test Cheep", cheeps[0].Text);
-            Assert.Equal(currentUserName, cheeps[0].Author.Name);
+            Assert.Equal(currentUserName, cheeps[0].Author.UserName);
         }
 
         [Fact]
         public void CreateUser_WhenCalledTwice_DoesNotDuplicateUser()
         {
-            _repo.CreateUser();
+            _repo.CreateUser("TestUser", "TestUser");
             var countAfterFirst = _context.Authors.Count();
 
-            _repo.CreateUser();
+            _repo.CreateUser("TestUser", "TestUser");
             var countAfterSecond = _context.Authors.Count();
 
             Assert.Equal(countAfterFirst, countAfterSecond);
