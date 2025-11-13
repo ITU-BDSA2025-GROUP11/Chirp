@@ -12,6 +12,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
     private readonly ChirpDbContext _context;
     private readonly CheepRepository _repo;
 
+    private string testName = "Test";
+    private string testMail = "Author";
+
     public CheepRepositoryIntegrationTests()
     {
         var options = new DbContextOptionsBuilder<ChirpDbContext>()
@@ -28,8 +31,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
     [Fact]
     public void Add_And_Retrieve_Cheep()
     {
-        _repo.CreateUser();
-        _repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor");
+        _repo.CreateUser(testName, testMail);
+        _repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
 
         var cheeps = _repo.GetCheeps();
 
@@ -41,8 +44,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
     [Fact]
     public void Cheep_Belongs_To_Correct_Author()
     {
-        _repo.CreateUser();
-        _repo.PostCheep("Resten af gruppen er også pænt cool");
+        _repo.CreateUser(testName, testMail);
+        _repo.PostCheep("Resten af gruppen er også pænt cool",  testName, testMail);
 
         var cheep = _context.Cheeps.Include(c => c.Author).First();
 
@@ -57,7 +60,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
-        var ex = Record.Exception(() => _repo.PostCheep("Plz no crash test"));
+        var ex = Record.Exception(() => _repo.PostCheep("Plz no crash test",  testName, testMail));
 
         Assert.Null(ex);
     }
@@ -66,9 +69,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
    [Fact]
    public void Get_Cheeps_From_Author()
    {
-       _repo.CreateUser();
-       _repo.PostCheep("Joakim’s cheep 1");
-       _repo.PostCheep("Joakim’s cheep 2");
+       _repo.CreateUser(testName, testMail);
+       _repo.PostCheep("Joakim’s cheep 1",  testName, testMail);
+       _repo.PostCheep("Joakim’s cheep 2",   testName, testMail);
     
        var otherAuthor = new Author
        {

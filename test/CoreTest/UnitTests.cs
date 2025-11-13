@@ -11,14 +11,14 @@ namespace clientTest
         {
             var author = new Author
             {
-                AuthorId = 1,
-                Name = "Jane Doe",
+                Id = "1",
+                UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>()
             };
 
-            Assert.Equal(1, author.AuthorId);
-            Assert.Equal("Jane Doe", author.Name);
+            Assert.Equal("1", author.Id);
+            Assert.Equal("Jane Doe", author.UserName);
             Assert.Equal("jane@example.com", author.Email);
             Assert.Empty(author.Cheeps);
         }
@@ -28,8 +28,8 @@ namespace clientTest
         {
             var author = new Author
             {
-                AuthorId = 1,
-                Name = "Jane Doe",
+                Id = "1",
+                UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>()
             };
@@ -39,14 +39,13 @@ namespace clientTest
                 CheepId = 1,
                 Text = "Test test test",
                 TimeStamp = new DateTime(2025, 3, 15),
-                AuthorId = author.AuthorId,
                 Author = author
             };
 
             Assert.Equal(1, cheep.CheepId);
             Assert.Equal("Test test test", cheep.Text);
             Assert.Equal(new DateTime(2025, 3, 15), cheep.TimeStamp);
-            Assert.Equal(author.AuthorId, cheep.AuthorId);
+            Assert.Equal(author.Id, cheep.Author.Id);
             Assert.Equal(author, cheep.Author);
         }
 
@@ -55,8 +54,8 @@ namespace clientTest
         {
             var author = new Author
             {
-                AuthorId = 1,
-                Name = "Jane Doe",
+                Id = "1",
+                UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>()
             };
@@ -66,7 +65,6 @@ namespace clientTest
                 CheepId = 1,
                 Text = "Test test test",
                 TimeStamp = new DateTime(2025, 3, 15),
-                AuthorId = author.AuthorId,
                 Author = author
             };
 
