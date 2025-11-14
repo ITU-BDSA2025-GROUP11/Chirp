@@ -25,12 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Chirp.db">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
     </ItemGroup>
 
