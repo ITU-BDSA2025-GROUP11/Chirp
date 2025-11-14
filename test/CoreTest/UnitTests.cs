@@ -48,6 +48,19 @@ namespace clientTest
             Assert.Equal(author.Id, cheep.Author.Id);
             Assert.Equal(author, cheep.Author);
         }
+        
+        [Fact]
+        public void FollowList_WhenPropertiesSet_CanRetrieveCorrectValues()
+        {
+            var author = new Author
+            {
+                Id = "1",
+                UserName = "Jane Doe",
+                Email = "jane@example.com",
+                Cheeps = new List<Cheep>()
+                FollowingList = new List<Author>()
+            };
+        }
 
         [Fact]
         public void EntityToDTO_WhenMappingEntities_ReturnsEquivalentDTOs()
@@ -91,5 +104,6 @@ namespace clientTest
             Assert.Equal(authorDto.Username, mappedAuthor.Username);
             Assert.Equal(authorDto.Email, mappedAuthor.Email);
         }
+        
     }
 }
