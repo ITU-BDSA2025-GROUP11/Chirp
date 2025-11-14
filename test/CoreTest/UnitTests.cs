@@ -15,12 +15,14 @@ namespace clientTest
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>()
+                FollowingList = new List<Author>()
             };
 
             Assert.Equal("1", author.Id);
             Assert.Equal("Jane Doe", author.UserName);
             Assert.Equal("jane@example.com", author.Email);
             Assert.Empty(author.Cheeps);
+            Assert.Empty(author.FollowingList);
         }
 
         [Fact]
@@ -32,6 +34,7 @@ namespace clientTest
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>()
+                FollowingList = new List<Author>()
             };
 
             var cheep = new Cheep
@@ -48,19 +51,6 @@ namespace clientTest
             Assert.Equal(author.Id, cheep.Author.Id);
             Assert.Equal(author, cheep.Author);
         }
-        
-        [Fact]
-        public void FollowList_WhenPropertiesSet_CanRetrieveCorrectValues()
-        {
-            var author = new Author
-            {
-                Id = "1",
-                UserName = "Jane Doe",
-                Email = "jane@example.com",
-                Cheeps = new List<Cheep>()
-                FollowingList = new List<Author>()
-            };
-        }
 
         [Fact]
         public void EntityToDTO_WhenMappingEntities_ReturnsEquivalentDTOs()
@@ -71,6 +61,7 @@ namespace clientTest
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>()
+                FollowingList = new List<Author>()
             };
 
             var cheep = new Cheep
