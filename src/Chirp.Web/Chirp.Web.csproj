@@ -4,7 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>1edd0588-63cf-4d15-abed-8e52dba6ca0b</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
         <Content Update="Pages\Shared\_Layout.cshtml">
