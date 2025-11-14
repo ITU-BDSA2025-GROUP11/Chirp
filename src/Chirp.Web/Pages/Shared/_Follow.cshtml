@@ -1,0 +1,17 @@
+@using Chirp.Core.DTOs
+@model CheepDTO
+
+@inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form method="post" asp-page-handler="Follow" style="display: inline;">
+        <input type="hidden" name="author" value="@Model.Author.Username" />
+        // OBS. THIS FUNCTIONALITY IS NOT IMPLEMENTED. AS WE DO NOT YET HAVE THE SUPPORT IN THE DB
+                                
+        <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
+            Follow
+        </button>
+    </form>
+}
