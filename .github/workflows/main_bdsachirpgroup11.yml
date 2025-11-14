@@ -22,9 +22,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
-        
+          
       - name: Build with dotnet
-        run: dotnet build Chirp.sln --configuration Release --no-restore
+        run: dotnet build Chirp.sln --configuration Release 
 
       - name: dotnet publish
         run: dotnet publish src/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -63,5 +63,6 @@ jobs:
           slot-name: 'Production'
           package: .
           clean: true
+
 
 
