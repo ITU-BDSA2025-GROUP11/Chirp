@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - BDSAchirpGroup11
+name: Build and deploy ASP.Net Core app to Azure Web App - chirp
 
 on:
   push:
@@ -21,10 +21,10 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
+        run: dotnet build src/Chirp.Web --configuration Release
 
       - name: dotnet publish
         run: dotnet publish src/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -51,16 +51,17 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_86951B6D337C479481A9F23122778279 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8D16020316A44E358C6854EC57293C00 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EA060F85359C46EABB6497ED078DC009 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_ACBC863B68F34B6B9A6ABE0FF0F2C2FE }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6CFD9F4F245B46E0A6D3020A01A0C5EE }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_113E16CB930C402CA3FDA9D86C025F32 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'BDSAchirpGroup11'
+          app-name: 'chirp'
           slot-name: 'Production'
           package: .
           clean: true
 
+          
