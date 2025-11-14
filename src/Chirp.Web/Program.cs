@@ -1,10 +1,11 @@
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// database setup
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDefaultIdentity<Author>(options =>
@@ -18,6 +19,23 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     options.User.RequireUniqueEmail = true;
 });
+
+// AUTHENTICATION SETUP
+// configure services
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = "GitHub";
+    })
+    .AddCookie()
+    .AddGitHub(o =>
+    {
+        o.ClientId = builder.Configuration["authentication:github:clientId"];
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
+        o.CallbackPath = "/signin-github";
+    });
 
 
 builder.Services.AddRazorPages();
@@ -37,7 +55,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
-//app.MapControllers();
+
+//Region AUTHENTICATION
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSession();
 
 using (var scope = app.Services.CreateScope())
 {
