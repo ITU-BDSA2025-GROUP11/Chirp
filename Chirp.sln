@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagesTest", "test\WebTest\P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseTest", "DatabaseTest", "{3360D44C-465D-351F-220E-8C2B2577BE69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTest", "test\databaseTest\DatabaseTest.csproj", "{4D23CDCA-8A36-49ED-9B0D-B476CBBDD72E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTest", "test\DatabaseTest\DatabaseTest.csproj", "{4D23CDCA-8A36-49ED-9B0D-B476CBBDD72E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
