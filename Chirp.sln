@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C88DD14-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTest", "test\CoreTest\CoreTest.csproj", "{DAF53C8E-40FA-4F51-81D9-A1294484093C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelTest", "test\DomainModelTest\DomainModelTest.csproj", "{A3493478-9D8B-4ECC-B3A3-3EA7FFB61FC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelsTest", "test\DomainModelTest\DomainModelTest.csproj", "{A3493478-9D8B-4ECC-B3A3-3EA7FFB61FC7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTest", "test\InfrastructureTest\InfrastructureTest.csproj", "{AC1F9CDD-592B-4E81-9172-2CA42735127F}"
 EndProject
