@@ -10,6 +10,8 @@ public class Author : IdentityUser
     
     public required string Email { get; set; }*/
     public required ICollection<Cheep> Cheeps { get; set; }
+    
+    public required ICollection<Author> FollowingList { get; set; }
 
    // public string userID { get; set; } = default!;
 }
