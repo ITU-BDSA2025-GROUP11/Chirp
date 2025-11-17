@@ -9,8 +9,14 @@ namespace Chirp.Infrastructure
     {
         List<CheepDTO> GetCheeps(string? author = null);
         List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
-        void PostCheep(string text, string authorName, string authorEmail); 
-        void CreateUser(string authorName, string authorEmail);    }
+        void PostCheep(string text, string authorName, string authorEmail);
+        void CreateUser(string authorName, string authorEmail);
+        
+        Task FollowUser(string currentUserId, string authorIdToFollow);
+        Task UnfollowUser(string currentUserId, string authorIdToUnfollow);
+        
+        Task<bool> IsFollowing(string currentUserId, string authorId);
+    }
 
     public class CheepRepository : ICheepRepository
     {
@@ -89,9 +95,9 @@ namespace Chirp.Infrastructure
 
         public void CreateUser(string authorName, string authorEmail)
         {
-            if (string.IsNullOrEmpty(authorName)) 
+            if (string.IsNullOrEmpty(authorName))
                 return;
-            
+
             if (_context.Authors.Any(a => a.UserName == authorName))
                 return;
 
@@ -104,6 +110,43 @@ namespace Chirp.Infrastructure
 
             _context.Authors.Add(author);
             _context.SaveChanges();
+        }
+        
+        public async Task FollowUser(string currentUserId, string authorIdToFollow)
+        {
+            var userToFollow = await _context.Authors.FindAsync(authorIdToFollow);
+
+            var currentUser = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+
+            if (userToFollow == null || currentUser == null) return;
+
+            if (!currentUser.Following.Contains(userToFollow))
+            {
+                currentUser.Following.Add(userToFollow);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UnfollowUser(string currentUserId, string authorIdToUnfollow)
+        {
+            var userToUnfollow = await _context.Authors.FindAsync(authorIdToUnfollow);
+
+            var currentUser = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+
+            if (userToUnfollow == null || currentUser == null) return;
+
+            currentUser.Following.Remove(userToUnfollow);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsFollowing(string currentUserId, string authorId)
+        {
+            return await _context.Authors
+                .AnyAsync(a => a.Id == currentUserId && a.Following.Any(f => f.Id == authorId));
         }
     }
 }
