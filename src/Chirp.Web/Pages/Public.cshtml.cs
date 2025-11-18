@@ -36,7 +36,7 @@ namespace Chirp.Web.Pages
             return Page();
         }
 
-        private int GetTotalPages(int numberOfCheeps, int pageSize)
+        public int GetTotalPages(int numberOfCheeps, int pageSize)
         {
             return (int)Math.Ceiling((double)numberOfCheeps / pageSize);
         }
