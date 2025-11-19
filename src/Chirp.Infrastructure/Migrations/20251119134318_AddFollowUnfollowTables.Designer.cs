@@ -11,14 +11,29 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20251108092308_InitialCreate1")]
-    partial class InitialCreate1
+    [Migration("20251119134318_AddFollowUnfollowTables")]
+    partial class AddFollowUnfollowTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.Property<string>("FollowersId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FollowingId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FollowersId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("AuthorFollows", (string)null);
+                });
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
                 {
@@ -84,7 +99,7 @@ namespace Chirp.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Cheep", b =>
@@ -237,6 +252,21 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.HasOne("Chirp.Core.DomainModel.Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Core.DomainModel.Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Cheep", b =>

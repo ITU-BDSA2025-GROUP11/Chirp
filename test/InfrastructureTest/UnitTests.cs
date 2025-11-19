@@ -47,7 +47,7 @@ namespace databasetest
         }
 
         [Fact]
-        public void GetCheeps_WhenNoAuthorProvided_ReturnsAllCheeps()
+        public async Task GetCheeps_WhenNoAuthorProvided_ReturnsAllCheeps()
         {
             var author = CreateTestAuthor();
             var cheep = new Cheep
@@ -59,7 +59,7 @@ namespace databasetest
             _context.Cheeps.Add(cheep);
             _context.SaveChanges();
 
-            var result = _repo.GetCheeps();
+            var result = await _repo.GetCheeps();
 
             Assert.Single(result);
             Assert.Equal("Hello World!", result[0].Text);
@@ -67,14 +67,14 @@ namespace databasetest
         }
 
         [Fact]
-        public void GetCheeps_WhenAuthorNotFound_ReturnsEmptyList()
+        public async Task GetCheeps_WhenAuthorNotFound_ReturnsEmptyList()
         {
-            var result = _repo.GetCheeps("NonExistentAuthor");
+            var result = await _repo.GetCheeps("NonExistentAuthor");
             Assert.Empty(result);
         }
 
         [Fact]
-        public void GetPaginatedCheeps_WhenCalled_ReturnsCorrectSubset()
+        public async Task GetPaginatedCheeps_WhenCalled_ReturnsCorrectSubset()
         {
             var author = CreateTestAuthor();
             for (int i = 0; i < 10; i++)
@@ -88,34 +88,34 @@ namespace databasetest
             }
             _context.SaveChanges();
 
-            var page = _repo.GetPaginatedCheeps(currentPage: 0, pageSize: 5);
+            var page = await _repo.GetPaginatedCheeps(currentPage: 0, pageSize: 5);
 
             Assert.Equal(5, page.Count);
             Assert.Equal("Cheep 0", page[0].Text);
         }
 
         [Fact]
-        public void PostCheep_WhenCalled_AddsCheepForCurrentUser()
+        public async Task PostCheep_WhenCalled_AddsCheepForCurrentUser()
         {
             
             var currentUserName = Environment.UserName;
-            _repo.CreateUser(currentUserName, currentUserName + "@example.com");
-            _repo.PostCheep("Test Cheep", currentUserName, currentUserName + "@example.com");
+            await _repo.CreateUser(currentUserName, currentUserName + "@example.com");
+            await _repo.PostCheep("Test Cheep", currentUserName, currentUserName + "@example.com");
 
-            var cheeps = _context.Cheeps.Include(c => c.Author).ToList();
+            var cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
             Assert.Single(cheeps);
             Assert.Equal("Test Cheep", cheeps[0].Text);
             Assert.Equal(currentUserName, cheeps[0].Author.UserName);
         }
 
         [Fact]
-        public void CreateUser_WhenCalledTwice_DoesNotDuplicateUser()
+        public async Task CreateUser_WhenCalledTwice_DoesNotDuplicateUser()
         {
-            _repo.CreateUser("TestUser", "TestUser");
-            var countAfterFirst = _context.Authors.Count();
+            await _repo.CreateUser("TestUser", "TestUser");
+            var countAfterFirst = await _context.Authors.CountAsync();
 
-            _repo.CreateUser("TestUser", "TestUser");
-            var countAfterSecond = _context.Authors.Count();
+            await _repo.CreateUser("TestUser", "TestUser");
+            var countAfterSecond = await _context.Authors.CountAsync();
 
             Assert.Equal(countAfterFirst, countAfterSecond);
         }
