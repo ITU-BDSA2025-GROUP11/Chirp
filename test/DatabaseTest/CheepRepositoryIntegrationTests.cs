@@ -49,7 +49,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
 
         var cheep = _context.Cheeps.Include(c => c.Author).First();
 
-        Assert.Equal(Environment.UserName, cheep.Author.UserName);
+        Assert.Equal(testName, cheep.Author.UserName);
         Assert.Equal("Resten af gruppen er også pænt cool", cheep.Text);
     }
 
@@ -91,9 +91,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
        _context.Users.Add(otherAuthor);
        _context.SaveChanges();
     
-       var cheeps = _repo.GetCheeps(author: Environment.UserName);
+       var cheeps = _repo.GetCheeps(author: testName);
     
-       Assert.All(cheeps, c => Assert.Equal(Environment.UserName, c.Author.Username));
+       Assert.All(cheeps, c => Assert.Equal(testName, c.Author.Username));
        Assert.DoesNotContain(cheeps, c => c.Author.Username == "SomeoneElse");
    }
 

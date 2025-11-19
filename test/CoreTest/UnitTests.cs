@@ -14,7 +14,7 @@ namespace clientTest
                 Id = "1",
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
-                Cheeps = new List<Cheep>()
+                Cheeps = new List<Cheep>(),
                 FollowingList = new List<Author>()
             };
 
@@ -33,7 +33,7 @@ namespace clientTest
                 Id = "1",
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
-                Cheeps = new List<Cheep>()
+                Cheeps = new List<Cheep>(),
                 FollowingList = new List<Author>()
             };
 
@@ -60,7 +60,7 @@ namespace clientTest
                 Id = "1",
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
-                Cheeps = new List<Cheep>()
+                Cheeps = new List<Cheep>(),
                 FollowingList = new List<Author>()
             };
 
