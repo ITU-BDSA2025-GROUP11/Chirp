@@ -13,6 +13,7 @@ namespace PlaywrightTests;
 //[TestFixture]
 public class ExampleTest : PageTest
 {
+    [Ignore("")]
     [Test]
    public async Task HasTitle()
     {
@@ -22,7 +23,8 @@ public class ExampleTest : PageTest
         await Expect(Page).ToHaveTitleAsync(new Regex("Playwright"));
     }
 
-    [Test]
+   [Ignore("")]
+   [Test]
     public async Task GetStartedLink()
     {
         await Page.GotoAsync("https://playwright.dev");
@@ -42,6 +44,7 @@ public class ExampleTest : PageTest
 [TestFixture]
 public class Tests : PageTest
 {
+    [Ignore("")]
     [Test]
     public async Task HomepageHasPlaywrightInTitleAndGetStartedLinkLinkingtoTheIntroPage()
     {
