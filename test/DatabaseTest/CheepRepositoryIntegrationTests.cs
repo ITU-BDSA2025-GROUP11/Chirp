@@ -31,8 +31,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
     [Fact]
     public async Task Add_And_Retrieve_Cheep()
     {
-        _repo.CreateUser(testName, testMail);
-        _repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
+        await _repo.CreateUser(testName, testMail);
+        await _repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
 
         var cheeps = await _repo.GetCheeps();
 
@@ -69,9 +69,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
    [Fact]
    public async Task Get_Cheeps_From_Author()
    {
-       _repo.CreateUser(testName, testMail);
-       _repo.PostCheep("Joakim’s cheep 1",  testName, testMail);
-       _repo.PostCheep("Joakim’s cheep 2",   testName, testMail);
+       await _repo.CreateUser(testName, testMail);
+       await _repo.PostCheep("Joakim’s cheep 1",  testName, testMail);
+       await _repo.PostCheep("Joakim’s cheep 2",   testName, testMail);
     
        var otherAuthor = new Author
        {
@@ -89,7 +89,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
 
        otherAuthor.Cheeps.Add(otherCheep);
        _context.Users.Add(otherAuthor);
-       _context.SaveChanges();
+       await _context.SaveChangesAsync();
     
        var cheeps = await _repo.GetCheeps(author: testName);
     
