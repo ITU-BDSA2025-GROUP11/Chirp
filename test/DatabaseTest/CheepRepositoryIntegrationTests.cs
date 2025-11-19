@@ -42,12 +42,12 @@ public class CheepRepositoryIntegrationTests : IDisposable
 
    //Checks that our cheeps get assigned to the corrct author
     [Fact]
-    public void Cheep_Belongs_To_Correct_Author()
+    public async Task Cheep_Belongs_To_Correct_Author()
     {
-        _repo.CreateUser(testName, testMail);
-        _repo.PostCheep("Resten af gruppen er også pænt cool",  testName, testMail);
+        await _repo.CreateUser(testName, testMail);
+        await _repo.PostCheep("Resten af gruppen er også pænt cool",  testName, testMail);
 
-        var cheep = _context.Cheeps.Include(c => c.Author).First();
+        var cheep = await _context.Cheeps.Include(c => c.Author).FirstAsync();
 
         Assert.Equal(testName, cheep.Author.UserName);
         Assert.Equal("Resten af gruppen er også pænt cool", cheep.Text);
@@ -60,9 +60,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
-        var ex =  Record.ExceptionAsync(() => _repo.PostCheep("Plz no crash test",  testName, testMail));
+        var ex =  await Record.ExceptionAsync(() => _repo.PostCheep("Plz no crash test",  testName, testMail));
 
-        Assert.Null(ex);
+        Assert.Null(ex);    
     }
 
    //checks that we only get cheeps from the desired author 
