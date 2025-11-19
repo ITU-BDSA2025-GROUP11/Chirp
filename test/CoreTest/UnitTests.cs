@@ -1,5 +1,5 @@
 using Chirp.Core.DomainModel;
-using Chirp.Core.DTOs;
+using Chirp.Core.DTO;
 using Xunit;
 
 namespace clientTest

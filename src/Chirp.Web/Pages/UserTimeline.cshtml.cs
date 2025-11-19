@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using Chirp.Core.DTOs;
+﻿using Chirp.Core.DTO;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 
 
 namespace Chirp.Web.Pages
@@ -16,15 +12,14 @@ namespace Chirp.Web.Pages
         private readonly ICheepRepository _service;
         private readonly UserManager<Author> _userManager;
 
-        public List<CheepDTO> Cheeps { get; set; } = new();
-        public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
+        public List<CheepDTO>? Cheeps { get; set; }
+        public List<CheepDTO>? CurrentPageCheeps { get; set; }
 
-        public int NumberOfCheeps => Cheeps.Count;
+        public int NumberOfCheeps => Cheeps?.Count ?? 0;
         public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
         
         [BindProperty]
         public string Message { get; set; }
-
         public UserTimelineModel(ICheepRepository service, UserManager<Author> userManager)
         {
             _service = service;
@@ -45,7 +40,7 @@ namespace Chirp.Web.Pages
         {
             if (string.IsNullOrEmpty(Message))
             {
-                return RedirectToPage(new { author = author });
+                return RedirectToPage(new { author });
             }
 
             var user = await _userManager.GetUserAsync(User);
