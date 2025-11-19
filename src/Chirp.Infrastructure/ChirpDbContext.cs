@@ -13,16 +13,18 @@ public class ChirpDbContext : IdentityDbContext<Author>
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // This ensures Identity creates its tables correctly
         base.OnModelCreating(modelBuilder);
         
-        base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.Entity<Author>() // EntityTypeBuilder<Author>
+        modelBuilder.Entity<Author>()
             .HasIndex(u => u.Email)
             .IsUnique();
        
-         modelBuilder.Entity<Author>()
-             .ToTable(name: "Authors", schema: (string)null);
+        modelBuilder.Entity<Author>()
+            .ToTable(name: "Authors", schema: (string)null);
+        
+        modelBuilder.Entity<Author>()
+            .HasMany(a => a.Following)
+            .WithMany(a => a.Followers)
+            .UsingEntity(j => j.ToTable("AuthorFollows"));
     }
 }
