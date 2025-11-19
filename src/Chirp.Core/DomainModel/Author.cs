@@ -10,7 +10,9 @@ public class Author : IdentityUser
     
     public required string Email { get; set; }*/
     public required ICollection<Cheep> Cheeps { get; set; }
-    
+
+    public override required string UserName { get; set; }
+
     // In Author.cs
     public ICollection<Author> FollowingList { get; set; } = new List<Author>();
 

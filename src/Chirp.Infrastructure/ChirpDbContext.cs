@@ -21,8 +21,11 @@ public class ChirpDbContext : IdentityDbContext<Author>
         modelBuilder.Entity<Author>() // EntityTypeBuilder<Author>
             .HasIndex(u => u.Email)
             .IsUnique();
-       
+            
+        modelBuilder.Entity<Author>() // EntityTypeBuilder<Author>
+            .HasIndex(u => u.UserName)
+            .IsUnique();
          modelBuilder.Entity<Author>()
-             .ToTable(name: "Authors", schema: (string)null);
+             .ToTable(name: "Authors", schema: null);
     }
 }
