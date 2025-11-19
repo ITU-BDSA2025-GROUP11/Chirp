@@ -192,7 +192,7 @@ namespace Chirp.Infrastructure
             if (author == null) return 0;
 
             var followingIds = author.Following.Select(a => a.Id).ToList();
-            followingIds.Add(author.Id); // Include the author's own posts
+            followingIds.Add(author.Id); 
 
             return await _context.Cheeps
                 .CountAsync(c => followingIds.Contains(c.Author.Id));

@@ -13,10 +13,9 @@ public class ChirpDbContext : IdentityDbContext<Author>
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // This ensures Identity creates its tables correctly
         base.OnModelCreating(modelBuilder);
         
-        modelBuilder.Entity<Author>() // EntityTypeBuilder<Author>
+        modelBuilder.Entity<Author>()
             .HasIndex(u => u.Email)
             .IsUnique();
        
