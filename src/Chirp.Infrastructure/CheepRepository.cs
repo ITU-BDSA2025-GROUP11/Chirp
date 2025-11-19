@@ -7,10 +7,18 @@ namespace Chirp.Infrastructure
 {
     public interface ICheepRepository
     {
-        List<CheepDTO> GetCheeps(string? author = null);
-        List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
-        void PostCheep(string text, string authorName, string authorEmail); 
-        void CreateUser(string authorName, string authorEmail);    }
+        Task<List<CheepDTO>> GetCheeps(string? author = null);        
+        Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);        
+        Task PostCheep(string text, string authorName, string authorEmail);        
+        Task CreateUser(string authorName, string authorEmail);        
+        Task<List<string>> GetFollowedIds(string userId);
+        Task FollowUser(string currentUserId, string authorIdToFollow);
+        Task UnfollowUser(string currentUserId, string authorIdToUnfollow);
+        Task<bool> IsFollowing(string currentUserId, string authorId);
+        Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
+        Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
+        Task<int> GetCheepCount(string? author = null);
+    }
 
     public class CheepRepository : ICheepRepository
     {
@@ -23,13 +31,13 @@ namespace Chirp.Infrastructure
             _logger = factory.CreateLogger<CheepRepository>();
         }
 
-        public List<CheepDTO> GetCheeps(string? author = null)
+        public async Task<List<CheepDTO>> GetCheeps(string? author = null)
         {
             if (!string.IsNullOrEmpty(author))
             {
-                var authorEntity = _context.Authors
+                var authorEntity = await _context.Authors
                     .Include(a => a.Cheeps)
-                    .FirstOrDefault(a => a.UserName == author);
+                    .FirstOrDefaultAsync(a => a.UserName == author);
 
                 if (authorEntity == null)
                     return new List<CheepDTO>();
@@ -41,34 +49,35 @@ namespace Chirp.Infrastructure
             }
             else
             {
-                return _context.Cheeps
+                return await _context.Cheeps 
                     .Include(c => c.Author)
                     .OrderByDescending(c => c.TimeStamp)
                     .Select(c => EntityToDTO.ToDTO(c))
-                    .ToList();
+                    .ToListAsync(); 
             }
         }
 
-        public List<CheepDTO> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
+        public async Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
         {
             IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
 
             if (!string.IsNullOrEmpty(author))
                 query = query.Where(c => c.Author.UserName == author);
 
-            return query
+            return await query
                 .OrderByDescending(c => c.TimeStamp)
                 .Skip(pageSize * currentPage)
                 .Take(pageSize)
                 .Select(c => EntityToDTO.ToDTO(c))
-                .ToList();
+                .ToListAsync(); 
         }
 
-        public void PostCheep(string text, string authorName, string authorEmail)
+        public async Task PostCheep(string text, string authorName, string authorEmail)
         {
-            CreateUser(authorName, authorEmail);
+            await CreateUser(authorName, authorEmail); 
 
-            var author = _context.Authors.FirstOrDefault(a => a.UserName == authorName);
+            var author = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == authorName);
+        
             if (author == null)
             {
                 _logger.LogWarning("No author found for user {User}", authorName);
@@ -79,20 +88,19 @@ namespace Chirp.Infrastructure
             {
                 Text = text,
                 TimeStamp = DateTime.Now,
-                //AuthorId = author.AuthorId,
                 Author = author
             };
 
             _context.Cheeps.Add(newCheep);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-
-        public void CreateUser(string authorName, string authorEmail)
+        
+        public async Task CreateUser(string authorName, string authorEmail)
         {
-            if (string.IsNullOrEmpty(authorName)) 
+            if (string.IsNullOrEmpty(authorName))
                 return;
-            
-            if (_context.Authors.Any(a => a.UserName == authorName))
+
+            if (await _context.Authors.AnyAsync(a => a.UserName == authorName))
                 return;
 
             var author = new Author
@@ -103,7 +111,103 @@ namespace Chirp.Infrastructure
             };
 
             _context.Authors.Add(author);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task FollowUser(string currentUserId, string authorIdToFollow)
+        {
+            var userToFollow = await _context.Authors.FindAsync(authorIdToFollow);
+
+            var currentUser = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+
+            if (userToFollow == null || currentUser == null) return;
+
+            if (!currentUser.Following.Contains(userToFollow))
+            {
+                currentUser.Following.Add(userToFollow);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UnfollowUser(string currentUserId, string authorIdToUnfollow)
+        {
+            var userToUnfollow = await _context.Authors.FindAsync(authorIdToUnfollow);
+
+            var currentUser = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+
+            if (userToUnfollow == null || currentUser == null) return;
+
+            currentUser.Following.Remove(userToUnfollow);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsFollowing(string currentUserId, string authorId)
+        {
+            return await _context.Authors
+                .AnyAsync(a => a.Id == currentUserId && a.Following.Any(f => f.Id == authorId));
+        }
+        
+        public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
+        {
+            var author = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.UserName == authorName);
+
+            if (author == null) return new List<CheepDTO>();
+
+            var followingIds = author.Following.Select(a => a.Id).ToList();
+            followingIds.Add(author.Id);
+
+            return await _context.Cheeps
+                .Include(c => c.Author)
+                .Where(c => followingIds.Contains(c.Author.Id))
+                .OrderByDescending(c => c.TimeStamp)
+                .Skip(pageSize * (page - 1))
+                .Take(pageSize)
+                .Select(c => EntityToDTO.ToDTO(c))
+                .ToListAsync();
+        }
+        
+        public async Task<List<string>> GetFollowedIds(string userId)
+        {
+            var user = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.Id == userId);
+
+            if (user == null) return new List<string>();
+
+            return user.Following.Select(a => a.Id).ToList();
+        }
+        
+        public async Task<int> GetCheepCountFromAuthorAndFollowing(string authorName)
+        {
+            var author = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.UserName == authorName);
+
+            if (author == null) return 0;
+
+            var followingIds = author.Following.Select(a => a.Id).ToList();
+            followingIds.Add(author.Id); 
+
+            return await _context.Cheeps
+                .CountAsync(c => followingIds.Contains(c.Author.Id));
+        }
+        
+        public async Task<int> GetCheepCount(string? author = null)
+        {
+            IQueryable<Cheep> query = _context.Cheeps;
+    
+            if (!string.IsNullOrEmpty(author))
+            {
+                query = query.Where(c => c.Author.UserName == author);
+            }
+    
+            return await query.CountAsync();
         }
     }
 }
