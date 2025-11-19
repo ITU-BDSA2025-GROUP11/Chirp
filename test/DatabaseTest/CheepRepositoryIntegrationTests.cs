@@ -29,12 +29,12 @@ public class CheepRepositoryIntegrationTests : IDisposable
     }
     //shows that we can add and retrive cheeps from the repo
     [Fact]
-    public void Add_And_Retrieve_Cheep()
+    public async Task Add_And_Retrieve_Cheep()
     {
         _repo.CreateUser(testName, testMail);
         _repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
 
-        var cheeps = _repo.GetCheeps();
+        var cheeps = await _repo.GetCheeps();
 
         Assert.Single(cheeps);
         Assert.Equal("Joakim er faktisk pænt handsome OG har rigtig god humor", cheeps[0].Text);
@@ -55,19 +55,19 @@ public class CheepRepositoryIntegrationTests : IDisposable
 
     //chekcs that we handle a missing author
     [Fact]
-    public void Missing_Author()
+    public async Task Missing_Author()
     {
         _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
-        var ex = Record.Exception(() => _repo.PostCheep("Plz no crash test",  testName, testMail));
+        var ex =  Record.ExceptionAsync(() => _repo.PostCheep("Plz no crash test",  testName, testMail));
 
         Assert.Null(ex);
     }
 
    //checks that we only get cheeps from the desired author 
    [Fact]
-   public void Get_Cheeps_From_Author()
+   public async Task Get_Cheeps_From_Author()
    {
        _repo.CreateUser(testName, testMail);
        _repo.PostCheep("Joakim’s cheep 1",  testName, testMail);
@@ -91,7 +91,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
        _context.Users.Add(otherAuthor);
        _context.SaveChanges();
     
-       var cheeps = _repo.GetCheeps(author: testName);
+       var cheeps = await _repo.GetCheeps(author: testName);
     
        Assert.All(cheeps, c => Assert.Equal(testName, c.Author.Username));
        Assert.DoesNotContain(cheeps, c => c.Author.Username == "SomeoneElse");
