@@ -1,17 +1,19 @@
 ﻿using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
-using Microsoft.Playwright.Xunit;
+using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 
 namespace PlaywrightTests;
-//[Parallelizable(ParallelScope.Self)]
 
 /// <summary>
-/// Showcase how a Playwright test might look
+/// Example test from Playwright documentation
 /// </summary>
-public class UnitTest1: PageTest
+[Parallelizable(ParallelScope.Self)]
+[TestFixture]
+public class ExampleTest : PageTest
 {
-    [Fact]
+    [Test]
     public async Task HasTitle()
     {
         await Page.GotoAsync("https://playwright.dev");
@@ -20,7 +22,7 @@ public class UnitTest1: PageTest
         await Expect(Page).ToHaveTitleAsync(new Regex("Playwright"));
     }
 
-    [Fact]
+    [Test]
     public async Task GetStartedLink()
     {
         await Page.GotoAsync("https://playwright.dev");
@@ -31,8 +33,16 @@ public class UnitTest1: PageTest
         // Expects page to have a heading with the name of Installation.
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Installation" })).ToBeVisibleAsync();
     } 
-    
-    [Fact]
+}
+
+/// <summary>
+/// Example test from lecture 9
+/// </summary>
+[Parallelizable(ParallelScope.Self)]
+[TestFixture]
+public class Tests : PageTest
+{
+    [Test]
     public async Task HomepageHasPlaywrightInTitleAndGetStartedLinkLinkingtoTheIntroPage()
     {
         await Page.GotoAsync("https://playwright.dev");
