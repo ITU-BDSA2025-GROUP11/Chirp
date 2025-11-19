@@ -15,14 +15,13 @@ namespace clientTest
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>(),
-                FollowingList = new List<Author>()
             };
 
             Assert.Equal("1", author.Id);
             Assert.Equal("Jane Doe", author.UserName);
             Assert.Equal("jane@example.com", author.Email);
             Assert.Empty(author.Cheeps);
-            Assert.Empty(author.FollowingList);
+            Assert.Empty(author.Followers);
         }
 
         [Fact]
@@ -34,7 +33,6 @@ namespace clientTest
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>(),
-                FollowingList = new List<Author>()
             };
 
             var cheep = new Cheep
@@ -61,7 +59,6 @@ namespace clientTest
                 UserName = "Jane Doe",
                 Email = "jane@example.com",
                 Cheeps = new List<Cheep>(),
-                FollowingList = new List<Author>()
             };
 
             var cheep = new Cheep
@@ -95,6 +92,5 @@ namespace clientTest
             Assert.Equal(authorDto.Username, mappedAuthor.Username);
             Assert.Equal(authorDto.Email, mappedAuthor.Email);
         }
-        
     }
 }
