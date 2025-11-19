@@ -54,6 +54,28 @@ namespace Chirp.Web.Pages
             return Page();
         }
         
+        public async Task<IActionResult> OnPostFollow(string authorId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.FollowUser(currentUserId, authorId);
+            }
+            
+            return RedirectToPage(); 
+        }
+        
+        public async Task<IActionResult> OnPostUnfollow(string authorId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.UnfollowUser(currentUserId, authorId);
+            }
+        
+            return RedirectToPage();
+        }
+        
         private int GetTotalPages(int numberOfCheeps, int pageSize)
         {
             return (int)Math.Ceiling((double)numberOfCheeps / pageSize);
