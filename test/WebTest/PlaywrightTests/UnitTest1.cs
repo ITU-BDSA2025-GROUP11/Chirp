@@ -9,18 +9,18 @@ namespace PlaywrightTests;
 /// <summary>
 /// Example test from Playwright documentation
 /// </summary>
-[Parallelizable(ParallelScope.Self)]
-[TestFixture]
+//[Parallelizable(ParallelScope.Self)]
+//[TestFixture]
 public class ExampleTest : PageTest
 {
-    /*[Test]
+    [Test]
    public async Task HasTitle()
     {
         await Page.GotoAsync("https://playwright.dev");
 
         // Expect a title "to contain" a substring.
         await Expect(Page).ToHaveTitleAsync(new Regex("Playwright"));
-    }*/
+    }
 
     [Test]
     public async Task GetStartedLink()
@@ -33,15 +33,6 @@ public class ExampleTest : PageTest
         // Expects page to have a heading with the name of Installation.
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Installation" })).ToBeVisibleAsync();
     } 
-    
-    [Test] 
-    public async Task HasTitle()
-    {
-        await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
-
-        // Expect a title "to contain" a substring.
-        await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
-    }
 }
 
 /// <summary>
@@ -68,6 +59,8 @@ public class Tests : PageTest
         // Expects the URL to contain intro.
         await Expect(Page).ToHaveURLAsync(new Regex(".*intro"));
     }
+    
 }
+
 
 
