@@ -51,9 +51,9 @@ public class PublicPagesTest
     {
         Before();
         publicPage = new PublicModel(_repo,  _userManager);
-        int numberOfFullPages =  numberOfCheeps / cheepsPerPage;
-        int excessCheeps = numberOfCheeps % cheepsPerPage;
-        int expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;
+        var numberOfFullPages =  numberOfCheeps / cheepsPerPage;
+        var excessCheeps = numberOfCheeps % cheepsPerPage;
+        var expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;
         
         Assert.Equal(expectedNumberOfPages, publicPage.GetTotalPages(numberOfCheeps, cheepsPerPage));
         
