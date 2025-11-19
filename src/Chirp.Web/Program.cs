@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (builder.Environment.IsDevelopment())
+{
+    connectionString = builder.Configuration.GetConnectionString("DevConnection");
+}
 builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDefaultIdentity<Author>(options =>
     {
@@ -18,7 +22,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     options.User.RequireUniqueEmail = true;
 });
-
 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
