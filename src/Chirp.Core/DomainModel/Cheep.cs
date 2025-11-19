@@ -10,7 +10,7 @@ public class Cheep
     public required string  Text { get; set; }
     
     // public int AuthorId { get; set; } //foreign key
-    public required Author? Author { get; set; } = null!;
+    public required Author Author { get; set; }
     
     public DateTime TimeStamp { get; set; }
     
