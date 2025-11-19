@@ -4,7 +4,7 @@ namespace Chirp.Core.DTO
 {
     public static class EntityToDTO
     {
-        public static AuthorDTO ToDTO(Author author)
+        public static AuthorDTO ToDto(Author author)
         {
             return new AuthorDTO
             {
@@ -13,13 +13,13 @@ namespace Chirp.Core.DTO
             };
         }
 
-        public static CheepDTO ToDTO(Cheep cheep)
+        public static CheepDTO ToDto(Cheep cheep)
         {
             return new CheepDTO
             {
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp,
-                Author = ToDTO(cheep.Author)
+                Author = ToDto(cheep.Author)
             };
         }
     }
