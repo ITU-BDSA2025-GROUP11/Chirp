@@ -1,4 +1,4 @@
-﻿namespace Chirp.Core.DTOs
+﻿namespace Chirp.Core.DTO
 {
     public class AuthorDTO
     {

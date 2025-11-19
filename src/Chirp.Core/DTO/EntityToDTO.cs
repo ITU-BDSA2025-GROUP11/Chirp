@@ -1,6 +1,6 @@
 ﻿using Chirp.Core.DomainModel;
 
-namespace Chirp.Core.DTOs
+namespace Chirp.Core.DTO
 {
     public static class EntityToDTO
     {

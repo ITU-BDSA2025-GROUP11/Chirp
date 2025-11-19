@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using Chirp.Core.DTOs;
+﻿using Chirp.Core.DTO;
 using Chirp.Infrastructure;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
-using Chirp.Core.DomainModel;
-using System.Threading.Tasks;
 
 namespace Chirp.Web.Pages
 {
@@ -21,7 +16,7 @@ namespace Chirp.Web.Pages
         public int NumberOfCheeps => Cheeps.Count;
         public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
-        [BindProperty] public string Message { get; set; }
+        [BindProperty] public required string Message { get; set; }
 
         public PublicModel(ICheepRepository service, UserManager<Author> userManager)
         {
