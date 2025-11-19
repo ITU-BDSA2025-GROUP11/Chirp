@@ -59,5 +59,9 @@ namespace Chirp.Web.Pages
             // Redirect to the same author's timeline
             return RedirectToPage(new { author = author });
         }
+        public int GetTotalPages(int numberOfCheeps, int pageSize)
+        {
+            return (int)Math.Ceiling((double)numberOfCheeps / pageSize);
+        }
     }
 }
