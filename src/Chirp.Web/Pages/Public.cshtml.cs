@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Security.Claims;
 using Chirp.Core.DTOs;
 using Chirp.Infrastructure;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
-using Chirp.Core.DomainModel;
-using System.Threading.Tasks;
 
 namespace Chirp.Web.Pages
 {
@@ -34,7 +30,7 @@ namespace Chirp.Web.Pages
             _userManager = userManager;
         }
 
-        public ActionResult OnGet(int? publicpage = 1)
+        public async Task<IActionResult> OnGet(int? publicpage = 1)
         {
             CurrentPage = publicpage ?? 1;
 
