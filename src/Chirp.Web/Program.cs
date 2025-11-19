@@ -27,12 +27,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
-var clientId = builder.Configuration["authentication:github:clientId"]
-?? Environment.GetEnvironmentVariable("GITHUBCLIENTID");
-        
-var clientSecret = builder.Configuration["authentication:github:clientSecret"]
-?? Environment.GetEnvironmentVariable("GITHUBCLIENTSECRET");
-
 
 builder.Services.AddAuthentication(options =>
     {
@@ -44,8 +38,8 @@ builder.Services.AddAuthentication(options =>
     .AddCookie()
     .AddGitHub(o =>
     {
-        o.ClientId = clientId
-        o.ClientSecret = clientSecret
+        o.ClientId = builder.Configuration["authentication:github:clientId"];
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
         o.CallbackPath = "/signin-github";
     });
 
