@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Microsoft.Playwright.NUnit;
 
+namespace PlaywrightTests;
 [Ignore("")]
 public class EndToEndTests : PageTest
 {
@@ -18,6 +20,16 @@ public class EndToEndTests : PageTest
         _serverProcess.Kill();
         _serverProcess.Dispose();
     }
+}
 
+  /*  [Test] 
+    public async Task HasTitle()
+    {
+        await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
+
+        // Expect a title "to contain" a substring.
+        await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
+    }
     // Test cases ...
 }
+*/
