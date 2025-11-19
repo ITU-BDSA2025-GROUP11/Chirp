@@ -40,9 +40,6 @@ namespace Chirp.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -88,8 +85,6 @@ namespace Chirp.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -334,8 +329,6 @@ namespace Chirp.Infrastructure.Migrations
             modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
                 {
                     b.Navigation("Cheeps");
-
-                    b.Navigation("FollowingList");
                 });
 #pragma warning restore 612, 618
         }

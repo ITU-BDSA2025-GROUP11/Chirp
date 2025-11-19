@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20251119112518_AddFollowUnfollowTables2")]
-    partial class AddFollowUnfollowTables2
+    [Migration("20251119134318_AddFollowUnfollowTables")]
+    partial class AddFollowUnfollowTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
