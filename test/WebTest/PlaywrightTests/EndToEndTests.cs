@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
+using Assert = NUnit.Framework.Assert;
 
 /*
  * Similar to the UI tests above, implement some suitable end-to-end test cases.
@@ -65,8 +66,8 @@ public class EndToEndTests : PageTest
     {
         await Page.GetByText("Register").ClickAsync();
         await Page.GetByLabel("Email").FillAsync("John@gmail.com");
-        await Page.GetByLabel("Password").FillAsync("Abc123!");
-        await Page.GetByLabel("Confirm Password").FillAsync("Abc123!");
+        await Page.GetByText("Password").FillAsync("Abc123!");
+        await Page.GetByText("Confirm Password").FillAsync("Abc123!");
        // await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         
        var response = await Page.RunAndWaitForResponseAsync(
@@ -78,6 +79,6 @@ public class EndToEndTests : PageTest
        );
 
        //C# test syntax:
-       Assert.AreEqual(201, response.Status);
+       Assert.Equals(201, response.Status);
     }
 }
