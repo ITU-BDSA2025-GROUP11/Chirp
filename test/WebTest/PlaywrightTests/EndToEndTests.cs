@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-//using Azure;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -15,21 +13,21 @@ namespace PlaywrightTests;
 public class EndToEndTests : PageTest
 {
     //private Process _serverProcess;
+    private Task baseURL;
 
     [SetUp]
     public async Task Init()
     {
-        //_serverProcess = await MyEndToEndUtil.StartServer(); // Custom utility class - not part of Playwright
-        Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
+        
+        baseURL=  Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
         Page.SetDefaultTimeout(0); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
     }
     
-    // [TearDown]
-    // public async Task Cleanup()
-    // {
-    //     _serverProcess.Kill();
-    //     _serverProcess.Dispose();
-    // }
+    [TearDown]
+    public async Task Cleanup()
+     {
+         baseURL.Dispose();
+     }
     [Ignore("")]
     [Test] 
     public async Task HasTitle()
@@ -67,10 +65,19 @@ public class EndToEndTests : PageTest
     {
         await Page.GetByText("Register").ClickAsync();
         await Page.GetByLabel("Email").FillAsync("John@gmail.com");
+        await Page.GetByLabel("Password").FillAsync("Abc123!");
+        await Page.GetByLabel("Confirm Password").FillAsync("Abc123!");
+       // await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         
-        
+       var response = await Page.RunAndWaitForResponseAsync(
+           async () =>
+           {
+               await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+           },
+           r => r.Url.Contains("/Identity/Account/Register") && r.Status >= 200
+       );
+
+       //C# test syntax:
+       Assert.AreEqual(201, response.Status);
     }
 }
-
-
-//AriaRole.Link, new() {Name ="Login"}
