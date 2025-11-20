@@ -61,6 +61,15 @@ public class EndToEndTests : PageTest
         await Page.GetByText("Register").ClickAsync();
         await Expect(Page.GetByText("Create a new account.")).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task RegisterNewUserAddsUserToDatabase()
+    {
+        await Page.GetByText("Register").ClickAsync();
+        await Page.GetByLabel("Email").FillAsync("John@gmail.com");
+        
+        
+    }
 }
 
 
