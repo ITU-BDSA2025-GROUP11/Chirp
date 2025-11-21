@@ -109,6 +109,21 @@ namespace databasetest
         }
 
         [Fact]
+        public async Task PostCheep_Cheep_length_above_allowed_characters()
+        {
+            string text = "The quiet river drifted under the moonlit sky, " +
+                                "carrying soft ripples that shimmered like silver threads and whispered gentle " +
+                                "stories to the silent forest around.";
+            
+            var currentUserName = Environment.UserName;
+            await _repo.CreateUser(currentUserName, currentUserName + "@example.com");
+            await _repo.PostCheep(text, currentUserName, currentUserName + "@example.com");
+
+            var cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
+            Assert.Empty(cheeps); 
+            }
+        
+        [Fact]
         public async Task CreateUser_WhenCalledTwice_DoesNotDuplicateUser()
         {
             await _repo.CreateUser("TestUser", "TestUser");
