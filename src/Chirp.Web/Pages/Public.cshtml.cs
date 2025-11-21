@@ -88,12 +88,17 @@ namespace Chirp.Web.Pages
                 return RedirectToPage();
             }
 
+            if (Message.Length > 160)
+            {
+                return RedirectToPage();
+            }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return Challenge();
             }
-
+            
             await _service.PostCheep(Message, user.UserName, user.Email);
             return RedirectToPage();
         }
