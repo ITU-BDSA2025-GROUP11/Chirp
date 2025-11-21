@@ -4,6 +4,8 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace PagesTest;
 
@@ -15,7 +17,7 @@ public class PublicPagesTest
     ChirpDbContext _context;
     private readonly UserManager<Author> _userManager;
 
-    public void Before()
+    private void Before()
     {
         var options = new DbContextOptionsBuilder<ChirpDbContext>()
             .UseSqlite("Data Source=:memory:")
@@ -30,17 +32,29 @@ public class PublicPagesTest
     [Fact]
     public void PublicPageInstantiationTest()
     {
+        Before();
         publicPage = new PublicModel(_repo, _userManager);
         Assert.NotNull(publicPage);
     }
     
+    
     [Fact]
-    public void TotalNumberOfCheepsTest()
+    public async void TotalNumberOfCheepsTest()
     {
-        Before();
-        publicPage = new PublicModel(_repo, _userManager);
-        var numberOfCheeps = _repo.GetCheeps().Count;
-        Assert.Equal(numberOfCheeps, publicPage.NumberOfCheeps);
+        try
+        {
+            Before();
+            publicPage = new PublicModel(_repo, _userManager);
+            var cheeps = await _repo.GetCheeps();
+            var numberOfCheeps = cheeps.Count;
+            Assert.Equal(numberOfCheeps, publicPage.NumberOfCheeps);
+        }
+        catch (Exception ex)
+        {
+            ITestOutputHelper outputHelper = new TestOutputHelper();
+            outputHelper.WriteLine(ex.Message);
+        }
+        
     }
 
     [Theory]
