@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
 /*
@@ -13,23 +14,15 @@ namespace PlaywrightTests;
 [TestFixture]
 public class EndToEndTests : PageTest
 {
-    //private Process _serverProcess;
-    private Task baseURL;
-
     [SetUp]
     public async Task Init()
     {
         
-        baseURL=  Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
-        Page.SetDefaultTimeout(0); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
+      await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
+       Page.SetDefaultTimeout(60000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
     }
     
-    [TearDown]
-    public async Task Cleanup()
-     {
-         baseURL.Dispose();
-     }
-    [Ignore("")]
+    [Ignore("reason")]
     [Test] 
     public async Task HasTitle()
     {
@@ -64,21 +57,32 @@ public class EndToEndTests : PageTest
     [Test]
     public async Task RegisterNewUserAddsUserToDatabase()
     {
-        await Page.GetByText("Register").ClickAsync();
-        await Page.GetByLabel("Email").FillAsync("John@gmail.com");
-        await Page.GetByText("Password").FillAsync("Abc123!");
-        await Page.GetByText("Confirm Password").FillAsync("Abc123!");
-       // await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        
-       var response = await Page.RunAndWaitForResponseAsync(
-           async () =>
-           {
-               await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-           },
-           r => r.Url.Contains("/Identity/Account/Register") && r.Status >= 200
-       );
+        string username = "TestUser";
+        string email = $"user_{Guid.NewGuid()}@test.com";
+        string password = "Abc123!";
 
-       //C# test syntax:
-       Assert.Equals(201, response.Status);
+        await Page.GetByText("Register").ClickAsync();
+        await Page.GetByLabel("Username").FillAsync(username);
+        await Page.GetByLabel("Email").FillAsync(email);
+        await Page.GetByLabel("Input_Password").FillAsync(password);
+        await Page.GetByLabel("Input_ConfirmPassword").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        
+        // Registration generally redirects to homepage
+        await Expect(Page.GetByText("Public Timeline")).ToBeVisibleAsync();
+
+        // Log out if applicable
+        if (await Page.GetByText("Logout").IsVisibleAsync())
+            await Page.GetByText("Logout").ClickAsync();
+
+        // Login with the new account
+        await Page.GetByLabel("Username").FillAsync(username);
+        await Page.GetByText("Login").ClickAsync();
+        await Page.GetByLabel("Email").FillAsync(email);
+        await Page.GetByLabel("Password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+        // Assert login succeeded
+        await Expect(Page.GetByText(username)).ToBeVisibleAsync();
     }
 }

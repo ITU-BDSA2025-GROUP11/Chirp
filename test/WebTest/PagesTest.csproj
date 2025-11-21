@@ -10,6 +10,37 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <!-- Only include NUnit + Playwright NUnit -->
+        <PackageReference Include="NUnit" Version="4.4.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="Microsoft.Playwright" Version="1.56.0" />
+        <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.56.0" />
+
+        <!-- Optional coverage tool -->
+        <PackageReference Include="coverlet.collector" Version="6.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- References to your actual projects -->
+        <ProjectReference Include="..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\src\Chirp.Web\Chirp.Web.csproj" />
+    </ItemGroup>
+
+</Project>
+
+<!--
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
         <PackageReference Include="Microsoft.Playwright" Version="1.56.0" />
@@ -19,7 +50,7 @@
         <PackageReference Include="Microsoft.Playwright.Xunit" Version="1.56.0" />
         <PackageReference Include="NUnit" Version="4.4.0" />
         <PackageReference Include="xunit" Version="2.5.3"/>
-       <!-- <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3"/>-->
+       &lt;!&ndash; <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3"/>&ndash;&gt;
     </ItemGroup>
     
 
@@ -34,3 +65,4 @@
     </ItemGroup>
 
 </Project>
+-->
