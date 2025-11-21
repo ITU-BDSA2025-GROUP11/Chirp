@@ -28,6 +28,7 @@ namespace Chirp.Web.Pages
         {
             _service = service;
             _userManager = userManager;
+            NumberOfCheeps = Cheeps.Count;
         }
 
         public async Task<IActionResult> OnGet(int? publicpage = 1)
@@ -36,7 +37,7 @@ namespace Chirp.Web.Pages
 
             Cheeps = await _service.GetCheeps();
     
-            NumberOfCheeps = await _service.GetCheepCount(null);
+            NumberOfCheeps = await _service.GetCheepCount();
             
             CurrentPageCheeps = await _service.GetPaginatedCheeps(CurrentPage - 1, PageSize);
             

@@ -1,7 +1,5 @@
 using Chirp.Core.DTO;
-using System.Collections.Generic;
 using System.Security.Claims;
-using Chirp.Core.DTOs;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +17,16 @@ namespace Chirp.Web.Pages
 
         public List<CheepDTO>? Cheeps { get; set; }
         public List<CheepDTO>? CurrentPageCheeps { get; set; }
-        public int NumberOfCheeps => Cheeps?.Count ?? 0;
+        public int NumberOfCheeps { get; set; }
         public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
         
         [BindProperty]
-        public string Message { get; set; }
+        public required string Message { get; set; }
         public UserTimelineModel(ICheepRepository service, UserManager<Author> userManager)
         {
             _service = service;
             _userManager = userManager;
+            NumberOfCheeps = Cheeps?.Count ?? 0;
         }
 
         public async Task<IActionResult> OnGet(string author, int? timelinepage)

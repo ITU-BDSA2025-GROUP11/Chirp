@@ -69,8 +69,9 @@ namespace clientTest
                 Author = author
             };
 
-            var authorDto = new AuthorDTO
+            var authorDto = new AuthorDTO()
             {
+                Id = "1",
                 Username = "Jane Doe",
                 Email = "jane@example.com"
             };
