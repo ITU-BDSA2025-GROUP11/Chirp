@@ -27,6 +27,11 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
+var clientId = builder.Configuration["authentication:github:clientId"];
+// Tag fra environment variables -T
+
+var clientSecret = builder.Configuration["authentication:github:clientSecret"];
+// Samme her 
 
 builder.Services.AddAuthentication(options =>
     {
