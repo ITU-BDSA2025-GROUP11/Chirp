@@ -32,7 +32,7 @@ var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?
 
 if (clientid is null || clientsecret is null)
 {
-    Console.WriteLine("Clientid or secret is null")
+    Console.WriteLine("Clientid or secret is null");
 }
 
 builder.Services.AddAuthentication(options =>
