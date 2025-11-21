@@ -30,9 +30,6 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 var clientid = builder.Configuration["authentication:github:clientId"] ?? System.Environment.GetEnvironmentVariable("CLIENTID");
 var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?? System.Environment.GetEnvironmentVariable("CLIENTSECRET");
 
-Console.WriteLine($"Config client ID: {builder.Configuration["authentication:github:clientId"]}");
-Console.WriteLine($"Env CLIENTID: {Environment.GetEnvironmentVariable("CLIENTID")}");
-
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
