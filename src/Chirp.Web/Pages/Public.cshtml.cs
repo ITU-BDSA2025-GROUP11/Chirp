@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Chirp.Core.DTOs;
 using Chirp.Infrastructure;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
-using Chirp.Core.DomainModel;
-using System.Threading.Tasks;
 
 namespace Chirp.Web.Pages
 {
@@ -76,7 +71,7 @@ namespace Chirp.Web.Pages
             return RedirectToPage();
         }
         
-        private int GetTotalPages(int numberOfCheeps, int pageSize)
+        public int GetTotalPages(int numberOfCheeps, int pageSize)
         {
             return (int)Math.Ceiling((double)numberOfCheeps / pageSize);
         }
