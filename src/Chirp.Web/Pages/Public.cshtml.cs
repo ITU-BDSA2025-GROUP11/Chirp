@@ -93,7 +93,7 @@ namespace Chirp.Web.Pages
             {
                 return Challenge();
             }
-
+            
             await _service.PostCheep(Message, user.UserName, user.Email);
             return RedirectToPage();
         }
