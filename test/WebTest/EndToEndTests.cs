@@ -9,7 +9,7 @@ using Assert = NUnit.Framework.Assert;
  * For example, test if a cheep that a user enters into a cheep box is stored in the
  * database for the respective author.
  */
-namespace PlaywrightTests;
+namespace WebTest;
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
 public class EndToEndTests : PageTest
@@ -19,7 +19,7 @@ public class EndToEndTests : PageTest
     {
         
       await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
-       Page.SetDefaultTimeout(60000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
+       Page.SetDefaultTimeout(20000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
     }
     
     [Ignore("reason")]
@@ -60,29 +60,33 @@ public class EndToEndTests : PageTest
         string username = "TestUser";
         string email = $"user_{Guid.NewGuid()}@test.com";
         string password = "Abc123!";
-
+        
         await Page.GetByText("Register").ClickAsync();
+
+  
         await Page.GetByLabel("Username").FillAsync(username);
         await Page.GetByLabel("Email").FillAsync(email);
-        await Page.GetByLabel("Input_Password").FillAsync(password);
-        await Page.GetByLabel("Input_ConfirmPassword").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.Locator("#Input_Password").FillAsync(password);
+        await Page.Locator("#Input_ConfirmPassword").FillAsync(password);
         
-        // Registration generally redirects to homepage
+     
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+
+        
         await Expect(Page.GetByText("Public Timeline")).ToBeVisibleAsync();
 
-        // Log out if applicable
+        
         if (await Page.GetByText("Logout").IsVisibleAsync())
             await Page.GetByText("Logout").ClickAsync();
 
-        // Login with the new account
-        await Page.GetByLabel("Username").FillAsync(username);
+  
         await Page.GetByText("Login").ClickAsync();
+
         await Page.GetByLabel("Email").FillAsync(email);
         await Page.GetByLabel("Password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
-        // Assert login succeeded
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
         await Expect(Page.GetByText(username)).ToBeVisibleAsync();
     }
 }

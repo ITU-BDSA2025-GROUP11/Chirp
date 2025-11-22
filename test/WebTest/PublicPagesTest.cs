@@ -3,7 +3,7 @@
 // using Chirp.Web;
 // using Chirp.Web.Pages;
 //
- namespace PagesTest;
+ namespace WebTest;
 //
 //
 // public class PublicPagesTest
