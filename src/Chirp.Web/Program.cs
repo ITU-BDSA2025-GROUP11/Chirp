@@ -32,12 +32,12 @@ var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?
 
 builder.Services.AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = "GitHub";
+        //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //options.DefaultChallengeScheme = "GitHub";
 
     })
-    .AddCookie()
+    //.AddCookie()
     .AddGitHub(o =>
     {
         o.ClientId = clientid;

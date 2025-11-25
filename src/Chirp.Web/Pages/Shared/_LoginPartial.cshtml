@@ -10,6 +10,7 @@
         <div>
             <a href="/@(User.Identity.Name)">My timeline</a> |
             <a href="/">Public timeline</a> |
+            <a class="nav-link text-dark" asp-page="/AboutMe">about me</a> |
             <form class="form-inline" asp-page="/Account/Logout"
                   asp-route-returnUrl="@Url.Page("/", new { area = "" })"
                   asp-area="Identity" method="post">
