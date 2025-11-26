@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("DefaultConnection string not found");
+
 if (builder.Environment.IsDevelopment())
 {
     connectionString = builder.Configuration.GetConnectionString("DevConnection");
@@ -27,8 +29,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
-var clientid = builder.Configuration["authentication:github:clientId"] ?? System.Environment.GetEnvironmentVariable("CLIENTID");
-var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?? System.Environment.GetEnvironmentVariable("CLIENTSECRET");
+var clientid = builder.Configuration["authentication:github:clientId"] ?? Environment.GetEnvironmentVariable("CLIENTID");
+var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?? Environment.GetEnvironmentVariable("CLIENTSECRET");
 
 builder.Services.AddAuthentication(options =>
     {
@@ -39,9 +41,9 @@ builder.Services.AddAuthentication(options =>
     })
     .AddCookie()
     .AddGitHub(o =>
-    { 
-        o.ClientId = clientid;
-        o.ClientSecret = clientsecret;
+    {
+        o.ClientId = clientid ?? string.Empty;
+        o.ClientSecret = clientsecret ?? string.Empty;
         o.CallbackPath = "/signin-github";
     });
 
