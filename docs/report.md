@@ -2,9 +2,11 @@
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2025 Group `<11>`
 author:
-- "Emilie Bliddal Ravn Larsen <ebiil@itu.dk>"
-- "Joakim-David Stauning Prewett <adho@itu.dk>"
-- "Milja Hil"
+- "Emilie Bliddal Ravn Larsen <ebll@itu.dk>"
+- "Joakim-David Stauning Prewett <jpre@itu.dk>"
+- "Milja Noomi Hildigunnsdottir <mhil@itu>"
+- "Morten Holtorp Erlandsen <merl@itu>"
+- "Therese Schultz-Nielsen <thsch@itu>"
 numbersections: true
 ---
 
