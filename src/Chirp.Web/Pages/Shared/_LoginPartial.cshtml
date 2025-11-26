@@ -1,17 +1,14 @@
-@using Microsoft.AspNetCore.Identity
-@using Chirp.Core.DomainModel
 @inject SignInManager<Author> SignInManager
-@inject UserManager<Author> UserManager
 
 <div class="navigation">
     <!-- LOGIN PARTIAL LOADED -->
-    @if (SignInManager.IsSignedIn(User))
+    @if (SignInManager.IsSignedIn(User) && User.Identity?.IsAuthenticated == true)
     {
         var safeName = User.Identity?.Name ?? "User";
         <div>
             <a href="/@safeName">My timeline</a> |
             <a href="/">Public timeline</a> |
-            <a class="nav-link text-dark" href="/AboutMe">about me</a> |
+            <a class="nav-link text-dark" href="/AboutMe">About me</a> |
             <form class="form-inline" asp-page="/Account/Logout"
                   asp-route-returnUrl="@Url.Page("/", new { area = "" })"
                   asp-area="Identity" method="post">

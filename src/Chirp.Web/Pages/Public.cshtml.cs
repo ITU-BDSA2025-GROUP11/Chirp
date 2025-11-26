@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Chirp.Core.DTOs;
 using Chirp.Infrastructure;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
-using Chirp.Core.DomainModel;
-using System.Threading.Tasks;
 
 namespace Chirp.Web.Pages
 {
@@ -27,7 +22,7 @@ namespace Chirp.Web.Pages
         
         public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
-        [BindProperty] public string Message { get; set; }
+        [BindProperty] public string Message { get; set; } = "";
 
         public PublicModel(ICheepRepository service, UserManager<Author> userManager)
         {
@@ -41,14 +36,16 @@ namespace Chirp.Web.Pages
 
             Cheeps = await _service.GetCheeps();
     
-            NumberOfCheeps = await _service.GetCheepCount(null);
+            NumberOfCheeps = await _service.GetCheepCount();
             
             CurrentPageCheeps = await _service.GetPaginatedCheeps(CurrentPage - 1, PageSize);
             
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity?.IsAuthenticated == true)
             {
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                if (currentUserId != null){
+                    ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                }
             }
     
             return Page();
@@ -94,7 +91,7 @@ namespace Chirp.Web.Pages
                 return Challenge();
             }
 
-            await _service.PostCheep(Message, user.UserName, user.Email);
+            await _service.PostCheep(Message, user.UserName ?? "unknown", user.Email ??  "unknown");
             return RedirectToPage();
         }
     }

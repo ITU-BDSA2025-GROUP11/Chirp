@@ -64,7 +64,7 @@ namespace Chirp.Infrastructure
             IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
 
             if (!string.IsNullOrEmpty(author))
-                query = query.Where(c => c.Author.UserName == author);
+                query = query.Where(c => c.Author!.UserName == author);
 
             return await query
                 .OrderByDescending(c => c.TimeStamp)
@@ -83,6 +83,12 @@ namespace Chirp.Infrastructure
             if (author == null)
             {
                 _logger.LogWarning("No author found for user {User}", authorName);
+                return;
+            }
+            
+            if (text.Length > 160)
+            {
+                _logger.LogWarning("{text} is longer than 160 chars", text);
                 return;
             }
 
@@ -166,7 +172,7 @@ namespace Chirp.Infrastructure
 
             return await _context.Cheeps
                 .Include(c => c.Author)
-                .Where(c => followingIds.Contains(c.Author.Id))
+                .Where(c => followingIds.Contains(c.Author!.Id))
                 .OrderByDescending(c => c.TimeStamp)
                 .Skip(pageSize * (page - 1))
                 .Take(pageSize)
@@ -197,7 +203,7 @@ namespace Chirp.Infrastructure
             followingIds.Add(author.Id); 
 
             return await _context.Cheeps
-                .CountAsync(c => followingIds.Contains(c.Author.Id));
+                .CountAsync(c => followingIds.Contains(c.Author!.Id));
         }
         
         public async Task<int> GetCheepCount(string? author = null)
@@ -206,7 +212,7 @@ namespace Chirp.Infrastructure
     
             if (!string.IsNullOrEmpty(author))
             {
-                query = query.Where(c => c.Author.UserName == author);
+                query = query.Where(c => c.Author!.UserName == author);
             }
     
             return await query.CountAsync();
