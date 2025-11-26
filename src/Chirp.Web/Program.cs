@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -32,19 +34,15 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 var clientid = builder.Configuration["authentication:github:clientId"] ?? Environment.GetEnvironmentVariable("CLIENTID");
 var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?? Environment.GetEnvironmentVariable("CLIENTSECRET");
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = "GitHub";
-
-    })
-    .AddCookie()
+builder.Services.AddAuthentication()
     .AddGitHub(o =>
     {
         o.ClientId = clientid ?? string.Empty;
         o.ClientSecret = clientsecret ?? string.Empty;
         o.CallbackPath = "/signin-github";
+        o.Scope.Add("read:user");
+        o.Scope.Add("user:email");
+        o.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
     });
 
 
