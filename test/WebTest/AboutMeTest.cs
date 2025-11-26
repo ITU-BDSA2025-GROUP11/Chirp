@@ -70,7 +70,6 @@ public class AboutMeUnitTest
     }
     
     //Edge cases
-    
     [Fact]
     public async Task DeleteUserReturnsFalseWhenUserDoesNotExist()
     {
