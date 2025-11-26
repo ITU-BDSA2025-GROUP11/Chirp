@@ -216,4 +216,5 @@ namespace Chirp.Infrastructure
             return await query.CountAsync();
         }
     }
+    // :)
 }
