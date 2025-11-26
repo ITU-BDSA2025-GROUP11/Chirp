@@ -7,8 +7,9 @@
     <!-- LOGIN PARTIAL LOADED -->
     @if (SignInManager.IsSignedIn(User))
     {
+        var safeName = User.Identity?.Name ?? "User";
         <div>
-            <a href="/@(User.Identity.Name)">My timeline</a> |
+            <a href="/@safeName">My timeline</a> |
             <a href="/">Public timeline</a> |
             <a class="nav-link text-dark" href="/AboutMe">about me</a> |
             <form class="form-inline" asp-page="/Account/Logout"
