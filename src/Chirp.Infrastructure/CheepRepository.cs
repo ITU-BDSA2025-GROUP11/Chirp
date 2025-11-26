@@ -83,6 +83,12 @@ namespace Chirp.Infrastructure
                 _logger.LogWarning("No author found for user {User}", authorName);
                 return;
             }
+            
+            if (text.Length > 160)
+            {
+                _logger.LogWarning("{text} is longer than 160 chars", text);
+                return;
+            }
 
             var newCheep = new Cheep
             {
