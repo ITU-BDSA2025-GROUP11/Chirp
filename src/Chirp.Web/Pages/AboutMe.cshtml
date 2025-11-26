@@ -8,8 +8,9 @@
 <div>
     <h2>About Me</h2>
 
-    @if (Model.UserInfo != null)
+    @if (User.Identity?.IsAuthenticated == true && Model.UserInfo != null)
     {
+        //Viser navn og Email 
         <ul class="cheeps" style="list-style: none; padding: 0; margin-top: 20px;">
             
             <li style="margin-bottom: 10px;">
@@ -18,15 +19,17 @@
                     <span>@Model.UserInfo.Name</span>
                 </div>
             </li>
+            
             <li style="margin-bottom: 10px;">
                 <div style="display: flex; align-items: baseline; gap: 8px;">
                     <strong>Email:</strong>
                     <span>@Model.UserInfo.Email</span>
                 </div>
             </li>
-            
-        </ul>
 
+        </ul>
+        
+        //viser Followers 
         <div style="margin-top: 20px;">
             <div class="cheepbox" style="border-color: #ccc;">
                 <strong>Following:</strong>
@@ -50,7 +53,8 @@
                 }
             </div>
         </div>
-
+        
+        // Forget Me knappen 
         <form method="post" asp-page-handler="ForgetMe">
             <button type="submit"
                     style="background-color: #c62828; color: white; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; margin-top: 20px;">
@@ -60,6 +64,6 @@
     }
     else
     {
-        <p>Could not load user information.</p>
+        <p>You are not logged in.</p>
     }
 </div>
