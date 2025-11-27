@@ -39,7 +39,7 @@ public class AboutMeUnitTest
         
         var oldUser = await Context.Authors.FirstOrDefaultAsync(a => a.UserName == username);
         Assert.Null(oldUser);
-        var anonymizedUser = await Context.Authors.FirstOrDefaultAsync(a => a.Email.StartsWith("deleted-"));
+        var anonymizedUser = await Context.Authors.FirstOrDefaultAsync(a => a.Email!.StartsWith("deleted-"));
         Assert.NotNull(anonymizedUser);
         Assert.StartsWith("DeletedUser-", anonymizedUser.UserName);
     }
