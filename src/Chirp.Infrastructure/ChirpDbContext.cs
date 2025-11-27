@@ -13,6 +13,7 @@ public class ChirpDbContext : IdentityDbContext<Author>
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         base.OnModelCreating(modelBuilder);
         
         modelBuilder.Entity<Author>()
@@ -23,8 +24,24 @@ public class ChirpDbContext : IdentityDbContext<Author>
             .ToTable(name: "Authors", schema: null);
         
         modelBuilder.Entity<Author>()
-            .HasMany(a => a.Following)
-            .WithMany(a => a.Followers)
+            .HasMany(a => a.Cheeps)        
+            .WithOne(c => c.Author!)       
+            .IsRequired(); 
+        
+        modelBuilder.Entity<Author>()
+            .HasMany(a => a.Following)    
+            .WithMany(a => a.Followers)    
             .UsingEntity(j => j.ToTable("AuthorFollows"));
+
+        
+        modelBuilder.Entity<Cheep>()
+            .HasMany(c => c.Likes)       
+            .WithMany(a => a.LikedCheeps)  
+            .UsingEntity(j => j.ToTable("CheepLikes")); 
+        
+        modelBuilder.Entity<Cheep>()
+            .HasMany(c => c.Dislikes)       
+            .WithMany(a => a.DislikedCheeps) 
+            .UsingEntity(j => j.ToTable("CheepDislikes"));
     }
 }

@@ -158,6 +158,58 @@ namespace Chirp.Infrastructure
             return await _context.Authors
                 .AnyAsync(a => a.Id == currentUserId && a.Following.Any(f => f.Id == authorId));
         }
+
+        public async Task LikePost(string currentUserId, string cheepIdToLike)
+        {
+            var cheepToLike = await _context.Cheeps.FindAsync(cheepIdToLike);
+            var userLiking = await _context.Authors
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+
+            if (cheepToLike == null || userLiking == null) return;
+            if (cheepToLike.Likes.Contains(userLiking)) return;
+            
+            cheepToLike.Likes.Add(userLiking);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DislikePost(string currentUserId, string cheepIdToDislike)
+        {
+            var cheepToDislike = await _context.Cheeps.FindAsync(cheepIdToDislike);
+            var userdisliking = await _context.Authors
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+            
+            if (cheepToDislike == null || userdisliking == null) return;
+            if (cheepToDislike.Dislikes.Contains(userdisliking)) return;
+            
+            cheepToDislike.Dislikes.Remove(userdisliking);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveDislike(string currentUserId, string cheepIdToUndislike)
+        {
+            var cheepToUndislike = await _context.Cheeps.FindAsync(cheepIdToUndislike);
+            var userundisliking = await _context.Authors
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+            
+            if (cheepToUndislike == null || userundisliking == null) return;
+            if (cheepToUndislike.Dislikes.Contains(userundisliking)) return;
+            
+            cheepToUndislike.Dislikes.Add(userundisliking);
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task RemoveLike(string currentUserId, string cheepIdToUnLike)
+        {
+            var cheepToUnLike = await _context.Cheeps.FindAsync(cheepIdToUnLike);
+            var userundisliking = await _context.Authors
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+            
+            if (cheepToUnLike == null || userundisliking == null) return;
+            if (cheepToUnLike.Dislikes.Contains(userundisliking)) return;
+            
+            cheepToUnLike.Dislikes.Add(userundisliking);
+            await _context.SaveChangesAsync();
+        }
         
         public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
         {
