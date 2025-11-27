@@ -15,8 +15,8 @@ namespace Chirp.Web.Pages
         
         public List<string> Following { get; set; } = new();
 
-        public List<CheepDTO>? Cheeps { get; set; }
-        public List<CheepDTO>? CurrentPageCheeps { get; set; }
+        public List<CheepDTO> Cheeps { get; set; }  = new();
+        public List<CheepDTO> CurrentPageCheeps { get; set; }  = new();
         public int NumberOfCheeps { get; set; }
         public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
         
