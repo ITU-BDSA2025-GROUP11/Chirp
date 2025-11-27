@@ -21,8 +21,6 @@ public class ChirpDbContext : IdentityDbContext<Author>
             b.HasMany(a => a.Following)
                 .WithMany(a => a.Followers)
                 .UsingEntity(j => j.ToTable("AuthorFollows"));
-            b.HasIndex(u => u.UserName)
-                .IsUnique();
             b.ToTable(name: "Authors", schema: null);
         });
     }
