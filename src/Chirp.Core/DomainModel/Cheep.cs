@@ -14,4 +14,8 @@ public class Cheep
     
     public DateTime TimeStamp { get; set; }
     
+    public virtual ICollection<Author> Dislikes { get; set; } = new List<Author>();
+    
+    public virtual ICollection<Cheep> Comments { get; set; } = new List<Cheep>();   
+    
 }
