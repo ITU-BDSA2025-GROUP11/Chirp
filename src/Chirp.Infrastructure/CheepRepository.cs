@@ -20,6 +20,7 @@ namespace Chirp.Infrastructure
         Task<int> GetCheepCount(string? author = null);
         Task<UserInfoDTO> GetUserInfo(string username);
         Task<bool> DeleteUser(string username);
+        Task<bool> IsUserDeleted(string username);
     }
 
     public class CheepRepository : ICheepRepository
@@ -217,7 +218,7 @@ namespace Chirp.Infrastructure
     
             return await query.CountAsync();
         }
-        public async Task<UserInfoDTO> GetUserInfo(string username)
+        public async Task<UserInfoDTO?> GetUserInfo(string username)
         {
             var author = await _context.Authors
                 .Where(a => a.UserName == username)
@@ -225,7 +226,7 @@ namespace Chirp.Infrastructure
                 .Include(a => a.Following)
                 .FirstOrDefaultAsync();
 
-            if (author == null) return new UserInfoDTO();
+            if (author == null) return null;
 
             return new UserInfoDTO
             {
@@ -238,7 +239,13 @@ namespace Chirp.Infrastructure
                     .ToList(),
                 FollowedUsernames = author.Following.Select(f => f.UserName).ToList()!
             };
-        } public async Task<bool> DeleteUser(string username)
+        }
+
+        public async Task<bool> IsUserDeleted(string username)
+        {
+            return await GetUserInfo(username) == null;
+        }
+        public async Task<bool> DeleteUser(string username)
         {
             var author = await _context.Authors
                 .Include(a => a.Following)
