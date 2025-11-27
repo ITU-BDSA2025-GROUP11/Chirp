@@ -217,7 +217,7 @@ namespace Chirp.Infrastructure
     
             return await query.CountAsync();
         }
-        public async Task<UserInfoDTO?> GetUserInfo(string username)
+        public async Task<UserInfoDTO> GetUserInfo(string username)
         {
             var author = await _context.Authors
                 .Where(a => a.UserName == username)
@@ -225,7 +225,7 @@ namespace Chirp.Infrastructure
                 .Include(a => a.Following)
                 .FirstOrDefaultAsync();
 
-            if (author == null) return null;
+            if (author == null) return new UserInfoDTO();
 
             return new UserInfoDTO
             {
