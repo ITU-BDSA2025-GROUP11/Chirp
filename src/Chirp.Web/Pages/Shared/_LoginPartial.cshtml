@@ -13,7 +13,7 @@
                   asp-route-returnUrl="@Url.Page("/", new { area = "" })"
                   asp-area="Identity" method="post">
                 <button class="nav-link btn btn-link text-dark"
-                        type="submit">Logout [@(User.Identity.Name)]</button>
+                        type="submit">Logout [@(User.Identity?.Name)]</button>
             </form>
         </div>
     }

@@ -18,7 +18,7 @@ namespace Chirp.Infrastructure
         Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
         Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
         Task<int> GetCheepCount(string? author = null);
-        Task<UserInfoDTO> GetUserInfo(string username);
+        Task<UserInfoDTO?> GetUserInfo(string username);
         Task<bool> DeleteUser(string username);
     }
 
