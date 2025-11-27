@@ -4,7 +4,7 @@
     {
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public List<CheepDTO> Cheeps { get; set; } = new List<CheepDTO>();
-        public List<string> FollowedUsernames { get; set; } = new List<string>();
+        public List<CheepDTO> Cheeps { get; set; } = new();
+        public List<string> FollowedUsernames { get; set; } = new();
     }
 }
