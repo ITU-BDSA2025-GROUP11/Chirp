@@ -87,7 +87,6 @@ public class AboutMeUnitTest
         await Repository.DeleteUser("Silas");
 
         var info = await Repository.GetUserInfo("Silas");
-
         Assert.Null(info);
     }
     

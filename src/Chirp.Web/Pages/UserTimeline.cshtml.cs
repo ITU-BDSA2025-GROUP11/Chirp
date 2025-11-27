@@ -31,6 +31,7 @@ namespace Chirp.Web.Pages
 
         public async Task<IActionResult> OnGet(string author, int? timelinepage)
         {
+            if (_service.IsUserDeleted(author).Result) return NotFound();
             CurrentPage = timelinepage ?? 1;
             var ownTimeline = User.Identity?.IsAuthenticated == true && User.Identity?.Name == author;
 

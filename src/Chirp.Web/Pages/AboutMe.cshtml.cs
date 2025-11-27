@@ -30,7 +30,7 @@ namespace Chirp.Web.Pages
             {
                 UserInfo = await _repository.GetUserInfo(username);
             }
-
+            
             return Page();
         }
 
