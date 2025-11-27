@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.Infrastructure; 
 using Microsoft.AspNetCore.Identity;
 using Chirp.Core.DomainModel;
+using Chirp.Core.DTO;
+
 
 namespace Chirp.Web.Pages
 {
