@@ -81,7 +81,6 @@ namespace Chirp.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -96,9 +95,6 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("UserName")
-                        .IsUnique();
 
                     b.ToTable("Authors", (string)null);
                 });
