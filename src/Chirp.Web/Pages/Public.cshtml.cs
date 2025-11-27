@@ -22,7 +22,7 @@ namespace Chirp.Web.Pages
         
         public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
-        [BindProperty] public required string Message { get; set; }
+        [BindProperty] public required string Message { get; set; } = "";
 
         public PublicModel(ICheepRepository service, UserManager<Author> userManager)
         {
@@ -41,10 +41,12 @@ namespace Chirp.Web.Pages
             
             CurrentPageCheeps = await _service.GetPaginatedCheeps(CurrentPage - 1, PageSize);
             
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity?.IsAuthenticated == true)
             {
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                if (currentUserId != null){
+                    ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                }
             }
     
             return Page();
@@ -90,7 +92,7 @@ namespace Chirp.Web.Pages
                 return Challenge();
             }
 
-            await _service.PostCheep(Message, user.UserName, user.Email);
+            await _service.PostCheep(Message, user.UserName ?? "unknown", user.Email ??  "unknown");
             return RedirectToPage();
         }
     }

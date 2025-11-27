@@ -18,6 +18,8 @@ namespace Chirp.Infrastructure
         Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
         Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
         Task<int> GetCheepCount(string? author = null);
+        Task<UserInfoDTO> GetUserInfo(string username);
+        Task<bool> DeleteUser(string username);
     }
 
     public class CheepRepository : ICheepRepository
@@ -62,7 +64,7 @@ namespace Chirp.Infrastructure
             IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
 
             if (!string.IsNullOrEmpty(author))
-                query = query.Where(c => c.Author.UserName == author);
+                query = query.Where(c => c.Author!.UserName == author);
 
             return await query
                 .OrderByDescending(c => c.TimeStamp)
@@ -81,6 +83,12 @@ namespace Chirp.Infrastructure
             if (author == null)
             {
                 _logger.LogWarning("No author found for user {User}", authorName);
+                return;
+            }
+            
+            if (text.Length > 160)
+            {
+                _logger.LogWarning("{text} is longer than 160 chars", text);
                 return;
             }
 
@@ -164,7 +172,7 @@ namespace Chirp.Infrastructure
 
             return await _context.Cheeps
                 .Include(c => c.Author)
-                .Where(c => followingIds.Contains(c.Author.Id))
+                .Where(c => followingIds.Contains(c.Author!.Id))
                 .OrderByDescending(c => c.TimeStamp)
                 .Skip(pageSize * (page - 1))
                 .Take(pageSize)
@@ -195,7 +203,7 @@ namespace Chirp.Infrastructure
             followingIds.Add(author.Id); 
 
             return await _context.Cheeps
-                .CountAsync(c => followingIds.Contains(c.Author.Id));
+                .CountAsync(c => followingIds.Contains(c.Author!.Id));
         }
         
         public async Task<int> GetCheepCount(string? author = null)
@@ -204,10 +212,53 @@ namespace Chirp.Infrastructure
     
             if (!string.IsNullOrEmpty(author))
             {
-                query = query.Where(c => c.Author.UserName == author);
+                query = query.Where(c => c.Author!.UserName == author);
             }
     
             return await query.CountAsync();
+        }
+        public async Task<UserInfoDTO?> GetUserInfo(string username)
+        {
+            var author = await _context.Authors
+                .Where(a => a.UserName == username)
+                .Include(a => a.Cheeps)
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync();
+
+            if (author == null) return null;
+
+            return new UserInfoDTO
+            {
+                Name = author.UserName ?? string.Empty,
+                Email = author.Email ?? string.Empty,
+                
+                Cheeps = author.Cheeps
+                    .OrderByDescending(c => c.TimeStamp)
+                    .Select(c => EntityToDTO.ToDTO(c))
+                    .ToList(),
+                FollowedUsernames = author.Following.Select(f => f.UserName).ToList()!
+            };
+        } public async Task<bool> DeleteUser(string username)
+        {
+            var author = await _context.Authors
+                .Include(a => a.Following)
+                .Include(a => a.Followers)
+                .Include(a => a.Cheeps)
+                .FirstOrDefaultAsync(a => a.UserName == username);
+
+            if (author == null) return false;
+            
+            author.Following.Clear();
+            author.Followers.Clear();
+
+            var uniqueId = Guid.NewGuid().ToString().Substring(0, 8);
+            author.UserName = $"DeletedUser-{uniqueId}";
+            author.NormalizedUserName = $"DELETEDUSER-{uniqueId}";
+            author.Email = $"deleted-{uniqueId}@chirp.db";
+            author.NormalizedEmail = $"DELETED-{uniqueId}@CHIRP.DB";
+            
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

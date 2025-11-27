@@ -21,7 +21,7 @@ namespace Chirp.Web.Pages
         public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
         
         [BindProperty]
-        public required string Message { get; set; }
+        public required string Message { get; set; } = "";
         public UserTimelineModel(ICheepRepository service, UserManager<Author> userManager)
         {
             _service = service;
@@ -32,7 +32,7 @@ namespace Chirp.Web.Pages
         public async Task<IActionResult> OnGet(string author, int? timelinepage)
         {
             CurrentPage = timelinepage ?? 1;
-            bool ownTimeline = User.Identity.IsAuthenticated && User.Identity.Name == author;
+            var ownTimeline = User.Identity?.IsAuthenticated == true && User.Identity?.Name == author;
 
             if (ownTimeline)
             {
@@ -47,10 +47,13 @@ namespace Chirp.Web.Pages
                 CurrentPageCheeps = await _service.GetPaginatedCheeps(CurrentPage - 1, 32, author);
             }
 
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity?.IsAuthenticated == true)
             {
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                if (currentUserId != null)
+                {
+                    ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                }
             }
 
             return Page();
@@ -69,9 +72,9 @@ namespace Chirp.Web.Pages
                 return Challenge();
             }
 
-            await _service.PostCheep(Message, user.UserName, user.Email); 
+            await _service.PostCheep(Message, user.UserName ?? "unknown", user.Email ?? "unknown"); 
 
-            return RedirectToPage(new { author = author });
+            return RedirectToPage(new { author });
         }
         
         public async Task<IActionResult> OnPostFollow(string authorId)
@@ -82,7 +85,7 @@ namespace Chirp.Web.Pages
                 await _service.FollowUser(currentUserId, authorId);
             }
             var author = RouteData.Values["author"] as string; 
-            return RedirectToPage(new { author = author });
+            return RedirectToPage(new { author });
         }
 
         public async Task<IActionResult> OnPostUnfollow(string authorId)
@@ -93,7 +96,7 @@ namespace Chirp.Web.Pages
                 await _service.UnfollowUser(currentUserId, authorId);
             }
             var author = RouteData.Values["author"] as string;
-            return RedirectToPage(new { author = author });
+            return RedirectToPage(new { author });
         }
     }
 }

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
 public class ChirpDbContext : IdentityDbContext<Author>
-{ 
-    public DbSet<Cheep> Cheeps { get; set; }
-    public DbSet<Author> Authors { get; set; }
+{
+    public DbSet<Cheep> Cheeps { get; set; } = null!;
+    public DbSet<Author> Authors { get; set; } = null!;
     public ChirpDbContext(DbContextOptions<ChirpDbContext> options) : base(options)
     {
     }

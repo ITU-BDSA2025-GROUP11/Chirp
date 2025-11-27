@@ -9,9 +9,9 @@ namespace Chirp.Core.DTO
             if (author.UserName == null || author.Email == null) throw new ArgumentException("Username or email is null");
             return new AuthorDTO
             {
-                Id = author.Id,
-                Username = author.UserName,
-                Email = author.Email
+                Id = author.Id ?? string.Empty,
+                Username = author.UserName  ?? string.Empty,
+                Email = author.Email ?? string.Empty
             };
         }
 
@@ -19,9 +19,9 @@ namespace Chirp.Core.DTO
         {
             return new CheepDTO
             {
-                Text = cheep.Text,
+                Text = cheep.Text ?? string.Empty,
                 TimeStamp = cheep.TimeStamp,
-                Author = ToDTO(cheep.Author)
+                Author = ToDTO(cheep.Author ?? throw new InvalidOperationException("Cheep must have a author"))
             };
         }
     }
