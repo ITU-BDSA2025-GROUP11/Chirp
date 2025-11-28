@@ -25,10 +25,10 @@ namespace Chirp.Web.Pages
 
         [BindProperty] public required string Message { get; set; } = "";
 
-        public PublicModel(ICheepRepository cheepAuthor, IAuthorRepository authorService, UserManager<Author> userManager)
+        public PublicModel(ICheepRepository cheepService, IAuthorRepository authorService, UserManager<Author> userManager)
         {
             _authorService = authorService;
-            _cheepService = cheepAuthor;
+            _cheepService = cheepService;
             _userManager = userManager;
             NumberOfCheeps = Cheeps.Count;
         }

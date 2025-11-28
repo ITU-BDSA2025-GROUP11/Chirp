@@ -23,6 +23,7 @@ public class AboutMeUnitTest
         Context = new ChirpDbContext(builder.Options);
         Context.Database.EnsureCreated();
 
+        authorRepository = new AuthorRepository(Context, NullLoggerFactory.Instance);
         cheepRepository = new CheepRepository(Context, NullLoggerFactory.Instance);
     }
 
