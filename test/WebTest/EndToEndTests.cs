@@ -57,7 +57,7 @@ public class EndToEndTests : PageTest
     [Test]
     public async Task RegisterNewUserAddsUserToDatabase()
     {
-        string username = "TestUser";
+        string username = "TestUser1";
         string email = $"user_{Guid.NewGuid()}@test.com";
         string password = "Abc123!";
         
