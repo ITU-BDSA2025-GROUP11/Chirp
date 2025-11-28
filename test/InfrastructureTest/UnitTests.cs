@@ -31,6 +31,7 @@ namespace databasetest
             //Create repository
             var loggerFactory = LoggerFactory.Create(builder => builder.AddFilter((_, __) => false));
             _cheepRepo = new CheepRepository(_context, loggerFactory);
+            _authorRepo = new AuthorRepository(_context, loggerFactory);
         }
 
         public void Dispose()

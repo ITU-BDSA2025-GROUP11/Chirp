@@ -27,6 +27,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Database.EnsureCreated(); 
 
         _cheepRepo = new CheepRepository(_context, new LoggerFactory());
+        _authorRepo = new AuthorRepository(_context, new LoggerFactory());
     }
     //shows that we can add and retrive cheeps from the repo
     [Fact]
