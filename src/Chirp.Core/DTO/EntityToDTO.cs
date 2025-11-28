@@ -19,6 +19,7 @@ namespace Chirp.Core.DTO
         {
             return new CheepDTO
             {
+                Id = cheep.CheepId,
                 Text = cheep.Text ?? string.Empty,
                 TimeStamp = cheep.TimeStamp,
                 Author = ToDTO(cheep.Author ?? throw new InvalidOperationException("Cheep must have a author"))
