@@ -69,15 +69,9 @@ namespace Chirp.Infrastructure
 
         public async Task PostCheep(string text, string authorName, string authorEmail)
         {
-            if (text.Length > 160) throw new ArgumentOutOfRangeException("Your cheep is too long. Please keep it at 160 characters or less");
+            if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
             var author = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == authorName);
-
-            
-            
-            if (author == null)
-            {
-                throw new ArgumentException("Author not found");
-            }
+            if (author == null) throw new ArgumentException("Author not found");
             
             var cheep = new Cheep
             {
@@ -86,13 +80,11 @@ namespace Chirp.Infrastructure
                 TimeStamp = DateTime.Now
             };
             _context.Cheeps.Add(cheep);
-                    
+            // if (text.Length > 160)
+            // {
+            //     _logger.LogWarning("{text} is longer than 160 chars", text);
+            // } 
             await _context.SaveChangesAsync();
-            
-            if (text.Length > 160)
-            {
-                _logger.LogWarning("{text} is longer than 160 chars", text);
-            }
         }
         public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
         {

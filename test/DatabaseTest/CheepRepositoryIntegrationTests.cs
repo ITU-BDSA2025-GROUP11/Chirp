@@ -101,7 +101,12 @@ public class CheepRepositoryIntegrationTests : IDisposable
        var tooLongCheep =
            "sdjlaksjdlkajS;lkajslnvfnvkjnfsbfbjkfghfdjghgoijwoeijijlkjdflkjadslkfjnjvnfdjhboigjwegerekdfkf;ldkf;ksd;fkds;kf;sdkfpoekfpwejgpejgraopbnofnbdajvfvjofnbdfonbldfkj";
        await _authorRepo.CreateUser(testName, testMail);
-       await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>  await _cheepRepo.PostCheep(tooLongCheep, testName, testMail));
+
+       await _cheepRepo.PostCheep(tooLongCheep, testName, testMail);
+       var cheeps = await _cheepRepo.GetCheeps();
+       Assert.Empty(cheeps);
+           
+       //await Assert.ThrowsAsync<ArgumentException>(() => _cheepRepo.PostCheep(tooLongCheep, testName, testMail));
    }
    
     public void Dispose()
