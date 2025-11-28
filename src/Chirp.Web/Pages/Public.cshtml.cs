@@ -51,6 +51,8 @@ namespace Chirp.Web.Pages
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (currentUserId != null){
                     ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                    ViewData["LikedCheeps"] = await _service.GetLikedCheepIds(currentUserId);
+                    ViewData["DislikedCheeps"] = await _service.GetDislikedCheepIds(currentUserId);
                 }
             }
     
@@ -90,6 +92,16 @@ namespace Chirp.Web.Pages
         
             return RedirectToPage();
         }
+        public async Task<IActionResult> OnPostUnlike(string cheepId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.RemoveLike(currentUserId, cheepId);
+            }
+        
+            return RedirectToPage();
+        }
         
         public async Task<IActionResult> OnPostDislike(string cheepId)
         {
@@ -102,16 +114,7 @@ namespace Chirp.Web.Pages
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostUnlike(string cheepId)
-        {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (currentUserId != null)
-            {
-                await _service.RemoveLike(currentUserId, cheepId);
-            }
-        
-            return RedirectToPage();
-        }
+
         
         public async Task<IActionResult> OnPostUndislike(string cheepId)
         {
