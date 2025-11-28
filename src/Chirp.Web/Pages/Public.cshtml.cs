@@ -3,6 +3,7 @@ using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Web.Pages
@@ -15,6 +16,10 @@ namespace Chirp.Web.Pages
         public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
         
         public List<string> Following { get; set; } = new();
+
+        public List<string> Likes { get; set; } = new();
+
+        public List<string> Dislikes { get; set; } = new();
         
         public List<CheepDTO> Cheeps { get; set; } = new();
 
@@ -61,6 +66,28 @@ namespace Chirp.Web.Pages
             }
             
             return RedirectToPage(); 
+        }
+        
+        public async Task<IActionResult> OnPostUnfollow(string authorId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.UnfollowUser(currentUserId, authorId);
+            }
+        
+            return RedirectToPage();
+        }
+        
+        public async Task<IActionResult> OnPostUnfollow(string authorId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.UnfollowUser(currentUserId, authorId);
+            }
+        
+            return RedirectToPage();
         }
         
         public async Task<IActionResult> OnPostUnfollow(string authorId)

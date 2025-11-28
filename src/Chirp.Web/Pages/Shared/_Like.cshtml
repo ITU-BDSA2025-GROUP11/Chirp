@@ -1,3 +1,5 @@
+@using Chirp.Core.DTO
+@model CheepDTO
 @inject SignInManager<Author> SignInManager
 
 @{
@@ -14,7 +16,7 @@
     {
         <form method="post" asp-page-handler="UnLike" asp-route-authorId="@Model.Author.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                UnLike @LikingIds.Count
+                UnLike 
             </button>
         </form>
     }
@@ -22,7 +24,7 @@
     {
         <form method="post" asp-page-handler="Like" asp-route-authorId="@Model.Author.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                Like @LikingIds.Count
+                Like 
             </button>
         </form>
     }
