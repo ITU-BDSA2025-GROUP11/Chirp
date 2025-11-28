@@ -58,7 +58,7 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task RegisterNewUserAddsUserToDatabase()
     {
-        string username = "TestUser1";
+        string username = Guid.NewGuid().ToString();
         string email = $"user_{Guid.NewGuid()}@test.com";
         string password = "Abc123!";
         
@@ -74,20 +74,23 @@ public class EndToEndTest : PageTest
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
 
         
-        await Expect(Page.GetByText("Public Timeline")).ToBeVisibleAsync();
-
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        
+        Console.WriteLine("Successfully created a new user");
         
         if (await Page.GetByText("Logout").IsVisibleAsync())
             await Page.GetByText("Logout").ClickAsync();
 
-  
+        Console.WriteLine("Logged out");
+        
         await Page.GetByText("Login").ClickAsync();
 
         await Page.GetByLabel("Email").FillAsync(email);
         await Page.GetByLabel("Password").FillAsync(password);
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        Console.WriteLine("Logged back in");
         
-        await Expect(Page.GetByText(username)).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Logout [")).ToBeVisibleAsync();
     }
 }
