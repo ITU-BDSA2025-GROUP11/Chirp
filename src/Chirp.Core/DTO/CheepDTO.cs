@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Chirp.Core.DTOs
+namespace Chirp.Core.DTO
 {
     public class CheepDTO
     {
-        public string Text { get; set; } = string.Empty;
-        public DateTime TimeStamp { get; set; }
-        public AuthorDTO Author { get; set; } = new AuthorDTO();
+        public required string Text { get; set; } 
+        public required DateTime TimeStamp { get; set; }
+        public required AuthorDTO Author { get; set; }
     }
 }
