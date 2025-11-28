@@ -8,6 +8,9 @@
     bool hasDisliked = dislikedCheeps != null && dislikedCheeps.Contains(Model.Id);
     
     bool isMe = User.Identity?.Name == Model.Author.Username;
+    var numberOfDislikes = Model.Dislikes.Count;
+    var heartFilled = $"️💔 {numberOfDislikes}";
+    var heartEmpty = $"🤍 {numberOfDislikes}";
 }
 
 @if (SignInManager.IsSignedIn(User) && !isMe)
@@ -16,7 +19,7 @@
     {
         <form method="post" asp-page-handler="UnDislike" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                UnDislike 
+                @heartFilled 
             </button>
         </form>
     }
@@ -24,7 +27,7 @@
     {
         <form method="post" asp-page-handler="Dislike" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                Dislike 
+                @heartEmpty 
             </button>
         </form>
     }

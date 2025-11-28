@@ -2,12 +2,13 @@
 @inject SignInManager<Author> SignInManager
 
 @{
-    //var LikingIds = ViewData["Likes"] as List<string>;
     var likedCheeps = ViewData["LikedCheeps"] as List<int>;
-   
     bool hasLiked = likedCheeps != null && likedCheeps.Contains(Model.Id);
-    
     bool isMe = User.Identity?.Name == Model.Author.Username;
+    var numberOfLikes = Model.Likes.Count;
+    var heartFilled = $"❤️ {numberOfLikes}";
+    var heartEmpty = $"🤍 {numberOfLikes}";
+    
 }
 
 @if (SignInManager.IsSignedIn(User) && !isMe)
@@ -15,8 +16,8 @@
     @if (hasLiked)
     {
         <form method="post" asp-page-handler="Unlike" asp-route-cheepId="@Model.Id" value="@Model.Id"  style="display: inline;">
-        <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-            Unlike
+        <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;" >
+            @heartFilled
         </button>
         </form> 
     }
@@ -24,7 +25,7 @@
     {
         <form method="post" asp-page-handler="Like" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                Like 
+                @heartEmpty
             </button>
         </form>
     }
