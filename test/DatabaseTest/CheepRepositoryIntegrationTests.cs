@@ -95,6 +95,14 @@ public class CheepRepositoryIntegrationTests : IDisposable
        Assert.DoesNotContain(cheeps, c => c.Author.Username == "SomeoneElse");
    }
 
+   [Fact]
+   public async Task CheepsOver160CharsAreRejected()
+   {
+       var tooLongCheep =
+           "sdjlaksjdlkajS;lkajslnvfnvkjnfsbfbjkfghfdjghgoijwoeijijlkjdflkjadslkfjnjvnfdjhboigjwegerekdfkf;ldkf;ksd;fkds;kf;sdkfpoekfpwejgpejgraopbnofnbdajvfvjofnbdfonbldfkj";
+       await _authorRepo.CreateUser(testName, testMail);
+       await Assert.ThrowsAnyAsync<Exception>(async () =>  await _cheepRepo.PostCheep(tooLongCheep, testName, testMail));
+   }
    
     public void Dispose()
     {
