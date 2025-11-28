@@ -79,46 +79,46 @@ namespace Chirp.Web.Pages
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostLike(string authorId)
+        public async Task<IActionResult> OnPostLike(string cheepId)
         {
-            var cheepid = 
+            //var cheepid =  
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.LikePost(currentUserId, authorId);
+                await _service.LikePost(currentUserId, cheepId);
             }
         
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostDislike(string authorId)
+        public async Task<IActionResult> OnPostDislike(string cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.DislikePost(currentUserId, authorId);
+                await _service.DislikePost(currentUserId, cheepId);
             }
         
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostUnlike(string authorId)
+        public async Task<IActionResult> OnPostUnlike(string cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.RemoveLike(currentUserId, authorId);
+                await _service.RemoveLike(currentUserId, cheepId);
             }
         
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostUndislike(string authorId)
+        public async Task<IActionResult> OnPostUndislike(string cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.RemoveDislike(currentUserId, authorId);
+                await _service.RemoveDislike(currentUserId, cheepId);
             }
         
             return RedirectToPage();

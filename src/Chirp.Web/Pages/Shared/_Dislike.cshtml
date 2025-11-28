@@ -14,7 +14,7 @@
 {
     @if (hasDisliked)
     {
-        <form method="post" asp-page-handler="UnLike" asp-route-authorId="@Model.Author.Id" style="display: inline;">
+        <form method="post" asp-page-handler="UnLike" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
                 UnDislike 
             </button>
@@ -22,7 +22,7 @@
     }
     else
     {
-        <form method="post" asp-page-handler="Like" asp-route-authorId="@Model.Author.Id" style="display: inline;">
+        <form method="post" asp-page-handler="Like" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
                 Dislike 
             </button>
