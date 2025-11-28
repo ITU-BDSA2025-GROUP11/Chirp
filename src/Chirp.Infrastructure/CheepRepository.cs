@@ -21,10 +21,10 @@ namespace Chirp.Infrastructure
         Task<UserInfoDTO?> GetUserInfo(string username);
         Task<bool> DeleteUser(string username);
         Task<bool> IsUserDeleted(string username);
-        public Task LikePost(string currentUserId, string cheepIdToLike);
-        public Task DislikePost(string currentUserId, string cheepIdToDislike);
-        public Task RemoveDislike(string currentUserId, string cheepIdToUndislike);
-        public Task RemoveLike(string currentUserId, string cheepIdToUnLike);
+        public Task LikePost(string currentUserId, int cheepIdToLike);
+        public Task DislikePost(string currentUserId, int cheepIdToDislike);
+        public Task RemoveDislike(string currentUserId, int cheepIdToUndislike);
+        public Task RemoveLike(string currentUserId, int cheepIdToUnLike);
         public Task<List<int>> GetLikedCheepIds(string userId);
         public Task<List<int>> GetDislikedCheepIds(string userId);
 
@@ -167,7 +167,7 @@ namespace Chirp.Infrastructure
                 .AnyAsync(a => a.Id == currentUserId && a.Following.Any(f => f.Id == authorId));
         }
 
-        public async Task LikePost(string currentUserId, string cheepIdToLike)
+        public async Task LikePost(string currentUserId, int cheepIdToLike)
         {
             var cheepToLike = await _context.Cheeps.FindAsync(cheepIdToLike);
             var userLiking = await _context.Authors
@@ -180,7 +180,7 @@ namespace Chirp.Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public async Task DislikePost(string currentUserId, string cheepIdToDislike)
+        public async Task DislikePost(string currentUserId, int cheepIdToDislike)
         {
             var cheepToDislike = await _context.Cheeps.FindAsync(cheepIdToDislike);
             var userdisliking = await _context.Authors
@@ -193,7 +193,7 @@ namespace Chirp.Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveDislike(string currentUserId, string cheepIdToUndislike)
+        public async Task RemoveDislike(string currentUserId, int cheepIdToUndislike)
         {
             var cheepToUndislike = await _context.Cheeps.FindAsync(cheepIdToUndislike);
             var userundisliking = await _context.Authors
@@ -206,7 +206,7 @@ namespace Chirp.Infrastructure
             await _context.SaveChangesAsync();
         }
         
-        public async Task RemoveLike(string currentUserId, string cheepIdToUnLike)
+        public async Task RemoveLike(string currentUserId, int cheepIdToUnLike)
         {
             var cheepToUnLike = await _context.Cheeps.FindAsync(cheepIdToUnLike);
             var userundisliking = await _context.Authors
