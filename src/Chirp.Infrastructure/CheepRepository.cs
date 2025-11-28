@@ -25,6 +25,8 @@ namespace Chirp.Infrastructure
         public Task DislikePost(string currentUserId, string cheepIdToDislike);
         public Task RemoveDislike(string currentUserId, string cheepIdToUndislike);
         public Task RemoveLike(string currentUserId, string cheepIdToUnLike);
+        public Task<List<int>> GetLikedCheepIds(string userId);
+        public Task<List<int>> GetDislikedCheepIds(string userId);
 
     }
 
@@ -247,6 +249,26 @@ namespace Chirp.Infrastructure
             if (user == null) return new List<string>();
 
             return user.Following.Select(a => a.Id).ToList();
+        }
+        public async Task<List<int>> GetLikedCheepIds(string userId)
+        {
+            var user = await _context.Authors
+                .Include(a => a.LikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == userId);
+        
+            if (user == null) return new List<int>();
+        
+            return user.LikedCheeps.Select(c => c.CheepId).ToList();
+        }
+        public async Task<List<int>> GetDislikedCheepIds(string userId)
+        {
+            var user = await _context.Authors
+                .Include(a => a.DislikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == userId);
+        
+            if (user == null) return new List<int>();
+        
+            return user.DislikedCheeps.Select(a => a.CheepId).ToList();
         }
         
         public async Task<int> GetCheepCountFromAuthorAndFollowing(string authorName)
