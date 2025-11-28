@@ -10,6 +10,7 @@ using Assert = NUnit.Framework.Assert;
  * database for the respective author.
  */
 namespace WebTest;
+
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
 public class EndToEndTest : PageTest
