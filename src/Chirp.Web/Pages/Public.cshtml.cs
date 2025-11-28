@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using Chirp.Core.DTOs;
+using System.Security.Claims;
+using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
@@ -22,12 +22,13 @@ namespace Chirp.Web.Pages
         
         public int TotalPages => GetTotalPages(NumberOfCheeps, PageSize);
 
-        [BindProperty] public string Message { get; set; } = "";
+        [BindProperty] public required string Message { get; set; } = "";
 
         public PublicModel(ICheepRepository service, UserManager<Author> userManager)
         {
             _service = service;
             _userManager = userManager;
+            NumberOfCheeps = Cheeps.Count;
         }
 
         public async Task<IActionResult> OnGet(int? publicpage = 1)

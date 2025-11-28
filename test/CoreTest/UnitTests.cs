@@ -1,5 +1,5 @@
 using Chirp.Core.DomainModel;
-using Chirp.Core.DTOs;
+using Chirp.Core.DTO;
 using Xunit;
 
 namespace clientTest
@@ -69,8 +69,9 @@ namespace clientTest
                 Author = author
             };
 
-            var authorDto = new AuthorDTO
+            var authorDto = new AuthorDTO()
             {
+                Id = "1",
                 Username = "Jane Doe",
                 Email = "jane@example.com"
             };

@@ -1,9 +1,10 @@
-﻿using System.Security.Claims;
-using Chirp.Core.DTOs;
+using Chirp.Core.DTO;
+using System.Security.Claims;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+
 
 namespace Chirp.Web.Pages
 {
@@ -12,26 +13,25 @@ namespace Chirp.Web.Pages
         private readonly ICheepRepository _service;
         private readonly UserManager<Author> _userManager;
         
-        public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
-        
         public List<string> Following { get; set; } = new();
 
-        public List<CheepDTO> Cheeps => CurrentPageCheeps;
-        
-        public int NumberOfCheeps { get; set; }        
+        public List<CheepDTO> Cheeps { get; set; }  = new();
+        public List<CheepDTO> CurrentPageCheeps { get; set; }  = new();
+        public int NumberOfCheeps { get; set; }
         public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
         
         [BindProperty]
-        public string Message { get; set; } =  string.Empty;
-
+        public required string Message { get; set; } = "";
         public UserTimelineModel(ICheepRepository service, UserManager<Author> userManager)
         {
             _service = service;
             _userManager = userManager;
+            NumberOfCheeps = Cheeps?.Count ?? 0;
         }
 
         public async Task<IActionResult> OnGet(string author, int? timelinepage)
         {
+            if (_service.IsUserDeleted(author).Result) return NotFound();
             CurrentPage = timelinepage ?? 1;
             var ownTimeline = User.Identity?.IsAuthenticated == true && User.Identity?.Name == author;
 
