@@ -81,8 +81,9 @@ namespace Chirp.Web.Pages
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostLike(string cheepId)
+        public async Task<IActionResult> OnPostLike(int cheepId)
         {
+            Console.WriteLine("I AM LIKING CHEEP: " + cheepId);
             //var cheepid =  
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
@@ -92,7 +93,7 @@ namespace Chirp.Web.Pages
         
             return RedirectToPage();
         }
-        public async Task<IActionResult> OnPostUnlike(string cheepId)
+        public async Task<IActionResult> OnPostUnlike(int cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
@@ -103,7 +104,7 @@ namespace Chirp.Web.Pages
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostDislike(string cheepId)
+        public async Task<IActionResult> OnPostDislike(int cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
@@ -116,7 +117,7 @@ namespace Chirp.Web.Pages
         
 
         
-        public async Task<IActionResult> OnPostUndislike(string cheepId)
+        public async Task<IActionResult> OnPostUndislike(int cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)

@@ -3,7 +3,7 @@
 @inject SignInManager<Author> SignInManager
 
 @{
-    var DislikingIds = ViewData["Dislikes"] as List<string>;
+    var DislikingIds = ViewData["Dislikes"] as List<int>;
     
     bool hasDisliked = DislikingIds != null && DislikingIds.Contains(Model.Id);
     
