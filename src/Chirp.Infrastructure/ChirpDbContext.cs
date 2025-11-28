@@ -21,7 +21,18 @@ public class ChirpDbContext : IdentityDbContext<Author>
             b.HasMany(a => a.Following)
                 .WithMany(a => a.Followers)
                 .UsingEntity(j => j.ToTable("AuthorFollows"));
+            b.HasMany(a => a.Cheeps);
             b.ToTable(name: "Authors", schema: null);
+           
+
+
+        });
+        
+        modelBuilder.Entity<Cheep>( b =>
+        {
+            b.HasOne(c => c.Author);
+            b.HasMany(c => c.Likes);
+            b.HasMany(c => c.Dislikes);
         });
     }
 }

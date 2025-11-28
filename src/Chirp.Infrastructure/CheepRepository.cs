@@ -182,7 +182,7 @@ namespace Chirp.Infrastructure
             if (cheepToDislike == null || userdisliking == null) return;
             if (cheepToDislike.Dislikes.Contains(userdisliking)) return;
             
-            cheepToDislike.Dislikes.Remove(userdisliking);
+            cheepToDislike.Dislikes.Add(userdisliking);
             await _context.SaveChangesAsync();
         }
 
@@ -193,9 +193,9 @@ namespace Chirp.Infrastructure
                 .FirstOrDefaultAsync(a => a.Id == currentUserId);
             
             if (cheepToUndislike == null || userundisliking == null) return;
-            if (cheepToUndislike.Dislikes.Contains(userundisliking)) return;
+            if (!cheepToUndislike.Dislikes.Contains(userundisliking)) return;
             
-            cheepToUndislike.Dislikes.Add(userundisliking);
+            cheepToUndislike.Dislikes.Remove(userundisliking);
             await _context.SaveChangesAsync();
         }
         
@@ -206,9 +206,9 @@ namespace Chirp.Infrastructure
                 .FirstOrDefaultAsync(a => a.Id == currentUserId);
             
             if (cheepToUnLike == null || userundisliking == null) return;
-            if (cheepToUnLike.Dislikes.Contains(userundisliking)) return;
+            if (!cheepToUnLike.Likes.Contains(userundisliking)) return;
             
-            cheepToUnLike.Dislikes.Add(userundisliking);
+            cheepToUnLike.Likes.Remove(userundisliking);
             await _context.SaveChangesAsync();
         }
         

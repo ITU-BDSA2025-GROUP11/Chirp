@@ -1,0 +1,30 @@
+@inject SignInManager<Author> SignInManager
+
+@{
+    var DislikingIds = ViewData["Dislikes"] as List<string>;
+    
+    bool hasDisliked = DislikingIds != null && DislikingIds.Contains(Model.Author.Id);
+    
+    bool isMe = User.Identity?.Name == Model.Author.Username;
+}
+
+@if (SignInManager.IsSignedIn(User) && !isMe)
+{
+    @if (hasDisliked)
+    {
+        <form method="post" asp-page-handler="UnLike" asp-route-authorId="@Model.Author.Id" style="display: inline;">
+            <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
+                UnDislike @DislikingIds.Count
+            </button>
+        </form>
+    }
+    else
+    {
+        <form method="post" asp-page-handler="Like" asp-route-authorId="@Model.Author.Id" style="display: inline;">
+            <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
+                Dislike @DislikingIds.Count
+            </button>
+        </form>
+    }
+}
+
