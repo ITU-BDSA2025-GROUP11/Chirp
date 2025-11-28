@@ -12,7 +12,7 @@ using Assert = NUnit.Framework.Assert;
 namespace WebTest;
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class EndToEndTests : PageTest
+public class EndToEndTest : PageTest
 {
     [SetUp]
     public async Task Init()
