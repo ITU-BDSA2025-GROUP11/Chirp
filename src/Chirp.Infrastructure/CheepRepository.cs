@@ -76,13 +76,7 @@ namespace Chirp.Infrastructure
             
             if (author == null)
             {
-                author = new Author
-                {
-                    UserName = authorName,
-                    Email = authorEmail,
-                    Cheeps = new List<Cheep>()
-                };
-                _context.Authors.Add(author);
+                throw new ArgumentException("Author not found");
             }
 
             var cheep = new Cheep
@@ -95,27 +89,10 @@ namespace Chirp.Infrastructure
                     
             await _context.SaveChangesAsync();
             
-            if (author == null)
-            {
-                _logger.LogWarning("No author found for user {User}", authorName);
-                return;
-            }
-            
             if (text.Length > 160)
             {
                 _logger.LogWarning("{text} is longer than 160 chars", text);
-                return;
             }
-
-            var newCheep = new Cheep
-            {
-                Text = text,
-                TimeStamp = DateTime.Now,
-                Author = author
-            };
-
-            _context.Cheeps.Add(newCheep);
-            await _context.SaveChangesAsync();
         }
         public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
         {
