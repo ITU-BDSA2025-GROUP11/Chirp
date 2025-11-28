@@ -69,7 +69,7 @@ namespace Chirp.Infrastructure
 
         public async Task PostCheep(string text, string authorName, string authorEmail)
         {
-            
+            if (text.Length > 160) throw new ArgumentOutOfRangeException("Your cheep is too long. Please keep it at 160 characters or less");
             var author = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == authorName);
 
             
@@ -78,7 +78,7 @@ namespace Chirp.Infrastructure
             {
                 throw new ArgumentException("Author not found");
             }
-
+            
             var cheep = new Cheep
             {
                 Text = text,
