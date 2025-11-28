@@ -1,9 +1,7 @@
-﻿using Xunit;
-using Chirp.Infrastructure;
+﻿using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Chirp.Core.DomainModel;
-using System.Linq;
 
 namespace DatabaseTest;
 
@@ -62,9 +60,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
-        var ex =  await Record.ExceptionAsync(() => _cheepRepo.PostCheep("Plz no crash test",  testName, testMail));
-
-        Assert.Null(ex);    
+        await Assert.ThrowsAsync<ArgumentException>(() => _cheepRepo.PostCheep("Plz no crash test", testName, testMail));
     }
 
    //checks that we only get cheeps from the desired author 
