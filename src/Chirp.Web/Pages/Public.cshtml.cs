@@ -117,7 +117,7 @@ namespace Chirp.Web.Pages
         
 
         
-        public async Task<IActionResult> OnPostUndislike(int cheepId)
+        public async Task<IActionResult> OnPostUnDislike(int cheepId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)

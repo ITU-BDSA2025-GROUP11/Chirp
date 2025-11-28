@@ -3,9 +3,9 @@
 @inject SignInManager<Author> SignInManager
 
 @{
-    var DislikingIds = ViewData["Dislikes"] as List<int>;
+    var dislikedCheeps = ViewData["DislikedCheeps"] as List<int>;
     
-    bool hasDisliked = DislikingIds != null && DislikingIds.Contains(Model.Id);
+    bool hasDisliked = dislikedCheeps != null && dislikedCheeps.Contains(Model.Id);
     
     bool isMe = User.Identity?.Name == Model.Author.Username;
 }
@@ -16,7 +16,7 @@
     {
         <form method="post" asp-page-handler="UnDislike" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
             <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                Undislike 
+                UnDislike 
             </button>
         </form>
     }
