@@ -10,7 +10,8 @@ namespace DatabaseTest;
 public class CheepRepositoryIntegrationTests : IDisposable
 {
     private readonly ChirpDbContext _context;
-    private readonly CheepRepository _repo;
+    private readonly CheepRepository _cheepRepo;
+    private readonly AuthorRepository _authorRepo;
 
     private string testName = "Test";
     private string testMail = "Author";
@@ -25,16 +26,16 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Database.OpenConnection();
         _context.Database.EnsureCreated(); 
 
-        _repo = new CheepRepository(_context, new LoggerFactory());
+        _cheepRepo = new CheepRepository(_context, new LoggerFactory());
     }
     //shows that we can add and retrive cheeps from the repo
     [Fact]
     public async Task Add_And_Retrieve_Cheep()
     {
-        await _repo.CreateUser(testName, testMail);
-        await _repo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
+        await _authorRepo.CreateUser(testName, testMail);
+        await _cheepRepo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
 
-        var cheeps = await _repo.GetCheeps();
+        var cheeps = await _cheepRepo.GetCheeps();
 
         Assert.Single(cheeps);
         Assert.Equal("Joakim er faktisk pænt handsome OG har rigtig god humor", cheeps[0].Text);
@@ -44,8 +45,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
     [Fact]
     public async Task Cheep_Belongs_To_Correct_Author()
     {
-        await _repo.CreateUser(testName, testMail);
-        await _repo.PostCheep("Resten af gruppen er også pænt cool",  testName, testMail);
+        await _authorRepo.CreateUser(testName, testMail);
+        await _cheepRepo.PostCheep("Resten af gruppen er også pænt cool",  testName, testMail);
 
         var cheep = await _context.Cheeps.Include(c => c.Author).FirstAsync();
 
@@ -60,7 +61,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
-        var ex =  await Record.ExceptionAsync(() => _repo.PostCheep("Plz no crash test",  testName, testMail));
+        var ex =  await Record.ExceptionAsync(() => _cheepRepo.PostCheep("Plz no crash test",  testName, testMail));
 
         Assert.Null(ex);    
     }
@@ -69,9 +70,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
    [Fact]
    public async Task Get_Cheeps_From_Author()
    {
-       await _repo.CreateUser(testName, testMail);
-       await _repo.PostCheep("Joakim’s cheep 1",  testName, testMail);
-       await _repo.PostCheep("Joakim’s cheep 2",   testName, testMail);
+       await _authorRepo.CreateUser(testName, testMail);
+       await _cheepRepo.PostCheep("Joakim’s cheep 1",  testName, testMail);
+       await _cheepRepo.PostCheep("Joakim’s cheep 2",   testName, testMail);
     
        var otherAuthor = new Author
        {
@@ -91,7 +92,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
        _context.Users.Add(otherAuthor);
        await _context.SaveChangesAsync();
     
-       var cheeps = await _repo.GetCheeps(author: testName);
+       var cheeps = await _cheepRepo.GetCheeps(author: testName);
     
        Assert.All(cheeps, c => Assert.Equal(testName, c.Author.Username));
        Assert.DoesNotContain(cheeps, c => c.Author.Username == "SomeoneElse");
