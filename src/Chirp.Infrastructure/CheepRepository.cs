@@ -179,6 +179,7 @@ namespace Chirp.Infrastructure
             if (cheepToLike == null || userLiking == null) return;
             if (userLiking.LikedCheeps.Contains(cheepToLike)) return;
             if (cheepToLike.Likes.Contains(userLiking)) return;
+            
             userLiking.LikedCheeps.Add(cheepToLike);
             cheepToLike.Likes.Add(userLiking);
             await _context.SaveChangesAsync();
@@ -230,6 +231,7 @@ namespace Chirp.Infrastructure
             if (cheepToUndislike == null || userUndisliking == null) return;
             if (!cheepToUndislike.Dislikes.Contains(userUndisliking)) return;
             if (!userUndisliking.DislikedCheeps.Contains(cheepToUndislike)) return;
+            
             userUndisliking.DislikedCheeps.Remove(cheepToUndislike);
             cheepToUndislike.Dislikes.Remove(userUndisliking);
             await _context.SaveChangesAsync();
