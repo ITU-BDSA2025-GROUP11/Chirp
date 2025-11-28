@@ -79,23 +79,46 @@ namespace Chirp.Web.Pages
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostUnfollow(string authorId)
+        public async Task<IActionResult> OnPostLike(string authorId)
         {
+            var cheepid = 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.UnfollowUser(currentUserId, authorId);
+                await _service.LikePost(currentUserId, authorId);
             }
         
             return RedirectToPage();
         }
         
-        public async Task<IActionResult> OnPostUnfollow(string authorId)
+        public async Task<IActionResult> OnPostDislike(string authorId)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.UnfollowUser(currentUserId, authorId);
+                await _service.DislikePost(currentUserId, authorId);
+            }
+        
+            return RedirectToPage();
+        }
+        
+        public async Task<IActionResult> OnPostUnlike(string authorId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.RemoveLike(currentUserId, authorId);
+            }
+        
+            return RedirectToPage();
+        }
+        
+        public async Task<IActionResult> OnPostUndislike(string authorId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _service.RemoveDislike(currentUserId, authorId);
             }
         
             return RedirectToPage();

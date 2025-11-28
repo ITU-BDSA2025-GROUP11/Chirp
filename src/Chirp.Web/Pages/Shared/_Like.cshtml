@@ -1,5 +1,5 @@
 @using Chirp.Core.DTO
-@model CheepDTO
+@model AuthorDTO
 @inject SignInManager<Author> SignInManager
 
 @{
@@ -15,9 +15,7 @@
     @if (hasLiked)
     {
         <form method="post" asp-page-handler="UnLike" asp-route-authorId="@Model.Author.Id" style="display: inline;">
-            <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
-                UnLike 
-            </button>
+            <a class="btn btn-danger btn-sm" asp-page="/Order" asp-route-id="@Model.Cheep.CheepId">Order Now</a>
         </form>
     }
     else

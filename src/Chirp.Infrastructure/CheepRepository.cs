@@ -21,6 +21,11 @@ namespace Chirp.Infrastructure
         Task<UserInfoDTO?> GetUserInfo(string username);
         Task<bool> DeleteUser(string username);
         Task<bool> IsUserDeleted(string username);
+        public Task LikePost(string currentUserId, string cheepIdToLike);
+        public Task DislikePost(string currentUserId, string cheepIdToDislike);
+        public Task RemoveDislike(string currentUserId, string cheepIdToUndislike);
+        public Task RemoveLike(string currentUserId, string cheepIdToUnLike);
+
     }
 
     public class CheepRepository : ICheepRepository

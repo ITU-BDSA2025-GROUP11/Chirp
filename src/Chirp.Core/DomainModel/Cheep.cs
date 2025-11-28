@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Core.DomainModel;
 
 public class Cheep
 {
+    [BindProperty]
     public int CheepId { get; set; }
     
     [MaxLength(160)]
