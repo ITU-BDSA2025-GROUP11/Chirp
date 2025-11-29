@@ -10,11 +10,6 @@ namespace Chirp.Infrastructure
         Task<List<CheepDTO>> GetCheeps(string? author = null);        
         Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);        
         Task PostCheep(string text, string authorName, string authorEmail);        
-        Task CreateUser(string authorName, string authorEmail);        
-        Task<List<string>> GetFollowedIds(string userId);
-        Task FollowUser(string currentUserId, string authorIdToFollow);
-        Task UnfollowUser(string currentUserId, string authorIdToUnfollow);
-        Task<bool> IsFollowing(string currentUserId, string authorId);
         Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
         Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
         Task<int> GetCheepCount(string? author = null);
@@ -84,80 +79,21 @@ namespace Chirp.Infrastructure
 
         public async Task PostCheep(string text, string authorName, string authorEmail)
         {
-            await CreateUser(authorName, authorEmail); 
-
+            if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
             var author = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == authorName);
-        
-            if (author == null)
-            {
-                _logger.LogWarning("No author found for user {User}", authorName);
-                return;
-            }
+            if (author == null) throw new ArgumentException("Author not found");
             
-            if (text.Length > 160)
-            {
-                _logger.LogWarning("{text} is longer than 160 chars", text);
-                return;
-            }
-
-            var newCheep = new Cheep
+            var cheep = new Cheep
             {
                 Text = text,
-                TimeStamp = DateTime.Now,
-                Author = author
+                Author = author,
+                TimeStamp = DateTime.Now
             };
-
-            _context.Cheeps.Add(newCheep);
-            await _context.SaveChangesAsync();
-        }
-        
-        public async Task CreateUser(string authorName, string authorEmail)
-        {
-            if (string.IsNullOrEmpty(authorName))
-                return;
-
-            if (await _context.Authors.AnyAsync(a => a.UserName == authorName))
-                return;
-
-            var author = new Author
-            {
-                UserName = authorName,
-                Email = authorEmail,
-                Cheeps = new List<Cheep>()
-            };
-
-            _context.Authors.Add(author);
-            await _context.SaveChangesAsync();
-        }
-        
-        public async Task FollowUser(string currentUserId, string authorIdToFollow)
-        {
-            var userToFollow = await _context.Authors.FindAsync(authorIdToFollow);
-
-            var currentUser = await _context.Authors
-                .Include(a => a.Following)
-                .FirstOrDefaultAsync(a => a.Id == currentUserId);
-
-            if (userToFollow == null || currentUser == null) return;
-
-            if (!currentUser.Following.Contains(userToFollow))
-            {
-                currentUser.Following.Add(userToFollow);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task UnfollowUser(string currentUserId, string authorIdToUnfollow)
-        {
-            var userToUnfollow = await _context.Authors.FindAsync(authorIdToUnfollow);
-
-            var currentUser = await _context.Authors
-                .Include(a => a.Following)
-                .FirstOrDefaultAsync(a => a.Id == currentUserId);
-
-            if (userToUnfollow == null || currentUser == null) return;
-
-            currentUser.Following.Remove(userToUnfollow);
+            _context.Cheeps.Add(cheep);
+            // if (text.Length > 160)
+            // {
+            //     _logger.LogWarning("{text} is longer than 160 chars", text);
+            // } 
             await _context.SaveChangesAsync();
         }
 
@@ -316,55 +252,6 @@ namespace Chirp.Infrastructure
             }
     
             return await query.CountAsync();
-        }
-        public async Task<UserInfoDTO?> GetUserInfo(string username)
-        {
-            var author = await _context.Authors
-                .Where(a => a.UserName == username)
-                .Include(a => a.Cheeps)
-                .Include(a => a.Following)
-                .FirstOrDefaultAsync();
-
-            if (author == null) return null;
-
-            return new UserInfoDTO
-            {
-                Name = author.UserName ?? string.Empty,
-                Email = author.Email ?? string.Empty,
-                
-                Cheeps = author.Cheeps
-                    .OrderByDescending(c => c.TimeStamp)
-                    .Select(c => EntityToDTO.ToDTO(c))
-                    .ToList(),
-                FollowedUsernames = author.Following.Select(f => f.UserName).ToList()!
-            };
-        }
-
-        public async Task<bool> IsUserDeleted(string username)
-        {
-            return await GetUserInfo(username) == null;
-        }
-        public async Task<bool> DeleteUser(string username)
-        {
-            var author = await _context.Authors
-                .Include(a => a.Following)
-                .Include(a => a.Followers)
-                .Include(a => a.Cheeps)
-                .FirstOrDefaultAsync(a => a.UserName == username);
-
-            if (author == null) return false;
-            
-            author.Following.Clear();
-            author.Followers.Clear();
-
-            var uniqueId = Guid.NewGuid().ToString().Substring(0, 8);
-            author.UserName = $"DeletedUser-{uniqueId}";
-            author.NormalizedUserName = $"DELETEDUSER-{uniqueId}";
-            author.Email = $"deleted-{uniqueId}@chirp.db";
-            author.NormalizedEmail = $"DELETED-{uniqueId}@CHIRP.DB";
-            
-            await _context.SaveChangesAsync();
-            return true;
         }
     }
 }
