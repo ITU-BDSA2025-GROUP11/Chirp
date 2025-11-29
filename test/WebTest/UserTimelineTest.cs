@@ -9,7 +9,8 @@ namespace PagesTest;
 
 public class UserTimelineTest
 {
-    ICheepRepository _repo;
+    ICheepRepository _cheepRepo;
+    IAuthorRepository _authorRepo;
     UserTimelineModel userTimeline;
     ChirpDbContext _context;
     private readonly UserManager<Author> _userManager;
@@ -24,20 +25,27 @@ public class UserTimelineTest
         _context.Database.OpenConnection();
         _context.Database.EnsureCreated(); 
 
-        _repo = new CheepRepository(_context, new LoggerFactory());
+        _cheepRepo = new CheepRepository(_context, new LoggerFactory());
+        _authorRepo = new AuthorRepository(_context, new LoggerFactory());
     }
     [Fact]
     public void TestUserTimelineInstantiation()
     {
-        userTimeline = new UserTimelineModel(_repo, _userManager);
+        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+            Message = "What should this say"
+        };
+        
         Assert.NotNull(userTimeline);
     }
     [Fact]
-    public void TotalNumberOfCheepsTest()
+    public async Task TotalNumberOfCheepsTest()
     {
         Before();
-        userTimeline = new UserTimelineModel(_repo, _userManager);
-        var numberOfCheeps = _repo.GetCheeps().Count;
+        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+            Message = "What should this say"
+        };
+        var cheeps = await _cheepRepo.GetCheeps();
+        var numberOfCheeps = cheeps.Count;
         Assert.Equal(numberOfCheeps, userTimeline.NumberOfCheeps);
     }
     [Theory]
@@ -47,7 +55,9 @@ public class UserTimelineTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        userTimeline = new UserTimelineModel(_repo,  _userManager);
+        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+            Message = "What should this say"
+        };
         var numberOfFullPages =  numberOfCheeps / cheepsPerPage;
         var excessCheeps = numberOfCheeps % cheepsPerPage;
         var expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;

@@ -4,6 +4,7 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -12,7 +13,8 @@ namespace PagesTest;
 
 public class PublicPagesTest
 {
-    ICheepRepository _repo;
+    ICheepRepository _cheepRepo;
+    IAuthorRepository _authorRepo;
     PublicModel publicPage;
     ChirpDbContext _context;
     private readonly UserManager<Author> _userManager;
@@ -27,13 +29,17 @@ public class PublicPagesTest
         _context.Database.OpenConnection();
         _context.Database.EnsureCreated(); 
 
-        _repo = new CheepRepository(_context, new LoggerFactory());
+        _cheepRepo = new CheepRepository(_context, new LoggerFactory());
+        _authorRepo = new AuthorRepository(_context, new LoggerFactory());
     }
     [Fact]
     public void PublicPageInstantiationTest()
     {
         Before();
-        publicPage = new PublicModel(_repo, _userManager);
+        publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
+        {
+            Message = "What should this say"
+        };
         Assert.NotNull(publicPage);
     }
     
@@ -44,8 +50,11 @@ public class PublicPagesTest
         try
         {
             Before();
-            publicPage = new PublicModel(_repo, _userManager);
-            var cheeps = await _repo.GetCheeps();
+            publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
+            {
+                Message = "What should this say"
+            };
+            var cheeps = await _cheepRepo.GetCheeps();
             var numberOfCheeps = cheeps.Count;
             Assert.Equal(numberOfCheeps, publicPage.NumberOfCheeps);
         }
@@ -64,7 +73,10 @@ public class PublicPagesTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        publicPage = new PublicModel(_repo,  _userManager);
+        publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
+        {
+            Message = "What should this say"
+        };
         var numberOfFullPages =  numberOfCheeps / cheepsPerPage;
         var excessCheeps = numberOfCheeps % cheepsPerPage;
         var expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;

@@ -36,6 +36,7 @@ namespace Chirp.Web.Pages
             _cheepService = cheepService;
             _userManager = userManager;
             NumberOfCheeps = Cheeps.Count;
+            Message = "";
         }
 
         public async Task<IActionResult> OnGet(int? publicpage = 1)
