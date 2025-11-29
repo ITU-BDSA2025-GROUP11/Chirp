@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
@@ -9,19 +10,77 @@ using Assert = NUnit.Framework.Assert;
  * For example, test if a cheep that a user enters into a cheep box is stored in the
  * database for the respective author.
  */
+
 namespace WebTest;
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
 public class EndToEndTest : PageTest
 {
+    public override BrowserNewContextOptions ContextOptions()
+    {
+        return new BrowserNewContextOptions
+        {
+            IgnoreHTTPSErrors = true
+        };
+    }
+
+    private Process? _server;
+    
+    [OneTimeTearDown]
+    public void TeardownServer()
+    {
+       // _server?.Kill();
+        _server?.Dispose();
+    }
+
+    
+    [OneTimeSetUp]
+    public void StartServer()
+    {
+        var psi = new ProcessStartInfo
+        {
+            FileName = "dotnet",
+            Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+        Console.WriteLine(Path.GetFullPath("../../../../../src/Chirp.Web/Chirp.Web.csproj"));
+
+
+        _server = new Process { StartInfo = psi };
+    
+        _server.OutputDataReceived += (_, e) => Console.WriteLine("[SERVER OUT] " + e.Data);
+        _server.ErrorDataReceived += (_, e) => Console.WriteLine("[SERVER ERR] " + e.Data);
+
+        _server.Start();
+
+        _server.BeginOutputReadLine();
+        _server.BeginErrorReadLine();
+        
+
+        
+        Thread.Sleep(5000); // wait for it to start
+       
+    }
+  
     [SetUp]
     public async Task Init()
     {
         
-      await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
-       Page.SetDefaultTimeout(20000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
+        await Page.GotoAsync("https://localhost:7103/");
     }
+    
+    
+   /* [SetUp]
+    public async Task Init()
+    {
+        
+      //await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
+      await Page.GotoAsync("http://localhost:5273/");
+       Page.SetDefaultTimeout(20000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
+    }*/
     
     [Ignore("reason")]
     [Test] 
@@ -84,9 +143,11 @@ public class EndToEndTest : PageTest
         Console.WriteLine("Logged out");
         
         await Page.GetByText("Login").ClickAsync();
-
-        await Page.GetByLabel("Email").FillAsync(email);
-        await Page.GetByLabel("Password").FillAsync(password);
+        await Expect(Page.Locator("#Input_Email")).ToBeVisibleAsync();
+        
+        await Page.Locator("#Input_Email").FillAsync(email);
+        //await Page.GetByLabel("Email").FillAsync(email);
+        await Page.Locator("#Input_Password").FillAsync(password);
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         Console.WriteLine("Logged back in");
