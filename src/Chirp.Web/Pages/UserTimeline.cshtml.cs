@@ -1,51 +1,52 @@
-﻿using System.Security.Claims;
-using Chirp.Core.DTOs;
+using Chirp.Core.DTO;
+using System.Security.Claims;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace Chirp.Web.Pages
 {
     public class UserTimelineModel : PaginationModel
     {
-        private readonly ICheepRepository _service;
+        private readonly IAuthorRepository _authorService;
+        private readonly ICheepRepository _cheepService;
         private readonly UserManager<Author> _userManager;
         
-        public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
-        
         public List<string> Following { get; set; } = new();
-
-        public List<CheepDTO> Cheeps => CurrentPageCheeps;
-        
-        public int NumberOfCheeps { get; set; }        
+        public List<CheepDTO> Cheeps { get; set; }  = new();
+        public List<CheepDTO> CurrentPageCheeps { get; set; }  = new();
+        public int NumberOfCheeps { get; set; }
         public int TotalPages => (int)Math.Ceiling((double)NumberOfCheeps / PageSize);
         
         [BindProperty]
-        public string Message { get; set; } =  string.Empty;
-
-        public UserTimelineModel(ICheepRepository service, UserManager<Author> userManager)
+        public required string Message { get; set; } = "";
+        public UserTimelineModel(ICheepRepository cheepService,IAuthorRepository authorService, UserManager<Author> userManager)
         {
-            _service = service;
+            _authorService = authorService;
+            _cheepService = cheepService;
             _userManager = userManager;
+            NumberOfCheeps = Cheeps?.Count ?? 0;
         }
 
         public async Task<IActionResult> OnGet(string author, int? timelinepage)
         {
+            if (_authorService.IsUserDeleted(author).Result) return NotFound();
             CurrentPage = timelinepage ?? 1;
             var ownTimeline = User.Identity?.IsAuthenticated == true && User.Identity?.Name == author;
 
             if (ownTimeline)
             {
-                NumberOfCheeps = await _service.GetCheepCountFromAuthorAndFollowing(author); 
-                CurrentPageCheeps = await _service.GetCheepsFromAuthorAndFollowing(CurrentPage, 32, author);
+                NumberOfCheeps = await _cheepService.GetCheepCountFromAuthorAndFollowing(author); 
+                CurrentPageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(CurrentPage, 32, author);
             }
             else
             {
-                var allCheeps = await _service.GetCheeps(author); 
+                var allCheeps = await _cheepService.GetCheeps(author); 
                 NumberOfCheeps = allCheeps.Count;
         
-                CurrentPageCheeps = await _service.GetPaginatedCheeps(CurrentPage - 1, 32, author);
+                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage - 1, 32, author);
             }
 
             if (User.Identity?.IsAuthenticated == true)
@@ -53,7 +54,7 @@ namespace Chirp.Web.Pages
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (currentUserId != null)
                 {
-                    ViewData["Following"] = await _service.GetFollowedIds(currentUserId);
+                    ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
                 }
             }
 
@@ -73,7 +74,7 @@ namespace Chirp.Web.Pages
                 return Challenge();
             }
 
-            await _service.PostCheep(Message, user.UserName ?? "unknown", user.Email ?? "unknown"); 
+            await _cheepService.PostCheep(Message, user.UserName ?? "unknown", user.Email ?? "unknown"); 
 
             return RedirectToPage(new { author });
         }
@@ -83,7 +84,7 @@ namespace Chirp.Web.Pages
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.FollowUser(currentUserId, authorId);
+                await _authorService.FollowUser(currentUserId, authorId);
             }
             var author = RouteData.Values["author"] as string; 
             return RedirectToPage(new { author });
@@ -94,7 +95,7 @@ namespace Chirp.Web.Pages
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.UnfollowUser(currentUserId, authorId);
+                await _authorService.UnfollowUser(currentUserId, authorId);
             }
             var author = RouteData.Values["author"] as string;
             return RedirectToPage(new { author });

@@ -1,0 +1,69 @@
+﻿@page "/AboutMe"
+@model Chirp.Web.Pages.AboutMeModel
+@{
+    ViewData["Title"] = "About Me";
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2>About Me</h2>
+
+    @if (User.Identity?.IsAuthenticated == true && Model.UserInfo != null)
+    {
+        //Viser navn og Email 
+        <ul class="cheeps" style="list-style: none; padding: 0; margin-top: 20px;">
+            
+            <li style="margin-bottom: 10px;">
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                    <strong>Name:</strong>
+                    <span>@Model.UserInfo.Name</span>
+                </div>
+            </li>
+            
+            <li style="margin-bottom: 10px;">
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                    <strong>Email:</strong>
+                    <span>@Model.UserInfo.Email</span>
+                </div>
+            </li>
+
+        </ul>
+        
+        //viser Followers 
+        <div style="margin-top: 20px;">
+            <div class="cheepbox" style="border-color: #ccc;">
+                <strong>Following:</strong>
+
+                @if (Model.UserInfo.FollowedUsernames.Any())
+                {
+                    <ul style="list-style: none; padding-left: 10px; margin-top: 8px;">
+                        @foreach (var username in Model.UserInfo.FollowedUsernames)
+                        {
+                            <li style="margin: 0; padding: 2px 0;">
+                                <a href="/@username">@username</a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div style="padding-left: 10px; margin-top: 8px;">
+                        <em>You are not following anyone.</em>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        // Forget Me knappen 
+        <form method="post" asp-page-handler="ForgetMe">
+            <button type="submit"
+                    style="background-color: #c62828; color: white; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; margin-top: 20px;">
+                Forget me!
+            </button>
+        </form>
+    }
+    else
+    {
+        <p>You are not logged in.</p>
+    }
+</div>

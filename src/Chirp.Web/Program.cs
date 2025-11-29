@@ -1,8 +1,7 @@
 using System.Security.Claims;
 using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -30,6 +29,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 var clientid = builder.Configuration["authentication:github:clientId"] ?? Environment.GetEnvironmentVariable("CLIENTID");
 var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?? Environment.GetEnvironmentVariable("CLIENTSECRET");
