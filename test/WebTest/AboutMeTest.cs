@@ -9,9 +9,9 @@ namespace WebTest;
 
 public class AboutMeUnitTest
 {
-    CheepRepository _repository;
-    ChirpDbContext _context;
-    SqliteConnection _connection;
+    CheepRepository? _repository;
+    ChirpDbContext? _context;
+    SqliteConnection? _connection;
     
     private void Before()
     {
@@ -32,13 +32,13 @@ public class AboutMeUnitTest
         Before();
         var username = "KomUdAfVoresRepoMatthias";
         var email = "matthias@stop";
-        await _repository.CreateUser(username, email);
+        await _repository!.CreateUser(username, email);
         
-        var result = await _repository.DeleteUser(username);
+        var result = await _repository!.DeleteUser(username);
         
         Assert.True(result);
         
-        var oldUser = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == username);
+        var oldUser = await _context!.Authors.FirstOrDefaultAsync(a => a.UserName == username);
         Assert.Null(oldUser);
         
         var anonymizedUser = await _context.Authors.FirstOrDefaultAsync(a => a.Email!.StartsWith("deleted-"));
@@ -52,11 +52,11 @@ public class AboutMeUnitTest
         Before();
         var userA = "UserA";
         var userB = "UserB";
-        await _repository.CreateUser(userA, "a@a.com");
-        await _repository.CreateUser(userB, "b@b.com");
+        await _repository!.CreateUser(userA, "a@a.com");
+        await _repository!.CreateUser(userB, "b@b.com");
         
-        var authorA = await _context.Authors.FirstAsync(a => a.UserName == userA);
-        var authorB = await _context.Authors.FirstAsync(a => a.UserName == userB);
+        var authorA = await _context!.Authors.FirstAsync(a => a.UserName == userA);
+        var authorB = await _context!.Authors.FirstAsync(a => a.UserName == userB);
         
         await _repository.FollowUser(authorA.Id, authorB.Id);
         
@@ -75,7 +75,7 @@ public class AboutMeUnitTest
     {
         Before();
 
-        var result = await _repository.DeleteUser("GivMigDrikkePenge");
+        var result = await _repository!.DeleteUser("GivMigDrikkePenge");
 
         Assert.False(result);
     }
@@ -85,7 +85,7 @@ public class AboutMeUnitTest
     {
         Before();
 
-        await _repository.CreateUser("Silas", "Silas@ta.com");
+        await _repository!.CreateUser("Silas", "Silas@ta.com");
         await _repository.DeleteUser("Silas");
 
         var info = await _repository.GetUserInfo("Silas");
@@ -98,10 +98,10 @@ public class AboutMeUnitTest
     {
         Before();
 
-        await _repository.CreateUser("A", "a@x");
-        await _repository.CreateUser("B", "b@x");
+        await _repository!.CreateUser("A", "a@x");
+        await _repository!.CreateUser("B", "b@x");
 
-        var a = await _context.Authors.FirstAsync(x => x.UserName == "A");
+        var a = await _context!.Authors.FirstAsync(x => x.UserName == "A");
         var b = await _context.Authors.FirstAsync(x => x.UserName == "B");
 
         await _repository.FollowUser(a.Id, b.Id);
@@ -120,8 +120,8 @@ public class AboutMeUnitTest
     {
         Before();
         
-        await _repository.CreateUser("Rotte", "rotte@mail.com");
-        var rotte = await _context.Authors.FirstAsync(a => a.UserName == "Rotte");
+        await _repository!.CreateUser("Rotte", "rotte@mail.com");
+        var rotte = await _context!.Authors.FirstAsync(a => a.UserName == "Rotte");
         
         _context.Cheeps.Add(new Cheep
         {

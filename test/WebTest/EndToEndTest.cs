@@ -77,7 +77,7 @@ public class EndToEndTest : PageTest
         _Password = "Abc123!";
     }
     
-    
+
     /* [SetUp]
      public async Task Init()
      {
@@ -119,19 +119,7 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task RegisterNewUserAddsUserToDatabase()
     {
-        await Page.GetByText("Register").ClickAsync();
-
-  
-        await Page.GetByLabel("Username").FillAsync(_Username);
-        await Page.GetByLabel("Email").FillAsync(_Email);
-        await Page.Locator("#Input_Password").FillAsync(_Password);
-        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
-        
-     
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-
-        
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        await RegisterUserTask();
         
         Console.WriteLine("Successfully created a new user");
         
@@ -159,16 +147,7 @@ public class EndToEndTest : PageTest
     public async Task AddNewCheepDisplaysCheepOnPublicTimeline()
     {
         //Register a new user
-        await Page.GetByText("Register").ClickAsync();
-  
-        await Page.GetByLabel("Username").FillAsync(_Username);
-        await Page.GetByLabel("Email").FillAsync(_Email);
-        await Page.Locator("#Input_Password").FillAsync(_Password);
-        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
-        
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        await RegisterUserTask();
 
         string testCheep = "Testing cheeping on Chirp!";
      //   await Page.GetByRole(AriaRole.Textbox, new() {Name = "Cheep on Chirp" }).FillAsync(testCheep);
@@ -184,18 +163,9 @@ public class EndToEndTest : PageTest
 
     [Test]
     public async Task AddNewCheepDisplaysCheepOnPrivateTimeline()
-    {
-        await Page.GetByText("Register").ClickAsync();
-  
-        await Page.GetByLabel("Username").FillAsync(_Username);
-        await Page.GetByLabel("Email").FillAsync(_Email);
-        await Page.Locator("#Input_Password").FillAsync(_Password);
-        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
+    { 
+        await RegisterUserTask();
         
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
-
         string testCheep = "Testing cheeping on Chirp is visible on private TL!";
         
         await Page.GetByRole(AriaRole.Textbox).FillAsync(testCheep);
@@ -208,5 +178,19 @@ public class EndToEndTest : PageTest
        // await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username,testCheep,]);
        await Expect(firstCheep).ToContainTextAsync(_Username);
        await Expect(firstCheep).ToContainTextAsync(testCheep);
+    }
+
+    public async Task RegisterUserTask()
+    {
+        await Page.GetByText("Register").ClickAsync();
+  
+        await Page.GetByLabel("Username").FillAsync(_Username);
+        await Page.GetByLabel("Email").FillAsync(_Email);
+        await Page.Locator("#Input_Password").FillAsync(_Password);
+        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+    
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
     }
 }
