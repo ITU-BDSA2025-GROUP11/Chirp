@@ -90,7 +90,7 @@ namespace Chirp.Web.Pages
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.LikePost(currentUserId, cheepId);
+                await _cheepService.LikePost(currentUserId, cheepId);
             }
         
             return RedirectToPage();
@@ -100,7 +100,7 @@ namespace Chirp.Web.Pages
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.RemoveLike(currentUserId, cheepId);
+                await _cheepService.RemoveLike(currentUserId, cheepId);
             }
         
             return RedirectToPage();
@@ -111,7 +111,7 @@ namespace Chirp.Web.Pages
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.DislikePost(currentUserId, cheepId);
+                await _cheepService.DislikePost(currentUserId, cheepId);
             }
         
             return RedirectToPage();
@@ -124,7 +124,7 @@ namespace Chirp.Web.Pages
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
-                await _service.RemoveDislike(currentUserId, cheepId);
+                await _cheepService.RemoveDislike(currentUserId, cheepId);
             }
         
             return RedirectToPage();
