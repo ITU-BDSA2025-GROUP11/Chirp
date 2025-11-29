@@ -181,4 +181,32 @@ public class EndToEndTest : PageTest
 
         await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username, testCheep]);
     }
+
+    [Test]
+    public async Task AddNewCheepDisplaysCheepOnPrivateTimeline()
+    {
+        await Page.GetByText("Register").ClickAsync();
+  
+        await Page.GetByLabel("Username").FillAsync(_Username);
+        await Page.GetByLabel("Email").FillAsync(_Email);
+        await Page.Locator("#Input_Password").FillAsync(_Password);
+        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+
+        string testCheep = "Testing cheeping on Chirp is visible on private TL!";
+        
+        await Page.GetByRole(AriaRole.Textbox).FillAsync(testCheep);
+        await Page.GetByRole(AriaRole.Button).And(Page.GetByText("Post")).ClickAsync();
+        
+        await Page.GetByRole(AriaRole.Link).And(Page.GetByText("My timeline")).ClickAsync();
+        
+        var firstCheep = Page.Locator("ul.cheeps > li").First;
+
+       // await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username,testCheep,]);
+       await Expect(firstCheep).ToContainTextAsync(_Username);
+       await Expect(firstCheep).ToContainTextAsync(testCheep);
+    }
 }
