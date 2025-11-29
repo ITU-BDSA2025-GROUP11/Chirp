@@ -30,7 +30,7 @@ public class EndToEndTest : PageTest
     [OneTimeTearDown]
     public void TeardownServer()
     {
-       // _server?.Kill();
+        // _server?.Kill();
         _server?.Dispose();
     }
 
@@ -59,8 +59,6 @@ public class EndToEndTest : PageTest
         _server.BeginOutputReadLine();
         _server.BeginErrorReadLine();
         
-
-        
         Thread.Sleep(5000); // wait for it to start
        
     }
@@ -68,35 +66,31 @@ public class EndToEndTest : PageTest
     [SetUp]
     public async Task Init()
     {
-        
         await Page.GotoAsync("https://localhost:7103/");
     }
     
     
-   /* [SetUp]
-    public async Task Init()
-    {
-        
-      //await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
-      await Page.GotoAsync("http://localhost:5273/");
-       Page.SetDefaultTimeout(20000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout 
-    }*/
+    /* [SetUp]
+     public async Task Init()
+     {
+
+       //await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
+       await Page.GotoAsync("http://localhost:5273/");
+        Page.SetDefaultTimeout(20000); //Azure page is sometimes slow, so make sure the tests doesn't fail due to timeout
+     }*/
     
     [Ignore("reason")]
     [Test] 
     public async Task HasTitle()
     {
         //await Page.GotoAsync("https://chirp-ddg2c4bsfsdtewhk.norwayeast-01.azurewebsites.net/");
-
         // Expect a title "to contain" a substring.
         await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
     }
-    // Test cases ...
 
     [Test]
     public async Task DefaultHomePageOnLoadIsPublicCheepPage()
     {
-        // await Expect(Page.GetByRole(AriaRole.Heading)).ToHaveTextAsync("Public Timeline");
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToHaveTextAsync("Public Timeline");
     }
 
@@ -104,7 +98,7 @@ public class EndToEndTest : PageTest
     public async Task PressLoginButtonRedirectsToLoginPage()
     { 
         await Page.GetByText("Login").ClickAsync(); //Click Login-button
-        await Expect(Page.GetByText("Use a local account to log in.")).ToBeVisibleAsync(); //Check that after clicking, we arrive at login page
+        await Expect(Page).ToHaveURLAsync("https://localhost:7103/Identity/Account/Login");
     }
 
     [Test]
@@ -148,8 +142,10 @@ public class EndToEndTest : PageTest
         await Page.Locator("#Input_Email").FillAsync(email);
         //await Page.GetByLabel("Email").FillAsync(email);
         await Page.Locator("#Input_Password").FillAsync(password);
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
+        
+        await Page.Locator("#login-submit").ClickAsync();
+        //await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         Console.WriteLine("Logged back in");
         
         await Expect(Page.GetByText("Logout [")).ToBeVisibleAsync();
