@@ -170,14 +170,15 @@ public class EndToEndTest : PageTest
         
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
 
-        string testCheep = "Test cheep:-)";
+        string testCheep = "Testing cheeping on Chirp!";
      //   await Page.GetByRole(AriaRole.Textbox, new() {Name = "Cheep on Chirp" }).FillAsync(testCheep);
      await Page.GetByRole(AriaRole.Textbox).FillAsync(testCheep);
         await Page.GetByRole(AriaRole.Button).And(Page.GetByText("Post")).ClickAsync();
         
-        await Expect(Page.GetByText(testCheep).And(Page.GetByText(_Username))).ToBeVisibleAsync();
-        //const listItem = Page.GetByRole(AriaRole.Listitem).And(Page.Get)
+        //await Expect(Page.GetByText(_Username).And(Page.GetByText(testCheep))).ToBeVisibleAsync();
+        //with the above expect, we mistakenly expect a SINGLE element where the above is true, but this will never be found!!!!
         //We want to check that the test cheep was made by the current logged in user
-        
+
+        await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username, testCheep]);
     }
 }

@@ -12,7 +12,7 @@ public class AboutMeUnitTest
     CheepRepository _repository;
     ChirpDbContext _context;
     SqliteConnection _connection;
-
+    
     private void Before()
     {
         _connection = new SqliteConnection("Filename=:memory:");
@@ -41,7 +41,7 @@ public class AboutMeUnitTest
         var oldUser = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == username);
         Assert.Null(oldUser);
         
-        var anonymizedUser = await _context.Authors.FirstOrDefaultAsync(a => a.Email.StartsWith("deleted-"));
+        var anonymizedUser = await _context.Authors.FirstOrDefaultAsync(a => a.Email!.StartsWith("deleted-"));
         Assert.NotNull(anonymizedUser);
         Assert.StartsWith("DeletedUser-", anonymizedUser.UserName);
     }
@@ -137,6 +137,6 @@ public class AboutMeUnitTest
             .Include(c => c.Author)
             .FirstAsync();
 
-        Assert.StartsWith("DeletedUser-", cheep.Author.UserName);
+        Assert.StartsWith("DeletedUser-", cheep.Author!.UserName);
     }
 }
