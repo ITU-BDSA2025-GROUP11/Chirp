@@ -9,8 +9,8 @@
     
     bool isMe = User.Identity?.Name == Model.Author.Username;
     var numberOfDislikes = Model.Dislikes.Count;
-    var heartFilled = $"️💔 {numberOfDislikes}";
-    var heartEmpty = $"🤍 {numberOfDislikes}";
+    var heartFilled = $"️🤡 {numberOfDislikes}";
+    var heartEmpty = $"⚪️ {numberOfDislikes}";
 }
 
 @if (SignInManager.IsSignedIn(User) && !isMe)
