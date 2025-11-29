@@ -29,7 +29,7 @@ namespace Chirp.Core.DTO
                 TimeStamp = cheep.TimeStamp,
                 Author = ToDTO(cheep.Author ?? throw new InvalidOperationException("Cheep must have a author")),
                 Likes = cheep.Likes,
-                Dislikes = cheep.Likes,
+                Dislikes = cheep.Dislikes,
             };
         }
     }
