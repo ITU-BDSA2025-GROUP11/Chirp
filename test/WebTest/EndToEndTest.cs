@@ -17,6 +17,10 @@ namespace WebTest;
 [TestFixture]
 public class EndToEndTest : PageTest
 {
+    private string _Username;
+    private string _Email;
+    private string _Password;
+    
     public override BrowserNewContextOptions ContextOptions()
     {
         return new BrowserNewContextOptions
@@ -67,6 +71,10 @@ public class EndToEndTest : PageTest
     public async Task Init()
     {
         await Page.GotoAsync("https://localhost:7103/");
+        
+       _Username = Guid.NewGuid().ToString();
+        _Email = $"user_{Guid.NewGuid()}@test.com";
+        _Password = "Abc123!";
     }
     
     
@@ -111,17 +119,13 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task RegisterNewUserAddsUserToDatabase()
     {
-        string username = Guid.NewGuid().ToString();
-        string email = $"user_{Guid.NewGuid()}@test.com";
-        string password = "Abc123!";
-        
         await Page.GetByText("Register").ClickAsync();
 
   
-        await Page.GetByLabel("Username").FillAsync(username);
-        await Page.GetByLabel("Email").FillAsync(email);
-        await Page.Locator("#Input_Password").FillAsync(password);
-        await Page.Locator("#Input_ConfirmPassword").FillAsync(password);
+        await Page.GetByLabel("Username").FillAsync(_Username);
+        await Page.GetByLabel("Email").FillAsync(_Email);
+        await Page.Locator("#Input_Password").FillAsync(_Password);
+        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
         
      
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
@@ -139,9 +143,9 @@ public class EndToEndTest : PageTest
         await Page.GetByText("Login").ClickAsync();
         await Expect(Page.Locator("#Input_Email")).ToBeVisibleAsync();
         
-        await Page.Locator("#Input_Email").FillAsync(email);
+        await Page.Locator("#Input_Email").FillAsync(_Email);
         //await Page.GetByLabel("Email").FillAsync(email);
-        await Page.Locator("#Input_Password").FillAsync(password);
+        await Page.Locator("#Input_Password").FillAsync(_Password);
         
         
         await Page.Locator("#login-submit").ClickAsync();
@@ -149,5 +153,31 @@ public class EndToEndTest : PageTest
         Console.WriteLine("Logged back in");
         
         await Expect(Page.GetByText("Logout [")).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task AddNewCheepDisplaysCheepOnPublicTimeline()
+    {
+        //Register a new user
+        await Page.GetByText("Register").ClickAsync();
+  
+        await Page.GetByLabel("Username").FillAsync(_Username);
+        await Page.GetByLabel("Email").FillAsync(_Email);
+        await Page.Locator("#Input_Password").FillAsync(_Password);
+        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+
+        string testCheep = "Test cheep:-)";
+     //   await Page.GetByRole(AriaRole.Textbox, new() {Name = "Cheep on Chirp" }).FillAsync(testCheep);
+     await Page.GetByRole(AriaRole.Textbox).FillAsync(testCheep);
+        await Page.GetByRole(AriaRole.Button).And(Page.GetByText("Post")).ClickAsync();
+        
+        await Expect(Page.GetByText(testCheep).And(Page.GetByText(_Username))).ToBeVisibleAsync();
+        //const listItem = Page.GetByRole(AriaRole.Listitem).And(Page.Get)
+        //We want to check that the test cheep was made by the current logged in user
+        
     }
 }
