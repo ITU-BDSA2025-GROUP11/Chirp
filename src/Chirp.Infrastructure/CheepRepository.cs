@@ -9,7 +9,7 @@ namespace Chirp.Infrastructure
     {
         Task<List<CheepDTO>> GetCheeps(string? author = null);        
         Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);        
-        Task PostCheep(string text, string authorName, string authorEmail);        
+        Task PostCheep(string text, string authorId);        
         Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
         Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
         Task<int> GetCheepCount(string? author = null);
@@ -46,37 +46,20 @@ namespace Chirp.Infrastructure
                     .Select(c => EntityToDTO.ToDTO(c))
                     .ToList();
             }
-            else
-            {
-                return await _context.Cheeps 
-                    .Include(c => c.Author)
-                    .OrderByDescending(c => c.TimeStamp)
-                    .Select(c => EntityToDTO.ToDTO(c))
-                    .ToListAsync(); 
-            }
-        }
-
-        public async Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
-        {
-            IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
-
-            if (!string.IsNullOrEmpty(author))
-                query = query.Where(c => c.Author.UserName == author);
-
-            return await query
+            return await _context.Cheeps 
+                .Include(c => c.Author)
                 .OrderByDescending(c => c.TimeStamp)
-                .Skip(pageSize * currentPage)
-                .Take(pageSize)
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync(); 
+            
         }
+        
 
-        public async Task PostCheep(string text, string authorName, string authorEmail)
+        public async Task PostCheep(string text, string authorId)
         {
             if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
-            var author = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == authorName);
+            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
             if (author == null) throw new ArgumentException("Author not found");
-            
             var cheep = new Cheep
             {
                 Text = text,
@@ -84,10 +67,7 @@ namespace Chirp.Infrastructure
                 TimeStamp = DateTime.Now
             };
             _context.Cheeps.Add(cheep);
-            // if (text.Length > 160)
-            // {
-            //     _logger.LogWarning("{text} is longer than 160 chars", text);
-            // } 
+            author.Cheeps.Add(cheep);
             await _context.SaveChangesAsync();
         }
 
@@ -188,6 +168,20 @@ namespace Chirp.Infrastructure
                 .ToListAsync();
         }
         
+        public async Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
+        {
+            IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
+
+            if (!string.IsNullOrEmpty(author))
+                query = query.Where(c => c.Author.UserName == author);
+
+            return await query
+                .OrderByDescending(c => c.TimeStamp)
+                .Skip(pageSize * currentPage)
+                .Take(pageSize)
+                .Select(c => EntityToDTO.ToDTO(c))
+                .ToListAsync(); 
+        }
         public async Task<List<string>> GetFollowedIds(string userId)
         {
             var user = await _context.Authors
