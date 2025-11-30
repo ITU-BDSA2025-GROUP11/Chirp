@@ -15,6 +15,8 @@ public interface IAuthorRepository
     Task<UserInfoDTO?> GetUserInfo(string username);
     Task<bool> DeleteUser(string username);
     Task<bool> IsUserDeleted(string username);
+    public Task<List<int>> GetLikedCheepIds(string userId);
+    public Task<List<int>> GetDislikedCheepIds(string userId);
 }
 
 public class AuthorRepository : IAuthorRepository
@@ -116,6 +118,26 @@ public class AuthorRepository : IAuthorRepository
                 .ToList(),
             FollowedUsernames = author.Following.Select(f => f.UserName).ToList()!
         };
+    }
+    public async Task<List<int>> GetLikedCheepIds(string userId)
+    {
+        var user = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Id == userId);
+        
+        if (user == null) return new List<int>();
+        
+        return user.LikedCheeps.Select(c => c.CheepId).ToList();
+    }
+    public async Task<List<int>> GetDislikedCheepIds(string userId)
+    {
+        var user = await _context.Authors
+            .Include(a => a.DislikedCheeps)
+            .FirstOrDefaultAsync(a => a.Id == userId);
+        
+        if (user == null) return new List<int>();
+        
+        return user.DislikedCheeps.Select(a => a.CheepId).ToList();
     }
 
     public async Task<bool> IsUserDeleted(string username)

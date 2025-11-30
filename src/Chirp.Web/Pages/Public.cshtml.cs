@@ -3,6 +3,7 @@ using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Chirp.Core.DomainModel;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Web.Pages
@@ -16,6 +17,10 @@ namespace Chirp.Web.Pages
         public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
         
         public List<string> Following { get; set; } = new();
+
+        public List<string> Likes { get; set; } = new();
+
+        public List<string> Dislikes { get; set; } = new();
         
         public List<CheepDTO> Cheeps { get; set; } = new();
 
@@ -48,6 +53,8 @@ namespace Chirp.Web.Pages
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (currentUserId != null){
                     ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
+                    ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
+                    ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
                 }
             }
     
@@ -71,6 +78,53 @@ namespace Chirp.Web.Pages
             if (currentUserId != null)
             {
                 await _authorService.UnfollowUser(currentUserId, authorId);
+            }
+        
+            return RedirectToPage();
+        }
+        
+        public async Task<IActionResult> OnPostLike(int cheepId)
+        {
+            Console.WriteLine("I AM LIKING CHEEP: " + cheepId);
+            //var cheepid =  
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _cheepService.LikePost(currentUserId, cheepId);
+            }
+        
+            return RedirectToPage();
+        }
+        public async Task<IActionResult> OnPostUnlike(int cheepId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _cheepService.RemoveLike(currentUserId, cheepId);
+            }
+        
+            return RedirectToPage();
+        }
+        
+        public async Task<IActionResult> OnPostDislike(int cheepId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _cheepService.DislikePost(currentUserId, cheepId);
+            }
+        
+            return RedirectToPage();
+        }
+        
+
+        
+        public async Task<IActionResult> OnPostUnDislike(int cheepId)
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != null)
+            {
+                await _cheepService.RemoveDislike(currentUserId, cheepId);
             }
         
             return RedirectToPage();

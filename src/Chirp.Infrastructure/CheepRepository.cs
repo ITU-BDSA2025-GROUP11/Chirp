@@ -13,6 +13,10 @@ namespace Chirp.Infrastructure
         Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
         Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
         Task<int> GetCheepCount(string? author = null);
+        public Task LikePost(string currentUserId, int cheepIdToLike);
+        public Task DislikePost(string currentUserId, int cheepIdToDislike);
+        public Task RemoveDislike(string currentUserId, int cheepIdToUndislike);
+        public Task RemoveLike(string currentUserId, int cheepIdToUnLike);
     }
 
     public class CheepRepository : ICheepRepository
@@ -86,6 +90,83 @@ namespace Chirp.Infrastructure
             // } 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsFollowing(string currentUserId, string authorId)
+        {
+            return await _context.Authors
+                .AnyAsync(a => a.Id == currentUserId && a.Following.Any(f => f.Id == authorId));
+        }
+
+        public async Task LikePost(string currentUserId, int cheepIdToLike)
+        {
+            var cheepToLike = await _context.Cheeps
+                .Include(c => c.Author)
+                .Include(c => c.Likes)
+                .FirstOrDefaultAsync(a => a.CheepId == cheepIdToLike);
+            var userLiking = await _context.Authors
+                .Include(a  => a.LikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+
+            if (cheepToLike == null || userLiking == null) return;
+            if (cheepToLike.Author == userLiking) return;
+            if (userLiking.LikedCheeps.Contains(cheepToLike) || cheepToLike.Likes.Contains(userLiking)) return;
+            
+            userLiking.LikedCheeps.Add(cheepToLike);
+            cheepToLike.Likes.Add(userLiking);
+            await _context.SaveChangesAsync();
+        }
+        public async Task RemoveLike(string currentUserId, int cheepIdToUnlike)
+        {
+            var cheepToUnLike = await _context.Cheeps
+                .Include(c => c.Likes)
+                .FirstOrDefaultAsync(a => a.CheepId == cheepIdToUnlike);
+            var userUnliking = await _context.Authors
+                .Include(a  => a.LikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+            
+            if (cheepToUnLike == null || userUnliking == null) return;
+            if (!userUnliking.LikedCheeps.Contains(cheepToUnLike) || !cheepToUnLike.Likes.Contains(userUnliking)) return;
+            
+            userUnliking.LikedCheeps.Remove(cheepToUnLike);
+            cheepToUnLike.Likes.Remove(userUnliking);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DislikePost(string currentUserId, int cheepIdToDislike)
+        {
+            
+            var cheepToDislike = await _context.Cheeps
+                .Include(c => c.Author)
+                .Include(c => c.Dislikes)
+                .FirstOrDefaultAsync(a => a.CheepId == cheepIdToDislike);
+            var userDisliking = await _context.Authors
+                .Include(a  => a.DislikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+            if (cheepToDislike == null || userDisliking == null) return;
+            if (cheepToDislike.Author == userDisliking) return;
+            if (userDisliking.DislikedCheeps.Contains(cheepToDislike) || cheepToDislike.Dislikes.Contains(userDisliking)) return;
+            
+            userDisliking.DislikedCheeps.Add(cheepToDislike);
+            cheepToDislike.Dislikes.Add(userDisliking);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveDislike(string currentUserId, int cheepIdToUndislike)
+        {
+            var cheepToUndislike = await _context.Cheeps
+                .Include(c => c.Dislikes)
+                .FirstOrDefaultAsync(a => a.CheepId == cheepIdToUndislike);
+            var userUndisliking = await _context.Authors
+                .Include(a  => a.DislikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == currentUserId);
+            
+            if (cheepToUndislike == null || userUndisliking == null) return;
+            if (!cheepToUndislike.Dislikes.Contains(userUndisliking) || !userUndisliking.DislikedCheeps.Contains(cheepToUndislike)) return;
+            
+            userUndisliking.DislikedCheeps.Remove(cheepToUndislike);
+            cheepToUndislike.Dislikes.Remove(userUndisliking);
+            await _context.SaveChangesAsync();
+        }
+        
         public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
         {
             var author = await _context.Authors
@@ -105,6 +186,17 @@ namespace Chirp.Infrastructure
                 .Take(pageSize)
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync();
+        }
+        
+        public async Task<List<string>> GetFollowedIds(string userId)
+        {
+            var user = await _context.Authors
+                .Include(a => a.Following)
+                .FirstOrDefaultAsync(a => a.Id == userId);
+
+            if (user == null) return new List<string>();
+
+            return user.Following.Select(a => a.Id).ToList();
         }
         
         public async Task<int> GetCheepCountFromAuthorAndFollowing(string authorName)
