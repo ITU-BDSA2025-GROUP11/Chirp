@@ -149,6 +149,7 @@ namespace Chirp.Infrastructure
         
         public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
         {
+            page--;
             var author = await _context.Authors
                 .Include(a => a.Following)
                 .FirstOrDefaultAsync(a => a.UserName == authorName);
@@ -170,6 +171,7 @@ namespace Chirp.Infrastructure
         
         public async Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
         {
+            currentPage--;
             IQueryable<Cheep> query = _context.Cheeps.Include(c => c.Author);
 
             if (!string.IsNullOrEmpty(author))

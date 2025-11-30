@@ -39,14 +39,14 @@ namespace Chirp.Web.Pages
             if (ownTimeline)
             {
                 NumberOfCheeps = await _cheepService.GetCheepCountFromAuthorAndFollowing(author); 
-                CurrentPageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(CurrentPage-1, 32, author);
+                CurrentPageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(CurrentPage, 32, author);
             }
             else
             {
                 var allCheeps = await _cheepService.GetCheeps(author); 
                 NumberOfCheeps = allCheeps.Count;
         
-                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage-1, 32, author);
+                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, 32, author);
             }
 
             if (User.Identity?.IsAuthenticated == true)

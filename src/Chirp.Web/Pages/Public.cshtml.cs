@@ -47,7 +47,7 @@ namespace Chirp.Web.Pages
     
             NumberOfCheeps = await _cheepService.GetCheepCount();
             
-            CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage-1, PageSize);
+            CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, PageSize);
             
             if (User.Identity?.IsAuthenticated == true)
             {

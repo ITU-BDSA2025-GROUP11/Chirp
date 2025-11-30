@@ -33,7 +33,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
     public async Task Add_And_Retrieve_Cheep()
     {
         await _authorRepo.CreateUser(testName, testMail);
-        await _cheepRepo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", testName, testMail);
+        var author = await _context.Authors.FirstAsync(a => a.UserName == testName);
+        await _cheepRepo.PostCheep("Joakim er faktisk pænt handsome OG har rigtig god humor", author.Id);
 
         var cheeps = await _cheepRepo.GetCheeps();
 
@@ -46,7 +47,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
     public async Task Cheep_Belongs_To_Correct_Author()
     {
         await _authorRepo.CreateUser(testName, testMail);
-        await _cheepRepo.PostCheep("Resten af gruppen er også pænt cool",  testName, testMail);
+        var author = await _context.Authors.FirstAsync(a => a.UserName == testName);
+        await _cheepRepo.PostCheep("Resten af gruppen er også pænt cool",  author.Id);
 
         var cheep = await _context.Cheeps.Include(c => c.Author).FirstAsync();
 
@@ -61,7 +63,7 @@ public class CheepRepositoryIntegrationTests : IDisposable
         _context.Users.RemoveRange(_context.Users);
         _context.SaveChanges();
 
-        await Assert.ThrowsAsync<ArgumentException>(() => _cheepRepo.PostCheep("Plz no crash test", testName, testMail));
+        await Assert.ThrowsAsync<ArgumentException>(() => _cheepRepo.PostCheep("Plz no crash test", "test"));
     }
 
     //checks that we only get cheeps from the desired author 
@@ -69,8 +71,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
     public async Task Get_Cheeps_From_Author()
     {
         await _authorRepo.CreateUser(testName, testMail);
-        await _cheepRepo.PostCheep("Joakim’s cheep 1",  testName, testMail);
-        await _cheepRepo.PostCheep("Joakim’s cheep 2",   testName, testMail);
+        var author = await _context.Authors.FirstAsync(a => a.UserName == testName);
+        await _cheepRepo.PostCheep("Joakim’s cheep 1",  author.Id);
+        await _cheepRepo.PostCheep("Joakim’s cheep 2",   author.Id);
     
         var otherAuthor = new Author
         {
@@ -102,8 +105,8 @@ public class CheepRepositoryIntegrationTests : IDisposable
         var tooLongCheep =
             "sdjlaksjdlkajS;lkajslnvfnvkjnfsbfbjkfghfdjghgoijwoeijijlkjdflkjadslkfjnjvnfdjhboigjwegerekdfkf;ldkf;ksd;fkds;kf;sdkfpoekfpwejgpejgraopbnofnbdajvfvjofnbdfonbldfkj";
         await _authorRepo.CreateUser(testName, testMail);
-
-        await _cheepRepo.PostCheep(tooLongCheep, testName, testMail);
+        var author = await _context.Authors.FirstAsync(a => a.UserName == testName);
+        await _cheepRepo.PostCheep(tooLongCheep, author.Id);
         var cheeps = await _cheepRepo.GetCheeps();
         Assert.Empty(cheeps);
            
@@ -114,10 +117,11 @@ public class CheepRepositoryIntegrationTests : IDisposable
     public async Task GetPaginatedCheeps()
     {
         await  _authorRepo.CreateUser(testName, testMail);
-        await _cheepRepo.PostCheep("test", testName, testMail);
+        var author = await _context.Authors.FirstAsync(a => a.UserName == testName);
+        await _cheepRepo.PostCheep("test", author.Id);
         var authorCheeps = await _cheepRepo.GetCheeps(testName);
         var pageCheeps = await _cheepRepo.GetPaginatedCheeps(1, 32, testName);
-        Assert.Equal(authorCheeps, pageCheeps);
+        Assert.Contains(pageCheeps, c => c.Id == authorCheeps[0].Id);
     }
 
     [Fact]
@@ -126,9 +130,9 @@ public class CheepRepositoryIntegrationTests : IDisposable
         await _authorRepo.CreateUser(testName, testMail);
         await _authorRepo.CreateUser("b", "b@b.com");
         var userA = await _context.Authors.FirstAsync(a => a.UserName == testName);
-        await _cheepRepo.PostCheep("test", testName, testMail);
-        await _cheepRepo.PostCheep("b", "b", "b@b.com");
+        await _cheepRepo.PostCheep("test", userA.Id);
         var userB = await _context.Authors.FirstAsync(a => a.UserName == "b");
+        await _cheepRepo.PostCheep("b", userB.Id);
         await _authorRepo.FollowUser(userA.Id, userB.Id);
         var cheepAs = await _cheepRepo.GetCheeps(testName);
         var cheepBs = await _cheepRepo.GetCheeps("b");

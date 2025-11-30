@@ -49,19 +49,19 @@ public class LikeDislikeTests
         // user and cheep a
         await AuthorRepository.CreateUser(_authorAName, _authorAEmail);
         authorA = await Context.Authors.FirstAsync(a => a.UserName == _authorAName);
-        await CheepRepository.PostCheep(_cheepAMessage, _authorAName, _authorAEmail);
+        await CheepRepository.PostCheep(_cheepAMessage, authorA.Id);
         cheepA = await Context.Cheeps.FirstAsync(c => c.Author ==  authorA);
         
         // user and cheep b
         await AuthorRepository.CreateUser(_authorBName, _authorBEmail);
         authorB = await Context.Authors.FirstAsync(a => a.UserName == _authorBName);
-        await CheepRepository.PostCheep(_cheepBMessage, _authorBName, _authorBEmail);
+        await CheepRepository.PostCheep(_cheepBMessage, authorB.Id);
         cheepB = await Context.Cheeps.FirstAsync(c => c.Author ==  authorB);
         
         // user and cheep c
         await AuthorRepository.CreateUser(_authorCName, _authorCEmail);
         authorC = await Context.Authors.FirstAsync(a => a.UserName == _authorCName);
-        await CheepRepository.PostCheep(_cheepCMessage, _authorCName, _authorCEmail);
+        await CheepRepository.PostCheep(_cheepCMessage, authorC.Id);
         cheepC = await Context.Cheeps.FirstAsync(c => c.Author ==  authorC);
         
     }

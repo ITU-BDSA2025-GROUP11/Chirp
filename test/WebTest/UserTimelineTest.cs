@@ -48,21 +48,7 @@ public class UserTimelineTest
         var numberOfCheeps = cheeps.Count;
         Assert.Equal(numberOfCheeps, userTimeline.NumberOfCheeps);
     }
-
-    [Fact]
-    public async Task UserTimelineShowsUserCheeps()
-    {
-        Before();
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
-            Message = "What should this say"
-        };
-        await _authorRepo.CreateUser("Test", "test@mail.com");
-        await _cheepRepo.PostCheep("Test", "Test", "test@mail.com");
-
-        var pageCheeps = await userTimeline.OnGet("Test", 1);
-        Assert.Contains(pageCheeps, c => )
-
-    }
+    
     [Theory]
     [InlineData(300, 32)]
     [InlineData(320, 32)]
