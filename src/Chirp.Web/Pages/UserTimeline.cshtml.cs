@@ -100,5 +100,9 @@ namespace Chirp.Web.Pages
             var author = RouteData.Values["author"] as string;
             return RedirectToPage(new { author });
         }
+        public int GetTotalPages(int numberOfCheeps, int pageSize)
+        {
+            return (int)Math.Ceiling((double)numberOfCheeps / pageSize);
+        }
     }
 }
