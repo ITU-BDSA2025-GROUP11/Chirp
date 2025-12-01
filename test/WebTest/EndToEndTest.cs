@@ -161,7 +161,7 @@ public class EndToEndTest : PageTest
         await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-
+        
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
     }
 }
