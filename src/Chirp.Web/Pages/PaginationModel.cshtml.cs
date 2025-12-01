@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public class PaginationModel() : PageModel
+public class PaginationModel : PageModel
 {
     [BindProperty(SupportsGet = true)]
     public int CurrentPage { get; set; } = 1;

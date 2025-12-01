@@ -3,6 +3,7 @@ using System;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    partial class ChirpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251128105157_Mopper9")]
+    partial class Mopper9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.21");
@@ -32,42 +35,18 @@ namespace Chirp.Infrastructure.Migrations
                     b.ToTable("AuthorFollows", (string)null);
                 });
 
-            modelBuilder.Entity("AuthorCheep", b =>
-                {
-                    b.Property<int>("LikedCheepsCheepId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LikesId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("LikedCheepsCheepId", "LikesId");
-
-                    b.HasIndex("LikesId");
-
-                    b.ToTable("CheepLikes", (string)null);
-                });
-
-            modelBuilder.Entity("AuthorCheep1", b =>
-                {
-                    b.Property<int>("DislikedCheepsCheepId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("DislikesId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("DislikedCheepsCheepId", "DislikesId");
-
-                    b.HasIndex("DislikesId");
-
-                    b.ToTable("CheepDislikes", (string)null);
-                });
-
             modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CheepId1")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -115,6 +94,10 @@ namespace Chirp.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CheepId");
+
+                    b.HasIndex("CheepId1");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -302,34 +285,15 @@ namespace Chirp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AuthorCheep", b =>
+            modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
                 {
                     b.HasOne("Chirp.Core.DomainModel.Cheep", null)
-                        .WithMany()
-                        .HasForeignKey("LikedCheepsCheepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Likes")
+                        .HasForeignKey("CheepId");
 
-                    b.HasOne("Chirp.Core.DomainModel.Author", null)
-                        .WithMany()
-                        .HasForeignKey("LikesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AuthorCheep1", b =>
-                {
                     b.HasOne("Chirp.Core.DomainModel.Cheep", null)
-                        .WithMany()
-                        .HasForeignKey("DislikedCheepsCheepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Chirp.Core.DomainModel.Author", null)
-                        .WithMany()
-                        .HasForeignKey("DislikesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Dislikes")
+                        .HasForeignKey("CheepId1");
                 });
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Cheep", b =>
@@ -401,6 +365,13 @@ namespace Chirp.Infrastructure.Migrations
             modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
                 {
                     b.Navigation("Cheeps");
+                });
+
+            modelBuilder.Entity("Chirp.Core.DomainModel.Cheep", b =>
+                {
+                    b.Navigation("Dislikes");
+
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }
