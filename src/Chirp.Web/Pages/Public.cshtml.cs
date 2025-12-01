@@ -47,7 +47,7 @@ namespace Chirp.Web.Pages
     
             NumberOfCheeps = await _cheepService.GetCheepCount();
             
-            CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage - 1, PageSize);
+            CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, PageSize);
             
             if (User.Identity?.IsAuthenticated == true)
             {
@@ -142,14 +142,14 @@ namespace Chirp.Web.Pages
             {
                 return RedirectToPage();
             }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var user = await _userManager.GetUserAsync(User);
+            if (currentUserId == null)
             {
                 return Challenge();
             }
 
-            await _cheepService.PostCheep(Message, user.UserName ?? "unknown", user.Email ??  "unknown");
+            await _cheepService.PostCheep(Message, currentUserId);
             return RedirectToPage();
         }
     }
