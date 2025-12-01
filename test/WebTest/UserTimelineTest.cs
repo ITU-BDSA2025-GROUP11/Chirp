@@ -48,6 +48,7 @@ public class UserTimelineTest
         var numberOfCheeps = cheeps.Count;
         Assert.Equal(numberOfCheeps, userTimeline.NumberOfCheeps);
     }
+    
     [Theory]
     [InlineData(300, 32)]
     [InlineData(320, 32)]

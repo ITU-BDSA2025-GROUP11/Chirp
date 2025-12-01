@@ -102,7 +102,8 @@ namespace databasetest
             
             var currentUserName = Environment.UserName;
             await _authorRepo.CreateUser(currentUserName, currentUserName + "@example.com");
-            await _cheepRepo.PostCheep("Test Cheep", currentUserName, currentUserName + "@example.com");
+            var author = await _context.Authors.FirstAsync(a => a.UserName == currentUserName);
+            await _cheepRepo.PostCheep("Test Cheep", author!.Id);
 
             var cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
             Assert.Single(cheeps);
@@ -119,7 +120,8 @@ namespace databasetest
             
             var currentUserName = Environment.UserName;
             await _authorRepo.CreateUser(currentUserName, currentUserName + "@example.com");
-            await _cheepRepo.PostCheep(text, currentUserName, currentUserName + "@example.com");
+            var author = await _context.Authors.FirstAsync(a => a.UserName == currentUserName);
+            await _cheepRepo.PostCheep(text, author!.Id);
 
             var cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
             Assert.Empty(cheeps); 
