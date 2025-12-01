@@ -4,11 +4,11 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
+using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
-namespace PagesTest;
+
+namespace WebTest;
 
 
 public class PublicPagesTest
@@ -17,7 +17,8 @@ public class PublicPagesTest
     IAuthorRepository _authorRepo;
     PublicModel publicPage;
     ChirpDbContext _context;
-    private readonly UserManager<Author> _userManager;
+    private readonly UserManager<Author>? _userManager;
+    private readonly ITestOutputHelper? output;
 
     private void Before()
     {
@@ -45,7 +46,7 @@ public class PublicPagesTest
     
     
     [Fact]
-    public async void TotalNumberOfCheepsTest()
+    public async Task TotalNumberOfCheepsTest()
     {
         try
         {
@@ -60,8 +61,7 @@ public class PublicPagesTest
         }
         catch (Exception ex)
         {
-            ITestOutputHelper outputHelper = new TestOutputHelper();
-            outputHelper.WriteLine(ex.Message);
+           this.output.WriteLine(ex.Message);
         }
         
     }

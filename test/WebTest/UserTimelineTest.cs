@@ -4,6 +4,7 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Xunit;
 
 namespace PagesTest;
 
