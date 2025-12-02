@@ -30,6 +30,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<ICheepService, CheepService>();
 
 var clientid = builder.Configuration["authentication:github:clientId"] ?? Environment.GetEnvironmentVariable("CLIENTID");
 var clientsecret = builder.Configuration["authentication:github:clientSecret"] ?? Environment.GetEnvironmentVariable("CLIENTSECRET");

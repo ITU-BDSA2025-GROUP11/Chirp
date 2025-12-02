@@ -1,7 +1,6 @@
 using Chirp.Core.DomainModel;
 using Chirp.Core.DTO;
 using Microsoft.Extensions.Logging;
-using SQLitePCL;
 
 namespace Chirp.Infrastructure;
 
@@ -102,6 +101,11 @@ public class AuthorService : IAuthorService
             FollowedUsernames = author.Following.Select(f => f.UserName).ToList()!
         };
     }
+    
+    public async Task<bool> IsFollowing(string currentUserId, string authorId)
+    {
+        return await _authorRepository.IsFollowing(currentUserId, authorId);
+    }
 
     public async Task<bool> DeleteUser(string username)
     {
@@ -136,11 +140,9 @@ public class AuthorService : IAuthorService
         return user.LikedCheeps.Select(c => c.CheepId).ToList();
     }
 
-    public Task<List<int>> GetDislikedCheepIds(string userId)
+    public async Task<List<int>> GetDislikedCheepIds(string userId)
     {
-        var user = await _context.Authors
-            .Include(a => a.DislikedCheeps)
-            .FirstOrDefaultAsync(a => a.Id == userId);
+        var user = await _authorRepository.FindUserAndDislikedCheeps(userId);
         
         if (user == null) return new List<int>();
         
