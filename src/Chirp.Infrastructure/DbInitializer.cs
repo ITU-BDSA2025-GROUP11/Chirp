@@ -1,5 +1,6 @@
 using Chirp.Core.DomainModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Infrastructure;
 
@@ -9,7 +10,7 @@ public static class DbInitializer
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
         {
-            
+            //var userManager = serviceProvider.GetRequiredService<UserManager<Author>>();
             var a1 = new Author() { UserName = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
             var a2 = new Author() { UserName = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() };
             var a3 = new Author() { UserName = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
@@ -22,8 +23,21 @@ public static class DbInitializer
             var a10 = new Author() { UserName = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", Cheeps = new List<Cheep>() };
             var a11 = new Author() { UserName = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
             var a12 = new Author() { UserName = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
-
-            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
+            var a13 = new Author() { UserName = "ADMIN", Email = "Admin@mail.com", Cheeps = new List<Cheep>() };
+            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13};
+            // await userManager.CreateAsync(a1);
+            // await userManager.CreateAsync(a2);
+            // await userManager.CreateAsync(a3);
+            // await userManager.CreateAsync(a4);
+            // await userManager.CreateAsync(a5);
+            // await userManager.CreateAsync(a6);
+            // await userManager.CreateAsync(a7);
+            // await userManager.CreateAsync(a8);
+            // await userManager.CreateAsync(a9);
+            // await userManager.CreateAsync(a10);
+            // await userManager.CreateAsync(a11, "LetM31n!");
+            // await userManager.CreateAsync(a12, "M32Want_Access");
+            // await userManager.CreateAsync(a13, "Admin11!");
             
             var c1 = new Cheep() { CheepId = 1, Author = a10, Text = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
             var c2 = new Cheep() { CheepId = 2, Author = a10, Text = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
@@ -751,22 +765,53 @@ public static class DbInitializer
                 c641, c642, c643, c644, c645, c646, c647, c648, c649, c650,
                 c651, c652, c653, c654, c655, c656, c657
                 };
-        
-            var passwordHasher = new PasswordHasher<Author>();
-
-            passwordHasher.HashPassword(a1, "LetM31n!");
-            passwordHasher.HashPassword(a2, "M32Want_Access");
-            
-            for (int i = 2; i < authors.Count; i++)
-            {
-                passwordHasher.HashPassword(authors[i], $"password{i}");
-            }
-            
+            AddCheepsToAuthors(cheeps, authors);
             chirpContext.Authors.AddRange(authors); 
             chirpContext.Cheeps.AddRange(cheeps);
         }
         
-        chirpContext.SaveChanges();
+        chirpContext.SaveChangesAsync();
+    }
+    private static void AddCheepsToAuthors(List<Cheep> cheeps, List<Author> authors) 
+    {
+        foreach (Cheep c in cheeps)
+        {
+            var authorName = c.Author.UserName;
+            authors[name2index(authorName)].Cheeps.Add(c);
+        }
+    }
+
+    private static int name2index(string name)
+    {
+        switch (name)
+        {
+            case "Helge":
+                return 0;
+            case "Adrian":
+                return 1;
+            case "Roger Histand":
+                return 2;
+            case "Luanna Muro":
+                return 3;
+            case "Wendell Ballan":
+                return 4;
+            case "Nathan Sirmon":
+                return 5;
+            case "Quintin Sitts":
+                return 6;
+            case "Mellie Yost":
+                return 7;
+            case "Malcolm Janski":
+                return 8;
+            case "Octavio Wagganer":
+                return 9;
+            case "Johnnie Calixto":
+                return 10;
+            case "Jacqualine Gilcoine":
+                return 11;
+        }
+
+        return 0;
     }
 }
 

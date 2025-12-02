@@ -4,22 +4,18 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace PagesTest;
 
-
-public class PublicPagesTest
+public class UserTimelineTest
 {
     ICheepRepository _cheepRepo;
     IAuthorRepository _authorRepo;
-    PublicModel publicPage;
+    UserTimelineModel userTimeline;
     ChirpDbContext _context;
     private readonly UserManager<Author> _userManager;
 
-    private void Before()
+    public void Before()
     {
         var options = new DbContextOptionsBuilder<ChirpDbContext>()
             .UseSqlite("Data Source=:memory:")
@@ -33,39 +29,26 @@ public class PublicPagesTest
         _authorRepo = new AuthorRepository(_context, new LoggerFactory());
     }
     [Fact]
-    public void PublicPageInstantiationTest()
+    public void TestUserTimelineInstantiation()
     {
-        Before();
-        publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
-        {
+        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
             Message = "What should this say"
         };
-        Assert.NotNull(publicPage);
-    }
-    
-    
-    [Fact]
-    public async void TotalNumberOfCheepsTest()
-    {
-        try
-        {
-            Before();
-            publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
-            {
-                Message = "What should this say"
-            };
-            var cheeps = await _cheepRepo.GetCheeps();
-            var numberOfCheeps = cheeps.Count;
-            Assert.Equal(numberOfCheeps, publicPage.NumberOfCheeps);
-        }
-        catch (Exception ex)
-        {
-            ITestOutputHelper outputHelper = new TestOutputHelper();
-            outputHelper.WriteLine(ex.Message);
-        }
         
+        Assert.NotNull(userTimeline);
     }
-
+    [Fact]
+    public async Task TotalNumberOfCheepsTest()
+    {
+        Before();
+        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+            Message = "What should this say"
+        };
+        var cheeps = await _cheepRepo.GetCheeps();
+        var numberOfCheeps = cheeps.Count;
+        Assert.Equal(numberOfCheeps, userTimeline.NumberOfCheeps);
+    }
+    
     [Theory]
     [InlineData(300, 32)]
     [InlineData(320, 32)]
@@ -73,15 +56,14 @@ public class PublicPagesTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
-        {
+        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
             Message = "What should this say"
         };
         var numberOfFullPages =  numberOfCheeps / cheepsPerPage;
         var excessCheeps = numberOfCheeps % cheepsPerPage;
         var expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;
         
-        Assert.Equal(expectedNumberOfPages, publicPage.GetTotalPages(numberOfCheeps, cheepsPerPage));
+        Assert.Equal(expectedNumberOfPages, userTimeline.GetTotalPages(numberOfCheeps, cheepsPerPage));
         
     }
 }
