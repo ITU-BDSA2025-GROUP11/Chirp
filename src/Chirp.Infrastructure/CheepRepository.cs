@@ -7,11 +7,11 @@ namespace Chirp.Infrastructure
 {
     public interface ICheepRepository
     {
-        Task<Author?> GetAuthor(string authorId);
         Task<Author?> GetAuthorAndCheeps(string authorName);
         Task<List<CheepDTO>> GetCheeps();
         Task<Author?> GetAuthorIdAndFollowing(string userId);
         void AddCheep(Cheep cheep);
+        Task<Author?> GetAuthorAndCheepsFromId(string authorId);
         Task SaveChanges();
         Task<bool> IsFollowing(string currentUserId, string authorId);
         Task<Cheep?> GetAuthorCheepAndLikes(int cheepIdToLike);
@@ -38,9 +38,11 @@ namespace Chirp.Infrastructure
             _logger = factory.CreateLogger<CheepRepository>();
         }
 
-        public async Task<Author?> GetAuthor(string authorId)
+        public async Task<Author?> GetAuthorAndCheepsFromId(string authorId)
         {
-            return await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
+            return await _context.Authors
+                .Include(a => a.Cheeps)
+                .FirstOrDefaultAsync(a => a.Id == authorId);
         }
 
         public async Task<Author?> GetAuthorAndCheeps(string authorName)

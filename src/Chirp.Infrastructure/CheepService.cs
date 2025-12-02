@@ -54,9 +54,8 @@ public class CheepService : ICheepService
     public async Task PostCheep(string text, string authorId)
     {
         if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
-        var author = await _cheepRepository.GetAuthor(authorId);
+        var author = await _cheepRepository.GetAuthorAndCheepsFromId(authorId);
         if (author == null) throw new ArgumentException("Author not found");
-        Console.WriteLine("Found author with id: " + authorId);
         var cheep = new Cheep
         {
             Text = text,
@@ -65,7 +64,6 @@ public class CheepService : ICheepService
         };
         author.Cheeps.Add(cheep);
         await _cheepRepository.SaveChanges();
-        Console.WriteLine("Posted new cheep!");
     }      
     
     public async Task<bool> IsFollowing(string currentUserId, string authorId)
