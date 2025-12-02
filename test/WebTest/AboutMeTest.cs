@@ -10,6 +10,7 @@ public class AboutMeUnitTest
 {
     public required CheepRepository cheepRepository;
     public required AuthorRepository authorRepository;
+    public AuthorService _authorService;
     public required ChirpDbContext Context;
     public required SqliteConnection Connection;
 
@@ -22,9 +23,10 @@ public class AboutMeUnitTest
 
         Context = new ChirpDbContext(builder.Options);
         Context.Database.EnsureCreated();
-
+        
         authorRepository = new AuthorRepository(Context, NullLoggerFactory.Instance);
         cheepRepository = new CheepRepository(Context, NullLoggerFactory.Instance);
+        _authorService = new AuthorService(authorRepository, NullLogger<AuthorService>.Instance);
     }
 
     [Fact]
@@ -33,9 +35,9 @@ public class AboutMeUnitTest
         Before();
         var username = "KomUdAfVoresRepoMatthias";
         var email = "matthias@stop";
-        await authorRepository.CreateUser(username, email);
+        await _authorService.CreateUser(username, email);
         
-        var result = await authorRepository.DeleteUser(username);
+        var result = await _authorService.DeleteUser(username);
         
         Assert.True(result);
         
@@ -52,15 +54,15 @@ public class AboutMeUnitTest
         Before();
         var userA = "UserA";
         var userB = "UserB";
-        await authorRepository.CreateUser(userA, "a@a.com");
-        await authorRepository.CreateUser(userB, "b@b.com");
+        await _authorService.CreateUser(userA, "a@a.com");
+        await _authorService.CreateUser(userB, "b@b.com");
         
         var authorA = await Context.Authors.FirstAsync(a => a.UserName == userA);
         var authorB = await Context.Authors.FirstAsync(a => a.UserName == userB);
         
-        await authorRepository.FollowUser(authorA.Id, authorB.Id);
+        await _authorService.FollowUser(authorA.Id, authorB.Id);
         
-        await authorRepository.DeleteUser(userA);
+        await _authorService.DeleteUser(userA);
         
         var deletedUser = await Context.Authors
             .Include(a => a.Following)
@@ -75,7 +77,7 @@ public class AboutMeUnitTest
     {
         Before();
 
-        var result = await authorRepository.DeleteUser("GivMigDrikkePenge");
+        var result = await _authorService.DeleteUser("GivMigDrikkePenge");
 
         Assert.False(result);
     }
@@ -85,8 +87,8 @@ public class AboutMeUnitTest
     {
         Before();
 
-        await authorRepository.CreateUser("Silas", "Silas@ta.com");
-        await authorRepository.DeleteUser("Silas");
+        await _authorService.CreateUser("Silas", "Silas@ta.com");
+        await _authorService.DeleteUser("Silas");
 
         var info = await authorRepository.GetUserInfo("Silas");
         Assert.Null(info);
@@ -97,15 +99,15 @@ public class AboutMeUnitTest
     {
         Before();
 
-        await authorRepository.CreateUser("A", "a@x");
-        await authorRepository.CreateUser("B", "b@x");
+        await _authorService.CreateUser("A", "a@x");
+        await _authorService.CreateUser("B", "b@x");
 
         var a = await Context.Authors.FirstAsync(x => x.UserName == "A");
         var b = await Context.Authors.FirstAsync(x => x.UserName == "B");
 
-        await authorRepository.FollowUser(a.Id, b.Id);
+        await _authorService.FollowUser(a.Id, b.Id);
 
-        await authorRepository.DeleteUser("B");
+        await _authorService.DeleteUser("B");
 
         var updatedA = await Context.Authors
             .Include(x => x.Following)
@@ -118,7 +120,7 @@ public class AboutMeUnitTest
     {
         Before();
         
-        await authorRepository.CreateUser("Rotte", "rotte@mail.com");
+        await _authorService.CreateUser("Rotte", "rotte@mail.com");
         var rotte = await Context.Authors.FirstAsync(a => a.UserName == "Rotte");
         
         Context.Cheeps.Add(new Cheep
@@ -129,7 +131,7 @@ public class AboutMeUnitTest
         });
         await Context.SaveChangesAsync();
         
-        await authorRepository.DeleteUser("Rotte");
+        await _authorService.DeleteUser("Rotte");
 
         var cheep = await Context.Cheeps
             .Include(c => c.Author)

@@ -4,6 +4,7 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Identity.Client;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -17,7 +18,10 @@ public class PublicPagesTest
     IAuthorRepository _authorRepo;
     PublicModel publicPage;
     ChirpDbContext _context;
+    
     private readonly UserManager<Author> _userManager;
+    public required CheepService _cheepService;
+    public required AuthorService _authorService;
 
     private void Before()
     {
@@ -31,12 +35,14 @@ public class PublicPagesTest
 
         _cheepRepo = new CheepRepository(_context, new LoggerFactory());
         _authorRepo = new AuthorRepository(_context, new LoggerFactory());
+        _authorService = new AuthorService(_authorRepo, NullLogger<AuthorService>.Instance);
+        _cheepService = new CheepService(_cheepRepo, NullLogger<CheepService>.Instance);
     }
     [Fact]
     public void PublicPageInstantiationTest()
     {
         Before();
-        publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
+        publicPage = new PublicModel(_cheepService, _authorService, _userManager)
         {
             Message = "What should this say"
         };
@@ -50,7 +56,7 @@ public class PublicPagesTest
         try
         {
             Before();
-            publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
+            publicPage = new PublicModel(_cheepService, _authorService, _userManager)
             {
                 Message = "What should this say"
             };
@@ -73,7 +79,7 @@ public class PublicPagesTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        publicPage = new PublicModel(_cheepRepo, _authorRepo, _userManager)
+        publicPage = new PublicModel(_cheepService, _authorService, _userManager)
         {
             Message = "What should this say"
         };

@@ -4,6 +4,7 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace PagesTest;
 
@@ -13,7 +14,10 @@ public class UserTimelineTest
     IAuthorRepository _authorRepo;
     UserTimelineModel userTimeline;
     ChirpDbContext _context;
+    
     private readonly UserManager<Author> _userManager;
+    public required CheepService _cheepService;
+    public required AuthorService _authorService;
 
     public void Before()
     {
@@ -27,11 +31,13 @@ public class UserTimelineTest
 
         _cheepRepo = new CheepRepository(_context, new LoggerFactory());
         _authorRepo = new AuthorRepository(_context, new LoggerFactory());
+        _authorService = new AuthorService(_authorRepo, NullLogger<AuthorService>.Instance);
+        _cheepService = new CheepService(_cheepRepo, NullLogger<CheepService>.Instance);
     }
     [Fact]
     public void TestUserTimelineInstantiation()
     {
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+        userTimeline = new UserTimelineModel(_cheepService, _authorService, _userManager) {
             Message = "What should this say"
         };
         
@@ -41,7 +47,7 @@ public class UserTimelineTest
     public async Task TotalNumberOfCheepsTest()
     {
         Before();
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+        userTimeline = new UserTimelineModel(_cheepService, _authorService, _userManager) {
             Message = "What should this say"
         };
         var cheeps = await _cheepRepo.GetCheeps();
@@ -56,7 +62,7 @@ public class UserTimelineTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+        userTimeline = new UserTimelineModel(_cheepService, _authorService, _userManager) {
             Message = "What should this say"
         };
         var numberOfFullPages =  numberOfCheeps / cheepsPerPage;

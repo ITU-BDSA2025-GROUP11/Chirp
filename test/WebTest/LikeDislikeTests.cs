@@ -13,6 +13,9 @@ public class LikeDislikeTests
     public required AuthorRepository AuthorRepository;
     public required ChirpDbContext Context;
     public required SqliteConnection Connection;
+    public required CheepService _cheepService;
+    public required AuthorService _authorService;
+    
     private readonly string _cheepAMessage = "a message";
     private readonly string _authorAName = "a";
     private readonly string _authorAEmail = "a@a.com";
@@ -36,32 +39,34 @@ public class LikeDislikeTests
         Connection.Open();
 
         var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(Connection);
-
         Context = new ChirpDbContext(builder.Options);
         Context.Database.EnsureCreated();
 
         CheepRepository = new CheepRepository(Context, NullLoggerFactory.Instance);
         AuthorRepository = new AuthorRepository(Context, NullLoggerFactory.Instance);
+        
+        _authorService = new AuthorService(AuthorRepository, NullLogger<AuthorService>.Instance);
+        _cheepService = new CheepService(CheepRepository, NullLogger<CheepService>.Instance);
     }
 
     private async Task CreateAuthorsAndCheeps()
     {
         // user and cheep a
-        await AuthorRepository.CreateUser(_authorAName, _authorAEmail);
+        await _authorService.CreateUser(_authorAName, _authorAEmail);
         authorA = await Context.Authors.FirstAsync(a => a.UserName == _authorAName);
-        await CheepRepository.PostCheep(_cheepAMessage, authorA.Id);
+        await _cheepService.PostCheep(_cheepAMessage, authorA.Id);
         cheepA = await Context.Cheeps.FirstAsync(c => c.Author ==  authorA);
         
         // user and cheep b
-        await AuthorRepository.CreateUser(_authorBName, _authorBEmail);
+        await _authorService.CreateUser(_authorBName, _authorBEmail);
         authorB = await Context.Authors.FirstAsync(a => a.UserName == _authorBName);
-        await CheepRepository.PostCheep(_cheepBMessage, authorB.Id);
+        await _cheepService.PostCheep(_cheepBMessage, authorB.Id);
         cheepB = await Context.Cheeps.FirstAsync(c => c.Author ==  authorB);
         
         // user and cheep c
-        await AuthorRepository.CreateUser(_authorCName, _authorCEmail);
+        await _authorService.CreateUser(_authorCName, _authorCEmail);
         authorC = await Context.Authors.FirstAsync(a => a.UserName == _authorCName);
-        await CheepRepository.PostCheep(_cheepCMessage, authorC.Id);
+        await _cheepService.PostCheep(_cheepCMessage, authorC.Id);
         cheepC = await Context.Cheeps.FirstAsync(c => c.Author ==  authorC);
         
     }
@@ -71,7 +76,7 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.LikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.LikePost(authorA.Id, cheepB.CheepId);
         Assert.Contains(authorA, cheepB.Likes);
         Assert.Contains(cheepB, authorA.LikedCheeps);
     }
@@ -80,8 +85,8 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.LikePost(authorA.Id, cheepB.CheepId);
-        await CheepRepository.RemoveLike(authorA.Id, cheepB.CheepId);
+        await _cheepService.LikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.RemoveLike(authorA.Id, cheepB.CheepId);
         Assert.DoesNotContain(authorA, cheepB.Likes);
         Assert.DoesNotContain(cheepB, authorA.LikedCheeps);
     }
@@ -91,10 +96,10 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.LikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.LikePost(authorA.Id, cheepB.CheepId);
         Assert.Single(cheepB.Likes);
         Assert.Single(authorA.LikedCheeps);
-        await CheepRepository.LikePost(authorC.Id, cheepB.CheepId);
+        await _cheepService.LikePost(authorC.Id, cheepB.CheepId);
         Assert.Equal(2, cheepB.Likes.Count);
     }
 
@@ -103,7 +108,7 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepB.CheepId);
         Assert.Empty(cheepB.Likes);
         Assert.Empty(authorA.LikedCheeps);
     }
@@ -112,10 +117,10 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.LikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.LikePost(authorA.Id, cheepB.CheepId);
         Assert.Single(cheepB.Likes);
         Assert.Single(authorA.LikedCheeps);
-        await CheepRepository.RemoveLike(authorA.Id, cheepB.CheepId);
+        await _cheepService.RemoveLike(authorA.Id, cheepB.CheepId);
         Assert.Empty(cheepB.Likes);
         Assert.Empty(authorA.LikedCheeps);
     }
@@ -124,7 +129,7 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepB.CheepId);
         Assert.Contains(authorA, cheepB.Dislikes);
         Assert.Contains(cheepB, authorA.DislikedCheeps);
     }
@@ -133,8 +138,8 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorA.Id, cheepB.CheepId);
-        await CheepRepository.RemoveDislike(authorA.Id, cheepB.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.RemoveDislike(authorA.Id, cheepB.CheepId);
         Assert.DoesNotContain(authorA, cheepB.Dislikes);
         Assert.DoesNotContain(cheepB, authorA.DislikedCheeps);
     }
@@ -144,10 +149,10 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepB.CheepId);
         Assert.Single(cheepB.Dislikes);
         Assert.Single(authorA.DislikedCheeps);
-        await CheepRepository.DislikePost(authorC.Id, cheepB.CheepId);
+        await _cheepService.DislikePost(authorC.Id, cheepB.CheepId);
         Assert.Equal(2, cheepB.Dislikes.Count);
     }
     
@@ -156,7 +161,7 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.LikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.LikePost(authorA.Id, cheepB.CheepId);
         Assert.Empty(cheepB.Dislikes);
         Assert.Empty(authorA.DislikedCheeps);
     }
@@ -165,10 +170,10 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorA.Id, cheepB.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepB.CheepId);
         Assert.Single(cheepB.Dislikes);
         Assert.Single(authorA.DislikedCheeps);
-        await CheepRepository.RemoveDislike(authorA.Id, cheepB.CheepId);
+        await _cheepService.RemoveDislike(authorA.Id, cheepB.CheepId);
         Assert.Empty(cheepB.Dislikes);
         Assert.Empty(authorA.DislikedCheeps);
     }
@@ -178,7 +183,7 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorC.Id, cheepC.CheepId);
+        await _cheepService.DislikePost(authorC.Id, cheepC.CheepId);
         Assert.Empty(cheepC.Likes);
         Assert.Empty(authorC.LikedCheeps);
     }
@@ -188,7 +193,7 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorC.Id, cheepC.CheepId);
+        await _cheepService.DislikePost(authorC.Id, cheepC.CheepId);
         Assert.Empty(cheepC.Dislikes);
         Assert.Empty(authorC.DislikedCheeps);
     }
@@ -197,8 +202,8 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.LikePost(authorB.Id, cheepC.CheepId);
-        await CheepRepository.LikePost(authorB.Id, cheepC.CheepId);
+        await _cheepService.LikePost(authorB.Id, cheepC.CheepId);
+        await _cheepService.LikePost(authorB.Id, cheepC.CheepId);
         Assert.Single(cheepC.Likes);
         Assert.Single(authorB.LikedCheeps);
     }
@@ -208,8 +213,8 @@ public class LikeDislikeTests
     {
         Before();
         await CreateAuthorsAndCheeps();
-        await CheepRepository.DislikePost(authorA.Id, cheepC.CheepId);
-        await CheepRepository.DislikePost(authorA.Id, cheepC.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepC.CheepId);
+        await _cheepService.DislikePost(authorA.Id, cheepC.CheepId);
         Assert.Single(cheepC.Dislikes);
         Assert.Single(authorA.DislikedCheeps);
     }
