@@ -7,7 +7,8 @@ namespace Chirp.Infrastructure;
 
 public interface IAuthorRepository
 {
-    Task CreateUser(string authorName, string authorEmail);
+    Task AddUser(Author author);
+    public Task<bool> UserExists(string authorName);
     Task<List<string>> GetFollowedIds(string userId);
     Task FollowUser(string currentUserId, string authorIdToFollow);
     Task UnfollowUser(string currentUserId, string authorIdToUnfollow);
@@ -30,23 +31,15 @@ public class AuthorRepository : IAuthorRepository
         _logger = factory.CreateLogger<AuthorRepository>();
     }
     
-    public async Task CreateUser(string authorName, string authorEmail)
+    public async Task AddUser(Author author)
     {
-        if (string.IsNullOrEmpty(authorName))
-            return;
-
-        if (await _context.Authors.AnyAsync(a => a.UserName == authorName))
-            return;
-
-        var author = new Author
-        {
-            UserName = authorName,
-            Email = authorEmail,
-            Cheeps = new List<Cheep>()
-        };
-
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> UserExists(string authorName)
+    {
+        return await _context.Authors.AnyAsync(a => a.UserName == authorName);
     }
         
     public async Task FollowUser(string currentUserId, string authorIdToFollow)
