@@ -48,30 +48,59 @@ public class AuthorService : IAuthorService
         await _authorRepository.AddUser(author);
     }
     
-    Task<List<string>> GetFollowedIds(string userId)
+    public async Task<List<string>> GetFollowedIds(string userId)
     {
-        var user = await _context.Authors
-            .Include(a => a.Following)
-            .FirstOrDefaultAsync(a => a.Id == userId);
-
+        var user = await _authorRepository.FindUserAndFollowing(userId);
+        
         if (user == null) return new List<string>();
 
-        return user.Following.Select(a => a.Id).ToList();
+        return _authorRepository.GetFollowedIds(user);
     }
 
-    Task FollowUser(string currentUserId, string authorIdToFollow)
+    public async Task FollowUser(string currentUserId, string authorIdToFollow)
     {
-        
+        var userToFollow = await _authorRepository.FindUser(authorIdToFollow);
+
+        var currentUser = await _authorRepository.FindUserAndFollowing(currentUserId);
+
+        if (userToFollow == null || currentUser == null) return;
+
+        if (!currentUser.Following.Contains(userToFollow))
+        {
+            currentUser.Following.Add(userToFollow);
+            await _authorRepository.SaveChanges();
+        }
     }
 
-    Task UnfollowUser(string currentUserId, string authorIdToUnfollow)
+    public async Task UnfollowUser(string currentUserId, string authorIdToUnfollow)
     {
-        
-    }
+        var userToUnfollow = await _authorRepository.FindUser(authorIdToUnfollow);
 
-    Task<bool> IsFollowing(string currentUserId, string authorId)
-    {
+        var currentUser = await _authorRepository.FindUserAndFollowing(currentUserId);
         
+        if (userToUnfollow == null || currentUser == null) return;
+
+        currentUser.Following.Remove(userToUnfollow);
+        await _authorRepository.SaveChanges();
+    }
+    
+    public async Task<UserInfoDTO?> GetUserInfo(string username)
+    {
+        var author = await _authorRepository.GetUserInfo(username);
+
+        if (author == null) return null;
+
+        return new UserInfoDTO
+        {
+            Name = author.UserName ?? string.Empty,
+            Email = author.Email ?? string.Empty,
+                
+            Cheeps = author.Cheeps
+                .OrderByDescending(c => c.TimeStamp)
+                .Select(c => EntityToDTO.ToDTO(c))
+                .ToList(),
+            FollowedUsernames = author.Following.Select(f => f.UserName).ToList()!
+        };
     }
 
     Task<bool> DeleteUser(string username)
@@ -79,11 +108,11 @@ public class AuthorService : IAuthorService
         
     }
 
-    Task<bool> IsUserDeleted(string username)
+    public async Task<bool> IsUserDeleted(string username)
     {
-        return await GetUserInfo(username) == null;
+        return await IsUserDeleted(username);
     }
-
+    
     public Task<List<int>> GetLikedCheepIds(string userId)
     {
         
@@ -93,4 +122,6 @@ public class AuthorService : IAuthorService
     {
         
     }
+
+    
 }
