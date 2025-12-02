@@ -119,8 +119,6 @@ namespace Chirp.Infrastructure
                 .FirstOrDefaultAsync(a => a.UserName == authorName);
         }
         
-        
-        
         public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, List<String> followingIds)
         {
             return await _context.Cheeps
