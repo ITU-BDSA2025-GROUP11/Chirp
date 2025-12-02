@@ -10,16 +10,16 @@ namespace Chirp.Web.Pages
 {
     public class AboutMeModel : PageModel
     {
-        private readonly ICheepRepository _cheepRepository;
-        private readonly IAuthorRepository  _authorRepository;
+        private readonly ICheepService _cheepService;
+        private readonly IAuthorService  _authorService;
         private readonly SignInManager<Author> _signInManager;
 
         public UserInfoDTO? UserInfo { get; private set; }
 
-        public AboutMeModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, SignInManager<Author> signInManager)
+        public AboutMeModel(ICheepService cheepService, IAuthorService authorService, SignInManager<Author> signInManager)
         {
-            _cheepRepository = cheepRepository;
-            _authorRepository = authorRepository;
+            _cheepService = cheepService;
+            _authorService = authorService;
             _signInManager = signInManager;
         }
 
@@ -29,7 +29,7 @@ namespace Chirp.Web.Pages
 
             if (username != null)
             {
-                UserInfo = await _authorRepository.GetUserInfo(username);
+                UserInfo = await _authorService.GetUserInfo(username);
             }
             
             return Page();
@@ -41,7 +41,7 @@ namespace Chirp.Web.Pages
 
             if (username != null)
             {
-                await _authorRepository.DeleteUser(username);
+                await _authorService.DeleteUser(username);
                 await _signInManager.SignOutAsync();
             }
 

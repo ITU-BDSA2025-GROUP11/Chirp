@@ -18,6 +18,7 @@ public interface IAuthorRepository
     Task<Author?> GetUserInfo(string username);
     Task<Author?> GetAllUserInfo(string username);
     Task<bool> IsUserDeleted(string username);
+    Task<Author?> FindUserAndDislikedCheeps(string authorId);
 }
 
 public class AuthorRepository : IAuthorRepository

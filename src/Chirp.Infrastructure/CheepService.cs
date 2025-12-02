@@ -21,10 +21,10 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    CheepRepository _cheepRepository;
+    ICheepRepository _cheepRepository;
     ILogger<CheepService> _logger;
 
-    public CheepService(CheepRepository cheepRepository, ILogger<CheepService> logger)
+    public CheepService(ICheepRepository cheepRepository, ILogger<CheepService> logger)
     {
         _cheepRepository = cheepRepository;
         _logger = logger;

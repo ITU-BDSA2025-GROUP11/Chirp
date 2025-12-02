@@ -8,6 +8,7 @@ public interface IAuthorService
 {
     Task CreateUser(string authorName, string authorEmail);
     Task<List<string>> GetFollowedIds(string userId);
+    Task<UserInfoDTO?> GetUserInfo(string username);
     Task FollowUser(string currentUserId, string authorIdToFollow);
     Task UnfollowUser(string currentUserId, string authorIdToUnfollow);
     Task<bool> IsFollowing(string currentUserId, string authorId);  
@@ -19,11 +20,11 @@ public interface IAuthorService
 
 public class AuthorService : IAuthorService
 {
-    private readonly AuthorRepository _authorRepository;
+    private readonly IAuthorRepository _authorRepository;
     private readonly ILogger<AuthorService> _logger;
 
 
-    public AuthorService(AuthorRepository authorRepository, ILogger<AuthorService> logger)
+    public AuthorService(IAuthorRepository authorRepository, ILogger<AuthorService> logger)
     {
         _authorRepository = authorRepository;
         _logger = logger;
