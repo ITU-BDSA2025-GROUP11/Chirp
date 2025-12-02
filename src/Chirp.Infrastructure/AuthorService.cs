@@ -54,7 +54,7 @@ public class AuthorService : IAuthorService
         
         if (user == null) return new List<string>();
 
-        return _authorRepository.GetFollowedIds(user);
+        return user.Following.Select(a => a.Id).ToList();
     }
 
     public async Task FollowUser(string currentUserId, string authorIdToFollow)
@@ -103,9 +103,23 @@ public class AuthorService : IAuthorService
         };
     }
 
-    Task<bool> DeleteUser(string username)
+    public async Task<bool> DeleteUser(string username)
     {
+        var author = await _authorRepository.GetAllUserInfo(username);
+
+        if (author == null) return false;
         
+        author.Following.Clear();
+        author.Followers.Clear();
+
+        var uniqueId = Guid.NewGuid().ToString().Substring(0, 8);
+        author.UserName = $"DeletedUser-{uniqueId}";
+        author.NormalizedUserName = $"DELETEDUSER-{uniqueId}";
+        author.Email = $"deleted-{uniqueId}@chirp.db";
+        author.NormalizedEmail = $"DELETED-{uniqueId}@CHIRP.DB";
+        
+        await _authorRepository.SaveChanges();
+        return true;
     }
 
     public async Task<bool> IsUserDeleted(string username)
@@ -113,14 +127,24 @@ public class AuthorService : IAuthorService
         return await IsUserDeleted(username);
     }
     
-    public Task<List<int>> GetLikedCheepIds(string userId)
+    public async Task<List<int>> GetLikedCheepIds(string userId)
     {
+        var user = await _authorRepository.FindUserAndLikedCheeps(userId);
         
+        if (user == null) return new List<int>();
+        
+        return user.LikedCheeps.Select(c => c.CheepId).ToList();
     }
 
     public Task<List<int>> GetDislikedCheepIds(string userId)
     {
+        var user = await _context.Authors
+            .Include(a => a.DislikedCheeps)
+            .FirstOrDefaultAsync(a => a.Id == userId);
         
+        if (user == null) return new List<int>();
+        
+        return user.DislikedCheeps.Select(a => a.CheepId).ToList();
     }
 
     
