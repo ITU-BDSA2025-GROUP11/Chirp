@@ -30,12 +30,12 @@ namespace Chirp.Infrastructure
             _logger = factory.CreateLogger<CheepRepository>();
         }
 
-        public async Task<Author?> FindAuthor(string authorId)
+        public async Task<Author?> GetAuthor(string authorId)
         {
             return await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
         }
 
-        public async Task<Author?> FindAuthorAndCheeps(string authorName)
+        public async Task<Author?> GetAuthorAndCheeps(string authorName)
         {
             return await _context.Authors
                 .Include(a => a.Cheeps)
@@ -65,6 +65,21 @@ namespace Chirp.Infrastructure
         {
             return await _context.Authors
                 .AnyAsync(a => a.Id == currentUserId && a.Following.Any(f => f.Id == authorId));
+        }
+        
+        public async Task<Cheep?> GetAuthorCheepAndLikes(int cheepIdToLike)
+        {
+            return await _context.Cheeps
+                .Include(c => c.Author)
+                .Include(c => c.Likes)
+                .FirstOrDefaultAsync(a => a.CheepId == cheepIdToLike);
+        }
+
+        public async Task<Author?> GetAuthorAndLikedCheeps(string userId)
+        {
+            return await _context.Authors
+                .Include(a  => a.LikedCheeps)
+                .FirstOrDefaultAsync(a => a.Id == userId);
         }
 
         public async Task LikePost(string currentUserId, int cheepIdToLike)
