@@ -53,7 +53,7 @@ namespace Chirp.Web.Pages
             {
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (currentUserId != null){
-                    ViewData["Following"] = await _authorService.GetAuthor(currentUserId);
+                    ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
                     ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
                     ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
                 }

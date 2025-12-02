@@ -24,6 +24,7 @@ namespace Chirp.Infrastructure
         Task<List<string>> GetFollowedIds(string userId);
         Task<int> CountCheeps(List<string> followingIds);
         IQueryable<Cheep> GetAllCheeps();
+        Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, List<String> followingIds);
     }
 
     public class CheepRepository : ICheepRepository

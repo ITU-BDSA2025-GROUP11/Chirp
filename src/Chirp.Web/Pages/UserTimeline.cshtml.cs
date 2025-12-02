@@ -10,8 +10,8 @@ namespace Chirp.Web.Pages
 {
     public class UserTimelineModel : PaginationModel
     {
-        private readonly IAuthorRepository _authorService;
-        private readonly ICheepRepository _cheepService;
+        private readonly IAuthorService _authorService;
+        private readonly ICheepService _cheepService;
         private readonly UserManager<Author> _userManager;
         
         public List<string> Following { get; set; } = new();
@@ -22,7 +22,7 @@ namespace Chirp.Web.Pages
         
         [BindProperty]
         public required string Message { get; set; } = "";
-        public UserTimelineModel(ICheepRepository cheepService,IAuthorRepository authorService, UserManager<Author> userManager)
+        public UserTimelineModel(ICheepService cheepService,IAuthorService authorService, UserManager<Author> userManager)
         {
             _authorService = authorService;
             _cheepService = cheepService;
@@ -54,7 +54,7 @@ namespace Chirp.Web.Pages
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (currentUserId != null)
                 {
-                    ViewData["Following"] = await _authorService.FindUser(currentUserId);
+                    ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
                     ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
                     ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
                 }
