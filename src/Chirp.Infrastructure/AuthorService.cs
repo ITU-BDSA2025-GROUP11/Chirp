@@ -1,10 +1,13 @@
+using Chirp.Core.DomainModel;
 using Chirp.Core.DTO;
 using Microsoft.Extensions.Logging;
+using SQLitePCL;
 
 namespace Chirp.Infrastructure;
 
 public interface IAuthorService
 {
+    Task CreateUser(string authorName, string authorEmail);
     Task<List<string>> GetFollowedIds(string userId);
     Task FollowUser(string currentUserId, string authorIdToFollow);
     Task UnfollowUser(string currentUserId, string authorIdToUnfollow);
@@ -26,10 +29,34 @@ public class AuthorService : IAuthorService
         _authorRepository = authorRepository;
         _logger = logger;
     }
+
+    public async Task CreateUser(string authorName, string authorEmail)
+    {
+        if (string.IsNullOrEmpty(authorName))
+            return;
+
+        if (await _authorRepository.UserExists(authorName)) 
+            return;
+        
+        var author = new Author
+        {
+            UserName = authorName,
+            Email = authorEmail,
+            Cheeps = new List<Cheep>()
+        };
+
+        await _authorRepository.AddUser(author);
+    }
     
     Task<List<string>> GetFollowedIds(string userId)
     {
-        
+        var user = await _context.Authors
+            .Include(a => a.Following)
+            .FirstOrDefaultAsync(a => a.Id == userId);
+
+        if (user == null) return new List<string>();
+
+        return user.Following.Select(a => a.Id).ToList();
     }
 
     Task FollowUser(string currentUserId, string authorIdToFollow)
