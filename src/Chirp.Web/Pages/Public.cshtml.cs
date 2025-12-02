@@ -10,8 +10,8 @@ namespace Chirp.Web.Pages
 {
     public class PublicModel : PaginationModel
     {
-        private readonly IAuthorRepository _authorService;
-        private readonly ICheepRepository _cheepService;
+        private readonly IAuthorService _authorService;
+        private readonly ICheepService _cheepService;
         private readonly UserManager<Author> _userManager;
         
         public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
@@ -30,7 +30,7 @@ namespace Chirp.Web.Pages
 
         [BindProperty] public required string Message { get; set; } = "";
 
-        public PublicModel(ICheepRepository cheepService, IAuthorRepository authorService, UserManager<Author> userManager)
+        public PublicModel(ICheepService cheepService, IAuthorService authorService, UserManager<Author> userManager)
         {
             _authorService = authorService;
             _cheepService = cheepService;
@@ -53,7 +53,7 @@ namespace Chirp.Web.Pages
             {
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (currentUserId != null){
-                    ViewData["Following"] = await _authorService.FindUser(currentUserId);
+                    ViewData["Following"] = await _authorService.GetAuthor(currentUserId);
                     ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
                     ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
                 }

@@ -1,5 +1,6 @@
 using Chirp.Core.DomainModel;
 using Chirp.Core.DTO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure;
@@ -49,7 +50,6 @@ public class CheepService : ICheepService
 
         }
     }        
-    Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);
 
     public async Task PostCheep(string text, string authorId)
     {
@@ -100,14 +100,91 @@ public class CheepService : ICheepService
         cheepToUnLike.Likes.Remove(userUnliking);
         await _cheepRepository.SaveChanges();
     }
+
+    public async Task DislikePost(string currentUserId, int cheepIdToDislike)
+    {
+        var cheepToDislike = await _cheepRepository.GetAuthorCheepAndDislikes(cheepIdToDislike);
+        var userDisliking = await _cheepRepository.GetAuthorAndDislikedCheeps(currentUserId);
+        
+        if (cheepToDislike == null || userDisliking == null) return;
+        if (cheepToDislike.Author == userDisliking) return;
+        if (userDisliking.DislikedCheeps.Contains(cheepToDislike) || cheepToDislike.Dislikes.Contains(userDisliking)) return;
+            
+        userDisliking.DislikedCheeps.Add(cheepToDislike);
+        cheepToDislike.Dislikes.Add(userDisliking);
+        await _cheepRepository.SaveChanges();
+    }
+
+    public async Task RemoveDislike(string currentUserId, int cheepIdToUndislike)
+    {
+        var cheepToUndislike = await _cheepRepository.GetAuthorCheepAndDislikes(cheepIdToUndislike);
+        var userUndisliking = await _cheepRepository.GetAuthorAndDislikedCheeps(currentUserId);
+            
+        if (cheepToUndislike == null || userUndisliking == null) return;
+        if (!cheepToUndislike.Dislikes.Contains(userUndisliking) || !userUndisliking.DislikedCheeps.Contains(cheepToUndislike)) return;
+            
+        userUndisliking.DislikedCheeps.Remove(cheepToUndislike);
+        cheepToUndislike.Dislikes.Remove(userUndisliking);
+        await _cheepRepository.SaveChanges();
+    }
+
+
+    public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
+    {
+        page--;
+        var author = await _cheepRepository.GetAuthorIdAndFollowing(authorName);
+
+        if (author == null) return new List<CheepDTO>();
+
+        var followingIds = author.Following.Select(a => a.Id).ToList();
+        followingIds.Add(author.Id);
+
+        return await _cheepRepository.GetCheepsFromAuthorAndFollowing(page, pageSize, followingIds);
+    }
+
+    public Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
+    {
+        currentPage--;
+        IQueryable<Cheep> query = _cheepRepository.GetCheepsFromAuthor();
+
+        if (!string.IsNullOrEmpty(author))
+            query = query.Where(c => c.Author.UserName == author);
+
+        return _cheepRepository.GetPaginatedCheeps(currentPage, pageSize, query);
+    }
     
-    public Task DislikePost(string currentUserId, int cheepIdToDislike);
-    public Task RemoveDislike(string currentUserId, int cheepIdToUndislike);
+    public async Task<List<string>> GetFollowedIds(string userId)
+    {
+        var user = await _cheepRepository.GetAuthorIdAndFollowing(userId);
+
+        if (user == null) return new List<string>();
+
+        return user.Following.Select(a => a.Id).ToList();
+    }
+
+    public async Task<int> GetCheepCountFromAuthorAndFollowing(string authorName)
+    {
+        var author = await _cheepRepository.GetAuthorNameAndFollowing(authorName);
+
+        if (author == null) return 0;
+
+        var followingIds = author.Following.Select(a => a.Id).ToList();
+        followingIds.Add(author.Id); 
+
+        return await _cheepRepository.CountCheeps(followingIds);
+    }
+
+    public async Task<int> GetCheepCount(string? author = null)
+    {
+        IQueryable<Cheep> query = _cheepRepository.GetAllCheeps();
     
+        if (!string.IsNullOrEmpty(author))
+        {
+            query = query.Where(c => c.Author.UserName == author);
+        }
     
-    Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
-    Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
-    Task<int> GetCheepCount(string? author = null);
+        return await query.CountAsync();
+    }
     
     
 }
