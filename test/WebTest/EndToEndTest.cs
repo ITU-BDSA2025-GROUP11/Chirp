@@ -63,7 +63,7 @@ public class EndToEndTest : PageTest
         _server.BeginOutputReadLine();
         _server.BeginErrorReadLine();
 
-        Thread.Sleep(5000); // wait for it to start
+        Thread.Sleep(25000); // wait for it to start
     }
 
     [SetUp]
