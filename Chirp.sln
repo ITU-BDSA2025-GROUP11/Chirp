@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTest", "test\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebTest", "WebTest", "{37F29A04-9D3B-47AB-B8C7-FE53A0D21462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagesTest", "test\WebTest\PagesTest.csproj", "{D54005E1-FF67-4557-BBDA-762EB1F06E8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTest", "test\WebTest\WebTest.csproj", "{D54005E1-FF67-4557-BBDA-762EB1F06E8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseTest", "DatabaseTest", "{3360D44C-465D-351F-220E-8C2B2577BE69}"
 EndProject

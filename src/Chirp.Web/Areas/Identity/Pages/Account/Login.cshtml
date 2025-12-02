@@ -1,0 +1,71 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5 ">
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"
+                    placeholder="name@example.com" />
+                <label asp-for="Input.Email" class="form-label">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password"
+                    aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password" class="form-label">Password</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col">
+
+                    <div class="checkbox mb-3">
+                        <label asp-for="Input.RememberMe" class="form-label">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                </div>
+            </div>
+            <div>
+                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            </div>
+        </form>
+
+        @if (Model.ExternalLogins?.Count > 0)
+        {
+            <hr />
+
+            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post"
+                class="form-horizontal">
+                <div>
+                    <p>
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="w-100 btn btn-lg btn-primary" name="provider" value="@provider.Name"
+                                title="Log in using your @provider.DisplayName account">Log in with
+                                @provider.DisplayName</button>
+                        }
+                    </p>
+                </div>
+            </form>
+        }
+
+        <div class="d-flex justify-content-center gap-1">
+            <p>Don't have an account?</p>
+            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register here</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
