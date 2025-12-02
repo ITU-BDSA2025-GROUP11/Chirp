@@ -149,6 +149,4 @@ public class AuthorService : IAuthorService
         
         return user.DislikedCheeps.Select(a => a.CheepId).ToList();
     }
-
-    
 }
