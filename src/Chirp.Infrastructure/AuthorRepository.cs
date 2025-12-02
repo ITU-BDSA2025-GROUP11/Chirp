@@ -45,11 +45,6 @@ public class AuthorRepository : IAuthorRepository
     {
         return await _context.Authors.AnyAsync(a => a.UserName == authorName);
     }
-    
-    public List<string> GetFollowedIds(Author author)
-    {
-        return author.Following.Select(a => a.Id).ToList();
-    }
 
     public async Task SaveChanges()
     {
@@ -68,6 +63,20 @@ public class AuthorRepository : IAuthorRepository
             .FirstOrDefaultAsync(a => a.Id == authorId);
     }
 
+    public async Task<Author?> FindUserAndLikedCheeps(string authorId)
+    {
+        return await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Id == authorId);
+    }
+
+    public async Task<Author?> FindUserAndDislikedCheeps(string authorId)
+    {
+        return await _context.Authors
+            .Include(a => a.DislikedCheeps)
+            .FirstOrDefaultAsync(a => a.Id == authorId);
+    }
+    
     public async Task<bool> IsFollowing(string currentUserId, string authorId)
     {
         return await _context.Authors
@@ -81,6 +90,15 @@ public class AuthorRepository : IAuthorRepository
             .Include(a => a.Cheeps)
             .Include(a => a.Following)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Author?> GetAllUserInfo(string username)
+    {
+        return await _context.Authors
+            .Include(a => a.Following)
+            .Include(a => a.Followers)
+            .Include(a => a.Cheeps)
+            .FirstOrDefaultAsync(a => a.UserName == username);
     }
     
     public async Task<List<int>> GetLikedCheepIds(string userId)
@@ -107,28 +125,5 @@ public class AuthorRepository : IAuthorRepository
     public async Task<bool> IsUserDeleted(string username)
     {
         return await GetUserInfo(username) == null;
-    }
-
-    public async Task<bool> DeleteUser(string username)
-    {
-        var author = await _context.Authors
-            .Include(a => a.Following)
-            .Include(a => a.Followers)
-            .Include(a => a.Cheeps)
-            .FirstOrDefaultAsync(a => a.UserName == username);
-
-        if (author == null) return false;
-        
-        author.Following.Clear();
-        author.Followers.Clear();
-
-        var uniqueId = Guid.NewGuid().ToString().Substring(0, 8);
-        author.UserName = $"DeletedUser-{uniqueId}";
-        author.NormalizedUserName = $"DELETEDUSER-{uniqueId}";
-        author.Email = $"deleted-{uniqueId}@chirp.db";
-        author.NormalizedEmail = $"DELETED-{uniqueId}@CHIRP.DB";
-        
-        await _context.SaveChangesAsync();
-        return true;
     }
 }
