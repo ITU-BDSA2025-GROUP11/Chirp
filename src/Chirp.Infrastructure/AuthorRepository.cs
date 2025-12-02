@@ -1,5 +1,4 @@
 ﻿using Chirp.Core.DomainModel;
-using Chirp.Core.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -8,14 +7,17 @@ namespace Chirp.Infrastructure;
 public interface IAuthorRepository
 {
     Task AddUser(Author author);
-    public Task<bool> UserExists(string authorName);
-    Task<Author?> FindUser(string userId);
-    Task<bool> IsFollowing(string currentUserId, string authorId);  
+    Task<bool> UserExists(string authorName);
+    Task SaveChanges();
+    Task<Author?> FindUser(string authorId);
+    Task<Author?> FindUserAndFollowing(string authorId);
+    Task<Author?> FindUserAndLikedCheeps(string authorId);
+    Task<bool> IsFollowing(string currentUserId, string authorId);
+    Task<List<int>> GetLikedCheepIds(string userId);
+    Task<List<int>> GetDislikedCheepIds(string userId);
     Task<Author?> GetUserInfo(string username);
-    Task<bool> DeleteUser(string username);
+    Task<Author?> GetAllUserInfo(string username);
     Task<bool> IsUserDeleted(string username);
-    public Task<List<int>> GetLikedCheepIds(string userId);
-    public Task<List<int>> GetDislikedCheepIds(string userId);
 }
 
 public class AuthorRepository : IAuthorRepository
@@ -32,12 +34,6 @@ public class AuthorRepository : IAuthorRepository
     public async Task AddUser(Author author)
     {
         _context.Authors.Add(author);
-        await SaveChanges();
-    }
-
-    public async Task RemoveUser(Author author)
-    {
-        _context.Authors.Remove(author);
         await SaveChanges();
     }
 

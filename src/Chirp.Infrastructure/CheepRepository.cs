@@ -30,44 +30,34 @@ namespace Chirp.Infrastructure
             _logger = factory.CreateLogger<CheepRepository>();
         }
 
-        public async Task<List<CheepDTO>> GetCheeps(string? author = null)
+        public async Task<Author?> FindAuthor(string authorId)
         {
-            if (!string.IsNullOrEmpty(author))
-            {
-                var authorEntity = await _context.Authors
-                    .Include(a => a.Cheeps)
-                    .FirstOrDefaultAsync(a => a.UserName == author);
+            return await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
+        }
 
-                if (authorEntity == null)
-                    return new List<CheepDTO>();
+        public async Task<Author?> FindAuthorAndCheeps(string authorName)
+        {
+            return await _context.Authors
+                .Include(a => a.Cheeps)
+                .FirstOrDefaultAsync(a => a.UserName == authorName);
+        }
 
-                return authorEntity.Cheeps
-                    .OrderByDescending(c => c.TimeStamp)
-                    .Select(c => EntityToDTO.ToDTO(c))
-                    .ToList();
-            }
+        public async Task<List<CheepDTO>> GetCheeps()
+        {
             return await _context.Cheeps 
                 .Include(c => c.Author)
                 .OrderByDescending(c => c.TimeStamp)
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync(); 
-            
         }
-        
 
-        public async Task PostCheep(string text, string authorId)
+        public void AddCheep(Cheep cheep)
         {
-            if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
-            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
-            if (author == null) throw new ArgumentException("Author not found");
-            var cheep = new Cheep
-            {
-                Text = text,
-                Author = author,
-                TimeStamp = DateTime.Now
-            };
             _context.Cheeps.Add(cheep);
-            author.Cheeps.Add(cheep);
+        }
+
+        public async Task SaveChanges()
+        {
             await _context.SaveChangesAsync();
         }
 
