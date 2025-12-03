@@ -38,8 +38,28 @@ jobs:
         env:
           ASPNETCORE_URLS: http://localhost:5273   
         run: |
-          dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build &
-          sleep 45
+          dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build > webapp.log 2>&1 &
+          APP_PID=$!
+          
+          echo "Waiting for Web App to start (PID: $APP_PID)..."
+          
+          for i in {1..30}; do
+           if curl -s http://localhost:5273 > /dev/null; then
+             echo "✅ Web App started successfully!"
+             exit 0
+           fi
+           echo "Waiting... ($i/30)"
+           sleep 1
+          done
+          
+          echo "Web App failed to start within 30 seconds."
+          echo "---------------- APP LOGS ----------------"
+          cat webapp.log
+          echo "------------------------------------------"
+          
+          kill $APP_PID
+          exit 1
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
+        
