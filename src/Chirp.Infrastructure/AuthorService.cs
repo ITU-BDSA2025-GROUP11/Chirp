@@ -129,7 +129,7 @@ public class AuthorService : IAuthorService
 
     public async Task<bool> IsUserDeleted(string username)
     {
-        return await IsUserDeleted(username);
+        return await GetUserInfo(username) == null;
     }
     
     public async Task<List<int>> GetLikedCheepIds(string userId)
