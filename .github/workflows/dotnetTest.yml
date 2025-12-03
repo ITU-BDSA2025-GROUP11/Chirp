@@ -33,5 +33,13 @@ jobs:
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install-deps
 
+      - name: Start Web App
+        shell: bash
+        env:
+          ASPNETCORE_URLS: http://localhost:5273   
+        run: |
+          dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build &
+          sleep 15
+
       - name: Test
         run: dotnet test --no-build --verbosity normal

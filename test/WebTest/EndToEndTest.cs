@@ -5,6 +5,7 @@ using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
+
 /*
  * Similar to the UI tests above, implement some suitable end-to-end test cases.
  * For example, test if a cheep that a user enters into a cheep box is stored in the
@@ -21,55 +22,55 @@ public class EndToEndTest : PageTest
     private string _Email;
     private string _Password;
 
-    public override BrowserNewContextOptions ContextOptions()
-    {
-        return new BrowserNewContextOptions
-        {
-            IgnoreHTTPSErrors = true
-        };
-    }
-
-    private Process? _server;
-
-    [OneTimeTearDown]
-    public void TeardownServer()
-    {
-        // _server?.Kill();
-        _server?.Dispose();
-    }
-
-
-    [OneTimeSetUp]
-    public void StartServer()
-    {
-        var psi = new ProcessStartInfo
-        {
-            FileName = "dotnet",
-            Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false
-        };
-        Console.WriteLine(Path.GetFullPath("../../../../../src/Chirp.Web/Chirp.Web.csproj"));
+    // public override BrowserNewContextOptions ContextOptions()
+    // {
+    //     return new BrowserNewContextOptions
+    //     {
+    //         IgnoreHTTPSErrors = true
+    //     };
+    // }
+    //
+    // private Process? _server;
+    //
+    // [OneTimeTearDown]
+    // public void TeardownServer()
+    // {
+    //     // _server?.Kill();
+    //     _server?.Dispose();
+    // }
 
 
-        _server = new Process { StartInfo = psi };
-
-        _server.OutputDataReceived += (_, e) => Console.WriteLine("[SERVER OUT] " + e.Data);
-        _server.ErrorDataReceived += (_, e) => Console.WriteLine("[SERVER ERR] " + e.Data);
-
-        _server.Start();
-
-        _server.BeginOutputReadLine();
-        _server.BeginErrorReadLine();
-
-        Thread.Sleep(25000); // wait for it to start
-    }
+    // [OneTimeSetUp]
+    // public void StartServer()
+    // {
+    //     var psi = new ProcessStartInfo
+    //     {
+    //         FileName = "dotnet",
+    //         Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
+    //         RedirectStandardOutput = true,
+    //         RedirectStandardError = true,
+    //         UseShellExecute = false
+    //     };
+    //     Console.WriteLine(Path.GetFullPath("../../../../../src/Chirp.Web/Chirp.Web.csproj"));
+    //
+    //
+    //     _server = new Process { StartInfo = psi };
+    //
+    //     _server.OutputDataReceived += (_, e) => Console.WriteLine("[SERVER OUT] " + e.Data);
+    //     _server.ErrorDataReceived += (_, e) => Console.WriteLine("[SERVER ERR] " + e.Data);
+    //
+    //     _server.Start();
+    //
+    //     _server.BeginOutputReadLine();
+    //     _server.BeginErrorReadLine();
+    //
+    //     Thread.Sleep(25000); // wait for it to start
+    // }
 
     [SetUp]
     public async Task Init()
     {
-        await Page.GotoAsync("https://localhost:7103/");
+        await Page.GotoAsync("http://localhost:5273/");
 
         _Username = Guid.NewGuid().ToString();
         _Email = $"user_{Guid.NewGuid()}@test.com";
@@ -87,7 +88,7 @@ public class EndToEndTest : PageTest
     public async Task PressLoginButtonRedirectsToLoginPage()
     {
         await Page.GetByText("Login").ClickAsync(); //Click Login-button
-        await Expect(Page).ToHaveURLAsync("https://localhost:7103/Identity/Account/Login");
+        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/Login");
     }
 
     [Test]
