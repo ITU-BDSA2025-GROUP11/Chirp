@@ -104,7 +104,7 @@ namespace Chirp.Web.Pages
         public async Task<IActionResult> OnPostLike(int cheepId)
         {
             Console.WriteLine("I AM LIKING CHEEP: " + cheepId);
-            //var cheepid =  
+            
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {

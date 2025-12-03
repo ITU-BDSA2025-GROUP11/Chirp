@@ -2,6 +2,7 @@
 @model CheepDTO
 @inject SignInManager<Author> SignInManager
 
+
 @{
     var dislikedCheeps = ViewData["DislikedCheeps"] as List<int>;
     
@@ -11,6 +12,7 @@
     var numberOfDislikes = Model.Dislikes.Count;
     var heartFilled = $"️🤡 {numberOfDislikes}";
     var heartEmpty = $"⚪️ {numberOfDislikes}";
+    
 }
 
 @if (SignInManager.IsSignedIn(User) && !isMe)
@@ -18,7 +20,7 @@
     @if (hasDisliked)
     {
         <form method="post" asp-page-handler="UnDislike" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
-            <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
+            <button style="background:transparent;padding:0;color: black;">
                 @heartFilled 
             </button>
         </form>
@@ -26,7 +28,7 @@
     else
     {
         <form method="post" asp-page-handler="Dislike" asp-route-cheepId="@Model.Id" value="@Model.Id" style="display: inline;">
-            <button type="submit" class="btn btn-link p-0 m-0" style="font-size: 0.9em; vertical-align: baseline;">
+            <button style="background:transparent;padding:0;color: black;">
                 @heartEmpty 
             </button>
         </form>
