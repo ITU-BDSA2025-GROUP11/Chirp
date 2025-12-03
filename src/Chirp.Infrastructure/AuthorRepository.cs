@@ -38,8 +38,7 @@ public class AuthorRepository : IAuthorRepository
         if (await _context.Authors.AnyAsync(a => a.UserName == authorName))
             return;
 
-        var author = new Author
-        {
+        var author = new Author {
             UserName = authorName,
             Email = authorEmail,
             Cheeps = new List<Cheep>()

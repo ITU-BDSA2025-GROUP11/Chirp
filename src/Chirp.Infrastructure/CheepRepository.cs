@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Chirp.Core.DomainModel;
 using Chirp.Core.DTO;
 using Microsoft.EntityFrameworkCore;
@@ -53,22 +54,28 @@ namespace Chirp.Infrastructure
                 .ToListAsync(); 
             
         }
-        
-
         public async Task PostCheep(string text, string authorId)
         {
             if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
-            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
-            if (author == null) throw new ArgumentException("Author not found");
+            var author = await _context.Authors
+                .Include(a => a.Cheeps)
+                .FirstOrDefaultAsync(a => a.Id == authorId);
+            if (author == null)
+            {
+                throw new ArgumentException("Author not found");
+            }
+            Console.WriteLine("Found author with id: " + authorId);
+
             var cheep = new Cheep
             {
                 Text = text,
                 Author = author,
                 TimeStamp = DateTime.Now
             };
-            _context.Cheeps.Add(cheep);
+            
             author.Cheeps.Add(cheep);
             await _context.SaveChangesAsync();
+            Console.WriteLine("Posted new cheep!");
         }
 
         public async Task<bool> IsFollowing(string currentUserId, string authorId)
