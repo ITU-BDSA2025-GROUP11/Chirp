@@ -52,6 +52,7 @@ var app = builder.Build();
 
 //Region MRGA
 app.UseHttpsRedirection();
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseStaticFiles();
 
