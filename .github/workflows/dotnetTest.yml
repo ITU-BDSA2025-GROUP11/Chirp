@@ -26,8 +26,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Install Playwright Browsers
-      run: pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
-      run: pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install-deps
+  - name: Install Playwright Browsers
+      run: |
+        pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
+        pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install-deps
     - name: Test
       run: dotnet test --no-build --verbosity normal
