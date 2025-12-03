@@ -28,6 +28,12 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
+      - name: Run Unit & Integration Tests
+        run: |
+          dotnet test test/CoreTest/CoreTest.csproj --no-build
+          dotnet test test/InfrastructureTest/InfrastructureTest.csproj --no-build
+          dotnet test test/DatabaseTest/DatabaseTest.csproj --no-build
+
       - name: Install Playwright Browsers
         run: |
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
@@ -55,7 +61,7 @@ jobs:
            sleep 1
           done
           
-          echo "❌ Web App failed to start within 30 seconds."
+          echo "Web App failed to start within 30 seconds."
           echo "---------------- APP LOGS ----------------"
           cat webapp.log
           echo "------------------------------------------"
@@ -63,5 +69,5 @@ jobs:
           kill $APP_PID
           exit 1
 
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+      - name: Run End-to-End Tests
+        run: dotnet test test/WebTest/WebTest.csproj --no-build --verbosity normal
