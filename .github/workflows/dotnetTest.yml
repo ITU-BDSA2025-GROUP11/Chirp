@@ -39,7 +39,7 @@ jobs:
           ASPNETCORE_URLS: http://localhost:5273   
         run: |
           dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build &
-          sleep 15
+          sleep 45
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
