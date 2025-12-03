@@ -33,17 +33,15 @@ jobs:
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install-deps
 
-      # 1. Generate the certificate so the app can start on HTTPS
       - name: Create Dev Certificate
         run: dotnet dev-certs https
 
-      # 2. Start the app on HTTPS (7103) and check health with -k (insecure)
       - name: Start Web App
         shell: bash
         env:
           ASPNETCORE_URLS: https://localhost:7103
         run: |
-          dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build > webapp.log 2>&1 &
+          dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build --no-launch-profile > webapp.log 2>&1 &
           APP_PID=$!
           
           echo "Waiting for Web App to start (PID: $APP_PID)..."
