@@ -28,7 +28,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       
-      # Fixed indentation here so it aligns with the steps above
       - name: Install Playwright Browsers
         run: |
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
