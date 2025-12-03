@@ -61,11 +61,11 @@ namespace Chirp.Infrastructure
                 .ToListAsync(); 
         }
 
-        public async Task<Author?> GetAuthorIdAndFollowing(string userId)
+        public async Task<Author?> GetAuthorIdAndFollowing(string username)
         {
             return await _context.Authors
                 .Include(a => a.Following)
-                .FirstOrDefaultAsync(a => a.Id == userId);
+                .FirstOrDefaultAsync(a => a.UserName == username);
         }
 
         public void AddCheep(Cheep cheep)

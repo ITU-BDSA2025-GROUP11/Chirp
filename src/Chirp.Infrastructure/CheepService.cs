@@ -130,7 +130,6 @@ public class CheepService : ICheepService
 
     public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
     {
-        page--;
         var author = await _cheepRepository.GetAuthorIdAndFollowing(authorName);
 
         if (author == null) return new List<CheepDTO>();
