@@ -21,15 +21,16 @@ public class EndToEndTest : PageTest
     private string _Username;
     private string _Email;
     private string _Password;
+    private string BaseUrl = "https://localhost:7103";
+    
+    public override BrowserNewContextOptions ContextOptions()
+    {
+        return new BrowserNewContextOptions
+        {
+            IgnoreHTTPSErrors = true
+        };
+    }
 
-    // public override BrowserNewContextOptions ContextOptions()
-    // {
-    //     return new BrowserNewContextOptions
-    //     {
-    //         IgnoreHTTPSErrors = true
-    //     };
-    // }
-    //
     // private Process? _server;
     //
     // [OneTimeTearDown]
@@ -70,7 +71,7 @@ public class EndToEndTest : PageTest
     [SetUp]
     public async Task Init()
     {
-        await Page.GotoAsync("http://localhost:5273/");
+        await Page.GotoAsync(BaseUrl);
 
         _Username = Guid.NewGuid().ToString();
         _Email = $"user_{Guid.NewGuid()}@test.com";
@@ -88,7 +89,7 @@ public class EndToEndTest : PageTest
     public async Task PressLoginButtonRedirectsToLoginPage()
     {
         await Page.GetByText("Login").ClickAsync(); //Click Login-button
-        await Expect(Page).ToHaveURLAsync("http://localhost:5273/Identity/Account/Login");
+        await Expect(Page).ToHaveURLAsync("https://localhost:7103/Identity/Account/Login");
     }
 
     [Test]

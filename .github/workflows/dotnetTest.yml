@@ -27,16 +27,21 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
-      
+
       - name: Install Playwright Browsers
         run: |
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
           pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install-deps
 
+      # 1. Generate the certificate so the app can start on HTTPS
+      - name: Create Dev Certificate
+        run: dotnet dev-certs https
+
+      # 2. Start the app on HTTPS (7103) and check health with -k (insecure)
       - name: Start Web App
         shell: bash
         env:
-          ASPNETCORE_URLS: http://localhost:5273   
+          ASPNETCORE_URLS: https://localhost:7103
         run: |
           dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build > webapp.log 2>&1 &
           APP_PID=$!
@@ -44,7 +49,7 @@ jobs:
           echo "Waiting for Web App to start (PID: $APP_PID)..."
           
           for i in {1..30}; do
-           if curl -s http://localhost:5273 > /dev/null; then
+           if curl -s -k https://localhost:7103 > /dev/null; then
              echo "✅ Web App started successfully!"
              exit 0
            fi
@@ -52,7 +57,7 @@ jobs:
            sleep 1
           done
           
-          echo "Web App failed to start within 30 seconds."
+          echo "❌ Web App failed to start within 30 seconds."
           echo "---------------- APP LOGS ----------------"
           cat webapp.log
           echo "------------------------------------------"
@@ -62,4 +67,3 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
-        
