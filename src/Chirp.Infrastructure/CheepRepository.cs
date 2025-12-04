@@ -57,6 +57,8 @@ namespace Chirp.Infrastructure
         {
             return await _context.Cheeps 
                 .Include(c => c.Author)
+                .Include(c => c.Likes)
+                .Include(c => c.Dislikes)
                 .OrderByDescending(c => c.TimeStamp)
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync(); 
@@ -179,5 +181,7 @@ namespace Chirp.Infrastructure
         {
             return _context.Cheeps;
         }
+
     }
+    
 }

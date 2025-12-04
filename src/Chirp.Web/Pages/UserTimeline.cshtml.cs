@@ -56,8 +56,7 @@ namespace Chirp.Web.Pages
                 {
                     ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
                     ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
-                    
-                    ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
+                    ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId); 
                 }
             }
 

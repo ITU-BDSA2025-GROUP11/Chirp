@@ -2,6 +2,7 @@ using Chirp.Core.DomainModel;
 using Chirp.Core.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SQLitePCL;
 
 namespace Chirp.Infrastructure;
 
@@ -195,6 +196,4 @@ public class CheepService : ICheepService
     
         return await query.CountAsync();
     }
-    
-    
 }
