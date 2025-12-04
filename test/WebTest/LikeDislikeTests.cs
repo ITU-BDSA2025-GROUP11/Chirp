@@ -1,4 +1,5 @@
 using Chirp.Core.DomainModel;
+using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -217,5 +218,15 @@ public class LikeDislikeTests
         await _cheepService.DislikePost(authorA.Id, cheepC.CheepId);
         Assert.Single(cheepC.Dislikes);
         Assert.Single(authorA.DislikedCheeps);
+    }
+
+    [Fact]
+    public async Task LikeCountIncreasesOnMultipleLikes()
+    {
+        Before();
+        await CreateAuthorsAndCheeps();
+        await _cheepService.LikePost(authorA.Id, cheepC.CheepId);
+        await _cheepService.LikePost(authorB.Id, cheepC.CheepId);
+        Assert.Equal(2, cheepC.Likes.Count);
     }
 }

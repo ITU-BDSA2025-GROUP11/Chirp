@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20251127171449_TestMigration")]
-    partial class TestMigration
+    [Migration("20251204230540_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,36 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasIndex("FollowingId");
 
                     b.ToTable("AuthorFollows", (string)null);
+                });
+
+            modelBuilder.Entity("AuthorCheep", b =>
+                {
+                    b.Property<int>("LikedCheepsCheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LikesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("LikedCheepsCheepId", "LikesId");
+
+                    b.HasIndex("LikesId");
+
+                    b.ToTable("CheepLikes", (string)null);
+                });
+
+            modelBuilder.Entity("AuthorCheep1", b =>
+                {
+                    b.Property<int>("DislikedCheepsCheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DislikesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("DislikedCheepsCheepId", "DislikesId");
+
+                    b.HasIndex("DislikesId");
+
+                    b.ToTable("CheepDislikes", (string)null);
                 });
 
             modelBuilder.Entity("Chirp.Core.DomainModel.Author", b =>
@@ -109,6 +139,9 @@ namespace Chirp.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AuthorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AuthorId1")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -123,6 +156,8 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasKey("CheepId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("AuthorId1");
 
                     b.ToTable("Cheeps");
                 });
@@ -270,11 +305,45 @@ namespace Chirp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AuthorCheep", b =>
+                {
+                    b.HasOne("Chirp.Core.DomainModel.Cheep", null)
+                        .WithMany()
+                        .HasForeignKey("LikedCheepsCheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Core.DomainModel.Author", null)
+                        .WithMany()
+                        .HasForeignKey("LikesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AuthorCheep1", b =>
+                {
+                    b.HasOne("Chirp.Core.DomainModel.Cheep", null)
+                        .WithMany()
+                        .HasForeignKey("DislikedCheepsCheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Core.DomainModel.Author", null)
+                        .WithMany()
+                        .HasForeignKey("DislikesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Chirp.Core.DomainModel.Cheep", b =>
                 {
-                    b.HasOne("Chirp.Core.DomainModel.Author", "Author")
+                    b.HasOne("Chirp.Core.DomainModel.Author", null)
                         .WithMany("Cheeps")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("Chirp.Core.DomainModel.Author", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
