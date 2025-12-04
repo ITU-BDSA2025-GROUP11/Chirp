@@ -46,7 +46,7 @@ namespace Chirp.Web.Pages
             {
                 NumberOfCheeps = Cheeps.Count;
         
-                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, 32, author);
+                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, PageSize, author);
             }
 
             if (User.Identity?.IsAuthenticated == true)
@@ -56,6 +56,7 @@ namespace Chirp.Web.Pages
                 {
                     ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
                     ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
+                    
                     ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
                 }
             }
