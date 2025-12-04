@@ -20,7 +20,7 @@
                         <strong>
                             <a href="/@cheep.Author.Username">@cheep.Author.Username</a>
                         </strong>
-                    
+                        
                         <partial name="Shared/_Follow" model="@cheep" />     
                         <partial name="Shared/_Like" model="@cheep" />
                         <partial name="Shared/_Dislike" model="@cheep" />  
@@ -29,6 +29,7 @@
                         
                     <div style="padding-left: 8px;">
                         @cheep.Text
+                        <b>Current cheep id @cheep.Id number of likes @cheep.Likes.Count</b>
                         <small>&mdash; @cheep.TimeStamp</small>
                     </div>
                 </li>
