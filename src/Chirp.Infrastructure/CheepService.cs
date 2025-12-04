@@ -10,7 +10,8 @@ public interface ICheepService
     Task<List<CheepDTO>> GetCheeps(string? author = null);        
     Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);        
     Task PostCheep(string text, string authorId);        
-    Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
+    Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(string authorName);
+    Task<List<CheepDTO>> GetPaginatedCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName);
     Task<int> GetCheepCountFromAuthorAndFollowing(string authorName);
     Task<int> GetCheepCount(string? author = null);
     public Task LikePost(string currentUserId, int cheepIdToLike);
@@ -127,17 +128,28 @@ public class CheepService : ICheepService
         await _cheepRepository.SaveChanges();
     }
 
-
-    public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
+    public async Task<List<CheepDTO>> GetPaginatedCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
     {
-        var author = await _cheepRepository.GetAuthorIdAndFollowing(authorName);
+        var author = await _cheepRepository.GetAuthorNameAndFollowing(authorName);
 
         if (author == null) return new List<CheepDTO>();
 
         var followingIds = author.Following.Select(a => a.Id).ToList();
         followingIds.Add(author.Id);
 
-        return await _cheepRepository.GetCheepsFromAuthorAndFollowing(page, pageSize, followingIds);
+        return await _cheepRepository.GetPaginatedCheepsFromAuthorAndFollowing(page, pageSize, followingIds);
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(string authorName)
+    {
+        var author = await _cheepRepository.GetAuthorNameAndFollowing(authorName);
+
+        if (author == null) return new List<CheepDTO>();
+
+        var followingIds = author.Following.Select(a => a.Id).ToList();
+        followingIds.Add(author.Id);
+
+        return await _cheepRepository.GetCheepsFromAuthorAndFollowing(followingIds);
     }
 
     public Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
@@ -151,14 +163,14 @@ public class CheepService : ICheepService
         return _cheepRepository.GetPaginatedCheeps(currentPage, pageSize, query);
     }
     
-    public async Task<List<string>> GetFollowedIds(string userId)
-    {
-        var user = await _cheepRepository.GetAuthorIdAndFollowing(userId);
-
-        if (user == null) return new List<string>();
-
-        return user.Following.Select(a => a.Id).ToList();
-    }
+    // public async Task<List<string>> GetFollowedIds(string userId)
+    // {
+    //     var user = await _cheepRepository.(userId);
+    //
+    //     if (user == null) return new List<string>();
+    //
+    //     return user.Following.Select(a => a.Id).ToList();
+    // }
 
     public async Task<int> GetCheepCountFromAuthorAndFollowing(string authorName)
     {
