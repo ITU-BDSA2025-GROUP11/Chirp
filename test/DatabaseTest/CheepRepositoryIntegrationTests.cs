@@ -129,24 +129,40 @@ public class CheepRepositoryIntegrationTests : IDisposable
         Assert.Contains(pageCheeps, c => c.Id == authorCheeps[0].Id);
     }
 
-    // [Fact]
-    // public async Task GetCheepsFromAuthorAndFollowing()
-    // {
-    //     await _authorService.CreateUser(testName, testMail);
-    //     await _authorService.CreateUser("b", "b@b.com");
-    //     var userA = await _context.Authors.FirstAsync(a => a.UserName == testName);
-    //     await _cheepService.PostCheep("test", userA.Id);
-    //     var userB = await _context.Authors.FirstAsync(a => a.UserName == "b");
-    //     await _cheepService.PostCheep("b", userB.Id);
-    //     await _authorService.FollowUser(userA.Id, userB.Id);
-    //     var cheepAs = await _cheepService.GetCheeps(testName);
-    //     var cheepBs = await _cheepService.GetCheeps("b");
-    //     var pageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(1, 32, testName);
-    //     var cheepA = cheepAs[0];
-    //     var cheepB = cheepBs[0];
-    //     Assert.Contains(pageCheeps, c =>c.Id == cheepA.Id);
-    //     Assert.Contains(pageCheeps, c =>c.Id == cheepB.Id);
-    // }
+    [Fact]
+    public async Task GetCheepsFromAuthorAndFollowing()
+    {
+        await _authorService.CreateUser(testName, testMail);
+        await _authorService.CreateUser("b", "b@b.com");
+        var userA = await _context.Authors.FirstAsync(a => a.UserName == testName);
+        await _cheepService.PostCheep("test", userA.Id);
+        var userB = await _context.Authors.FirstAsync(a => a.UserName == "b");
+        await _cheepService.PostCheep("b", userB.Id);
+        await _authorService.FollowUser(userA.Id, userB.Id);
+        var cheepAs = await _cheepService.GetCheeps(testName);
+        var cheepBs = await _cheepService.GetCheeps("b");
+        var pageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(testName);
+        var cheepA = cheepAs[0];
+        var cheepB = cheepBs[0];
+        Assert.Contains(pageCheeps, c =>c.Id == cheepA.Id);
+        Assert.Contains(pageCheeps, c =>c.Id == cheepB.Id);
+    }
+
+    [Fact]
+    public async Task GetCheepsFromAuthorAndFollowing_WhenAuthorHasNoCheeps()
+    {
+        await _authorService.CreateUser("b", "b@b.b");
+        await _authorService.CreateUser("a", "a@a.a");
+        var userA = await _context.Authors.FirstAsync(a => a.UserName == "a");
+        var userB = await _context.Authors.FirstAsync(a => a.UserName == "b");
+        await _cheepService.PostCheep("b", userB.Id);
+        await _authorService.FollowUser(userA.Id, userB.Id);
+        var cheepBs = await _cheepService.GetCheeps("b");
+        var pageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing("a");
+        var cheepB = cheepBs[0];
+        Assert.Single(pageCheeps);
+        Assert.Contains(pageCheeps, c =>c.Id == cheepB.Id);
+    }
     
     public void Dispose()
     {
