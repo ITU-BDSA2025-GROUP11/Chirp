@@ -33,5 +33,10 @@
             </button>
         </form>
     }
+} else if (!SignInManager.IsSignedIn(User))
+{
+    <button style="background:transparent;padding:0;color: black;text-decoration:none;" href="/Identity/Account/Register">
+        @heartEmpty
+    </button>
 }
 
