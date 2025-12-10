@@ -9,7 +9,7 @@ namespace Chirp.Infrastructure
     {
         Task<Author?> GetAuthorAndCheeps(string authorName);
         Task<List<CheepDTO>> GetCheeps();
-        Task<Author?> GetAuthorIdAndFollowing(string userId);
+        //Task<Author?> GetAuthorIdAndFollowing(string userId);
         void AddCheep(Cheep cheep);
         Task<Author?> GetAuthorAndCheepsFromId(string authorId);
         Task SaveChanges();
@@ -24,7 +24,8 @@ namespace Chirp.Infrastructure
         Task<List<string>> GetFollowedIds(string userId);
         Task<int> CountCheeps(List<string> followingIds);
         IQueryable<Cheep> GetAllCheeps();
-        Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, List<String> followingIds);
+        Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(List<string> followingIds);
+        Task<List<CheepDTO>> GetPaginatedCheepsFromAuthorAndFollowing(int page, int pageSize, List<string> followingIds);
     }
 
     public class CheepRepository : ICheepRepository
@@ -56,17 +57,19 @@ namespace Chirp.Infrastructure
         {
             return await _context.Cheeps 
                 .Include(c => c.Author)
+                .Include(c => c.Likes)
+                .Include(c => c.Dislikes)
                 .OrderByDescending(c => c.TimeStamp)
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync(); 
         }
 
-        public async Task<Author?> GetAuthorIdAndFollowing(string username)
-        {
-            return await _context.Authors
-                .Include(a => a.Following)
-                .FirstOrDefaultAsync(a => a.UserName == username);
-        }
+        // public async Task<Author?> GetAuthorIdAndFollowing(string username)
+        // {
+        //     return await _context.Authors
+        //         .Include(a => a.Following)
+        //         .FirstOrDefaultAsync(a => a.UserName == username);
+        // }
 
         public void AddCheep(Cheep cheep)
         {
@@ -121,7 +124,7 @@ namespace Chirp.Infrastructure
                 .FirstOrDefaultAsync(a => a.UserName == authorName);
         }
         
-        public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(int page, int pageSize, List<String> followingIds)
+        public async Task<List<CheepDTO>> GetPaginatedCheepsFromAuthorAndFollowing(int page, int pageSize, List<string> followingIds)
         {
             return await _context.Cheeps
                 .Include(c => c.Author)
@@ -129,6 +132,16 @@ namespace Chirp.Infrastructure
                 .OrderByDescending(c => c.TimeStamp)
                 .Skip(pageSize * (page - 1))
                 .Take(pageSize)
+                .Select(c => EntityToDTO.ToDTO(c))
+                .ToListAsync();
+        }
+
+        public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(List<string> followingIds)
+        {
+            return await _context.Cheeps
+                .Include(c => c.Author)
+                .Where(c => followingIds.Contains(c.Author.Id))
+                .OrderByDescending(c => c.TimeStamp)
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync();
         }
@@ -168,5 +181,7 @@ namespace Chirp.Infrastructure
         {
             return _context.Cheeps;
         }
+
     }
+    
 }
