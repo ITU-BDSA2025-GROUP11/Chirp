@@ -10,6 +10,8 @@ author:
 numbersections: true
 ---
 
+**Planlagt aflevering d. 30 december**
+
 # Design and Architecture of _Chirp!_
 
 ## Domain model (Therese)
