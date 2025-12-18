@@ -31,7 +31,7 @@ The user journey in Chirp is designed to be intuitive, guiding the user from una
 
 ### 1. Start up
 Upon opening the website the user is presented with the Public Timeline. Here the user can view Cheeps from other authors but is unable to interact with them. 
-Via the buttons in banner the user is then presented with two options.
+Via the buttons in the banner the user is then presented with two options.
 * Login
 * Register
 
