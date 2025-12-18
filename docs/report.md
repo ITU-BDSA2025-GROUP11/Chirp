@@ -23,7 +23,8 @@ Here comes a description of our domain model.
 ## Architecture of deployed application (Milja)
 
 ## User activities (Joakim)
-The following section describes how a user interacts with Chirp, from unauthenticated access to account management.
+The following section describes how a user navigates through the Chirp application
+from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
 
 ### 1. Start up
 Upon opening the website the user is presented with the Public Timeline. Here the user can view Cheeps from other authors but is unable to interact with them. 
