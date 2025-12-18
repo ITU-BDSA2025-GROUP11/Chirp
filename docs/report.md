@@ -42,10 +42,10 @@ If however the user chooses register they are prompted for a Username and Email 
 * At least one number.
 * At least one special character.
 
-When in the login screen the user also has a third option
+Once on the login page the user also has a third option
 * Login with github
 
-this allows the user to login via their github account.
+This allows the user to login via their github account.
 
 ### 2. Timelines
 Once logged in, the user is redirected to the public timeline. Here Cheeps from all users are displayed along with their respective likes and dislikes.
@@ -55,15 +55,24 @@ From here the user can perform the following actions.
 * Like or dislike Cheeps.
 * Follow other authors.
 
-The user can switch to their private timeline. This view filters the content to show only
+The user can switch to their private timeline. This view filters the content to only show.
 *  The user's own Cheeps.
 *  Cheeps from authors the user is following.
 
-If the user decides to unfollow an author while on their own private page the page refreshes and that author's Cheeps immediately disappear from the private timeline.
-Clicking on another authors username in either the public or private timeline will like directly to their timeline showing all their cheeps.
+If the user decides to unfollow an author while on their own private timeline the page refreshes and that author's Cheeps immediately disappear from the private timeline.
+
+Clicking on another author's username in either the public or private timeline will link directly to their timeline showing all their cheeps.
 ### 3. About me.
-The user can access the about Me page. This section displays the user's profile information username, Email and a list of followed accounts.
-At the bottom of this page the user finds the forget me button. Once pressed The user's Name and Email are anonymized in the database effectively deleting their account, the user is then immediately logged out and the user will be unable to log back in with the deleted account. All cheeps from the deleted account will also be invisible and inaccessible for all remaining users.
+The user can access the about Me page from the banner at any time. This section displays the user's profile information
+* Username
+* Email
+* List of followed accounts.
+
+At the bottom of this page the user finds the forget me button.
+Once pressed The user's Name and Email are anonymized in the database effectively deleting their account,
+the user is then immediately logged out and the user will be unable to log back in with the anonymized credentials.
+
+All cheeps from the deleted account will also be invisible and inaccessible for all remaining users.
 ### 4. Logout
 Finally a user can choose to perform a standard logout. This returns them to the initial unauthenticated state on the Public Timeline, where they can choose to log in again or register a new account.
 
