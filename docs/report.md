@@ -23,11 +23,7 @@ Here comes a description of our domain model.
 ## Architecture of deployed application (Milja)
 
 ## User activities (Joakim)
-## User Journey
-Illustrate typical scenarios of a user journey through your Chirp! application. That is, start illustrating the first page that is presented to a non-authorized user, illustrate what a non-authorized user can do with your Chirp! application, and finally illustrate what a user can do after authentication.
-Make sure that the illustrations are in line with the actual behavior of your application.
-
-The user journey in Chirp is designed to be intuitive, guiding the user from unauthenticated access to active participation and account management.
+The following section describes how a user interacts with Chirp, from unauthenticated access to account management.
 
 ### 1. Start up
 Upon opening the website the user is presented with the Public Timeline. Here the user can view Cheeps from other authors but is unable to interact with them. 
