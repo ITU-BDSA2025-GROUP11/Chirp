@@ -40,4 +40,5 @@ Here comes a description of our domain model.
 
 ## License (Joakim)
 
+
 ## LLMs, ChatGPT, CoPilot, and others (Joakim)
