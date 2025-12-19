@@ -13,12 +13,13 @@ numbersections: true
 **Planlagt aflevering d. 30 december**
 
 # Design and Architecture of _Chirp!_
+![[DomainModelClassDiagram.jpg]]
 The architecture of the application follows an onion structure, partitioning the src folder into three subfolder: Chirp.Core, Chirp.Infrastructure and
 Chirp.Web. These represent the different layers of the program where Chirp.Core resides as the base of the program, defining the entity classes as well
 as as containing Data Transfer Objects (DTOs) which are all used in the infrastructure layer for the functionality of the program, but without having references
-to netiher Chirp.Infrastructure nor Chirp.Web, keeping the core independant. 
+to netiher Chirp.Infrastructure nor Chirp.Web, keeping the core independant from other classes. 
 
-This core is used by Chirp.Infrastructure which uses the entity classes to create migrations when creating the database and  
+This core is used by Chirp.Infrastructure which uses the entity classes to create migrations when creating the database and **(læs op på dette)** 
 
 ## Domain model (Therese)
 
@@ -40,6 +41,7 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 # Process
 
 ## Build, test, release, and deployment (Therese og Milja)
+
 
 ## Team work (Emilie og Milja)
 
