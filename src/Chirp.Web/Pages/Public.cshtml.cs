@@ -12,7 +12,6 @@ namespace Chirp.Web.Pages
     {
         private readonly IAuthorService _authorService;
         private readonly ICheepService _cheepService;
-        private readonly UserManager<Author> _userManager;
         
         public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
         
@@ -30,11 +29,10 @@ namespace Chirp.Web.Pages
 
         [BindProperty] public required string Message { get; set; } = "";
 
-        public PublicModel(ICheepService cheepService, IAuthorService authorService, UserManager<Author> userManager)
+        public PublicModel(ICheepService cheepService, IAuthorService authorService)
         {
             _authorService = authorService;
             _cheepService = cheepService;
-            _userManager = userManager;
             NumberOfCheeps = Cheeps.Count;
             Message = "";
         }
