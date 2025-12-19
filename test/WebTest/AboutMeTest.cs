@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
-namespace PagesTest;
+namespace WebTest;
 
 public class AboutMeUnitTest
 {
-    public required CheepRepository cheepRepository;
-    public required AuthorRepository authorRepository;
-    public AuthorService _authorService;
+    public required CheepRepository CheepRepository;
+    public required AuthorRepository AuthorRepository;
+    private AuthorService? _authorService;
     public required ChirpDbContext Context;
     public required SqliteConnection Connection;
 
@@ -25,9 +25,9 @@ public class AboutMeUnitTest
         Context = new ChirpDbContext(builder.Options);
         Context.Database.EnsureCreated();
         
-        authorRepository = new AuthorRepository(Context, NullLoggerFactory.Instance);
-        cheepRepository = new CheepRepository(Context, NullLoggerFactory.Instance);
-        _authorService = new AuthorService(authorRepository, NullLogger<AuthorService>.Instance);
+        AuthorRepository = new AuthorRepository(Context, NullLoggerFactory.Instance);
+        CheepRepository = new CheepRepository(Context, NullLoggerFactory.Instance);
+        _authorService = new AuthorService(AuthorRepository, NullLogger<AuthorService>.Instance);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class AboutMeUnitTest
         Before();
         var username = "KomUdAfVoresRepoMatthias";
         var email = "matthias@stop";
-        await _authorService.CreateUser(username, email);
+        await _authorService!.CreateUser(username, email);
         
         var result = await _authorService.DeleteUser(username);
         
@@ -55,7 +55,7 @@ public class AboutMeUnitTest
         Before();
         var userA = "UserA";
         var userB = "UserB";
-        await _authorService.CreateUser(userA, "a@a.com");
+        await _authorService!.CreateUser(userA, "a@a.com");
         await _authorService.CreateUser(userB, "b@b.com");
         
         var authorA = await Context.Authors.FirstAsync(a => a.UserName == userA);
@@ -78,7 +78,7 @@ public class AboutMeUnitTest
     {
         Before();
 
-        var result = await _authorService.DeleteUser("GivMigDrikkePenge");
+        var result = await _authorService!.DeleteUser("GivMigDrikkePenge");
 
         Assert.False(result);
     }
@@ -88,10 +88,10 @@ public class AboutMeUnitTest
     {
         Before();
 
-        await _authorService.CreateUser("Silas", "Silas@ta.com");
+        await _authorService!.CreateUser("Silas", "Silas@ta.com");
         await _authorService.DeleteUser("Silas");
 
-        var info = await authorRepository.GetUserInfo("Silas");
+        var info = await AuthorRepository.GetUserInfo("Silas");
         Assert.Null(info);
     }
     
@@ -100,7 +100,7 @@ public class AboutMeUnitTest
     {
         Before();
 
-        await _authorService.CreateUser("A", "a@x");
+        await _authorService!.CreateUser("A", "a@x");
         await _authorService.CreateUser("B", "b@x");
 
         var a = await Context.Authors.FirstAsync(x => x.UserName == "A");
@@ -121,7 +121,7 @@ public class AboutMeUnitTest
     {
         Before();
         
-        await _authorService.CreateUser("Rotte", "rotte@mail.com");
+        await _authorService!.CreateUser("Rotte", "rotte@mail.com");
         var rotte = await Context.Authors.FirstAsync(a => a.UserName == "Rotte");
         
         Context.Cheeps.Add(new Cheep

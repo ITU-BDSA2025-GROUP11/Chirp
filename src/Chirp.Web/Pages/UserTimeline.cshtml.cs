@@ -12,7 +12,6 @@ namespace Chirp.Web.Pages
     {
         private readonly IAuthorService _authorService;
         private readonly ICheepService _cheepService;
-        private readonly UserManager<Author> _userManager;
         
         public List<string> Following { get; set; } = new();
         public List<CheepDTO> Cheeps { get; set; }  = new();
@@ -22,11 +21,10 @@ namespace Chirp.Web.Pages
         
         [BindProperty]
         public required string Message { get; set; } = "";
-        public UserTimelineModel(ICheepService cheepService,IAuthorService authorService, UserManager<Author> userManager)
+        public UserTimelineModel(ICheepService cheepService,IAuthorService authorService)
         {
             _authorService = authorService;
             _cheepService = cheepService;
-            _userManager = userManager;
             NumberOfCheeps = Cheeps?.Count ?? 0;
         }
 
