@@ -1,6 +1,4 @@
 using Chirp.Core.DomainModel;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Infrastructure;
 
@@ -777,16 +775,14 @@ public static class DbInitializer
         foreach (Cheep c in cheeps)
         {
             var authorName = c.Author.UserName;
-            authors[name2index(authorName)].Cheeps.Add(c);
+            authors[Name2Index(authorName!)].Cheeps.Add(c);
         }
     }
 
-    private static int name2index(string name)
+    private static int Name2Index(string name)
     {
         switch (name)
         {
-            case "Helge":
-                return 0;
             case "Adrian":
                 return 1;
             case "Roger Histand":
@@ -810,7 +806,6 @@ public static class DbInitializer
             case "Jacqualine Gilcoine":
                 return 11;
         }
-
         return 0;
     }
 }

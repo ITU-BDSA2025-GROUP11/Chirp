@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Chirp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddFollowUnfollowTables : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -187,8 +187,9 @@ namespace Chirp.Infrastructure.Migrations
                     CheepId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Text = table.Column<string>(type: "TEXT", maxLength: 160, nullable: false),
-                    AuthorId = table.Column<string>(type: "TEXT", nullable: true),
-                    TimeStamp = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    AuthorId1 = table.Column<string>(type: "TEXT", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    AuthorId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -198,6 +199,60 @@ namespace Chirp.Infrastructure.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Cheeps_Authors_AuthorId1",
+                        column: x => x.AuthorId1,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheepDislikes",
+                columns: table => new
+                {
+                    DislikedCheepsCheepId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DislikesId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheepDislikes", x => new { x.DislikedCheepsCheepId, x.DislikesId });
+                    table.ForeignKey(
+                        name: "FK_CheepDislikes_Authors_DislikesId",
+                        column: x => x.DislikesId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CheepDislikes_Cheeps_DislikedCheepsCheepId",
+                        column: x => x.DislikedCheepsCheepId,
+                        principalTable: "Cheeps",
+                        principalColumn: "CheepId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheepLikes",
+                columns: table => new
+                {
+                    LikedCheepsCheepId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LikesId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheepLikes", x => new { x.LikedCheepsCheepId, x.LikesId });
+                    table.ForeignKey(
+                        name: "FK_CheepLikes_Authors_LikesId",
+                        column: x => x.LikesId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CheepLikes_Cheeps_LikedCheepsCheepId",
+                        column: x => x.LikedCheepsCheepId,
+                        principalTable: "Cheeps",
+                        principalColumn: "CheepId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -249,9 +304,24 @@ namespace Chirp.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CheepDislikes_DislikesId",
+                table: "CheepDislikes",
+                column: "DislikesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CheepLikes_LikesId",
+                table: "CheepLikes",
+                column: "LikesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cheeps_AuthorId",
                 table: "Cheeps",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cheeps_AuthorId1",
+                table: "Cheeps",
+                column: "AuthorId1");
         }
 
         /// <inheritdoc />
@@ -276,10 +346,16 @@ namespace Chirp.Infrastructure.Migrations
                 name: "AuthorFollows");
 
             migrationBuilder.DropTable(
-                name: "Cheeps");
+                name: "CheepDislikes");
+
+            migrationBuilder.DropTable(
+                name: "CheepLikes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Cheeps");
 
             migrationBuilder.DropTable(
                 name: "Authors");

@@ -3,6 +3,7 @@ using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace databasetest
 {
@@ -12,6 +13,8 @@ namespace databasetest
         private readonly ChirpDbContext _context;
         private readonly CheepRepository _cheepRepo;
         private readonly AuthorRepository _authorRepo;
+        public required CheepService _cheepService;
+        public required AuthorService _authorService;
 
         public UnitTests()
         {
@@ -32,6 +35,8 @@ namespace databasetest
             var loggerFactory = LoggerFactory.Create(builder => builder.AddFilter((_, __) => false));
             _cheepRepo = new CheepRepository(_context, loggerFactory);
             _authorRepo = new AuthorRepository(_context, loggerFactory);
+            _authorService = new AuthorService(_authorRepo, NullLogger<AuthorService>.Instance);
+            _cheepService = new CheepService(_cheepRepo, NullLogger<CheepService>.Instance);
         }
 
         public void Dispose()
@@ -71,7 +76,7 @@ namespace databasetest
         [Fact]
         public async Task GetCheeps_WhenAuthorNotFound_ReturnsEmptyList()
         {
-            var result = await _cheepRepo.GetCheeps("NonExistentAuthor");
+            var result = await _cheepService.GetCheeps("NonExistentAuthor");
             Assert.Empty(result);
         }
 
@@ -90,7 +95,7 @@ namespace databasetest
             }
             _context.SaveChanges();
 
-            var page = await _cheepRepo.GetPaginatedCheeps(currentPage: 0, pageSize: 5);
+            var page = await _cheepService.GetPaginatedCheeps(currentPage: 0, pageSize: 5);
 
             Assert.Equal(5, page.Count);
             Assert.Equal("Cheep 0", page[0].Text);
@@ -101,9 +106,9 @@ namespace databasetest
         {
             
             var currentUserName = Environment.UserName;
-            await _authorRepo.CreateUser(currentUserName, currentUserName + "@example.com");
+            await _authorService.CreateUser(currentUserName, currentUserName + "@example.com");
             var author = await _context.Authors.FirstAsync(a => a.UserName == currentUserName);
-            await _cheepRepo.PostCheep("Test Cheep", author!.Id);
+            await _cheepService.PostCheep("Test Cheep", author!.Id);
 
             var cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
             Assert.Single(cheeps);
@@ -119,9 +124,9 @@ namespace databasetest
                           "stories to the silent forest around.";
             
             var currentUserName = Environment.UserName;
-            await _authorRepo.CreateUser(currentUserName, currentUserName + "@example.com");
+            await _authorService.CreateUser(currentUserName, currentUserName + "@example.com");
             var author = await _context.Authors.FirstAsync(a => a.UserName == currentUserName);
-            await _cheepRepo.PostCheep(text, author!.Id);
+            await _cheepService.PostCheep(text, author!.Id);
 
             var cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
             Assert.Empty(cheeps); 
@@ -130,10 +135,10 @@ namespace databasetest
         [Fact]
         public async Task CreateUser_WhenCalledTwice_DoesNotDuplicateUser()
         {
-            await _authorRepo.CreateUser("TestUser", "TestUser");
+            await _authorService.CreateUser("TestUser", "TestUser");
             var countAfterFirst = await _context.Authors.CountAsync();
 
-            await _authorRepo.CreateUser("TestUser", "TestUser");
+            await _authorService.CreateUser("TestUser", "TestUser");
             var countAfterSecond = await _context.Authors.CountAsync();
 
             Assert.Equal(countAfterFirst, countAfterSecond);

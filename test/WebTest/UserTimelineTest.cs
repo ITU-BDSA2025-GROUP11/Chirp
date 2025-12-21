@@ -1,22 +1,23 @@
-using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
 using Chirp.Web.Pages;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using Microsoft.Extensions.Logging.Abstractions;
 
-namespace PagesTest;
+namespace WebTest;
 
 public class UserTimelineTest
 {
-    ICheepRepository _cheepRepo;
-    IAuthorRepository _authorRepo;
-    UserTimelineModel userTimeline;
-    ChirpDbContext _context;
-    private readonly UserManager<Author> _userManager;
+    ICheepRepository? _cheepRepo;
+    IAuthorRepository? _authorRepo;
+    public required UserTimelineModel UserTimeline;
+    ChirpDbContext? _context;
+    
+    public required CheepService CheepService;
+    public required AuthorService AuthorService;
 
-    public void Before()
+    private void Before()
     {
         var options = new DbContextOptionsBuilder<ChirpDbContext>()
             .UseSqlite("Data Source=:memory:")
@@ -28,26 +29,28 @@ public class UserTimelineTest
 
         _cheepRepo = new CheepRepository(_context, new LoggerFactory());
         _authorRepo = new AuthorRepository(_context, new LoggerFactory());
+        AuthorService = new AuthorService(_authorRepo, NullLogger<AuthorService>.Instance);
+        CheepService = new CheepService(_cheepRepo, NullLogger<CheepService>.Instance);
     }
     [Fact]
     public void TestUserTimelineInstantiation()
     {
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+        UserTimeline = new UserTimelineModel(CheepService, AuthorService) {
             Message = "What should this say"
         };
         
-        Assert.NotNull(userTimeline);
+        Assert.NotNull(UserTimeline);
     }
     [Fact]
     public async Task TotalNumberOfCheepsTest()
     {
         Before();
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+        UserTimeline = new UserTimelineModel(CheepService, AuthorService) {
             Message = "What should this say"
         };
-        var cheeps = await _cheepRepo.GetCheeps();
+        var cheeps = await _cheepRepo!.GetCheeps();
         var numberOfCheeps = cheeps.Count;
-        Assert.Equal(numberOfCheeps, userTimeline.NumberOfCheeps);
+        Assert.Equal(numberOfCheeps, UserTimeline.NumberOfCheeps);
     }
     
     [Theory]
@@ -57,14 +60,14 @@ public class UserTimelineTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        userTimeline = new UserTimelineModel(_cheepRepo, _authorRepo, _userManager) {
+        UserTimeline = new UserTimelineModel(CheepService, AuthorService) {
             Message = "What should this say"
         };
         var numberOfFullPages =  numberOfCheeps / cheepsPerPage;
         var excessCheeps = numberOfCheeps % cheepsPerPage;
         var expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;
         
-        Assert.Equal(expectedNumberOfPages, userTimeline.GetTotalPages(numberOfCheeps, cheepsPerPage));
+        Assert.Equal(expectedNumberOfPages, UserTimeline.GetTotalPages(numberOfCheeps, cheepsPerPage));
         
     }
 }

@@ -10,9 +10,8 @@ namespace Chirp.Web.Pages
 {
     public class PublicModel : PaginationModel
     {
-        private readonly IAuthorRepository _authorService;
-        private readonly ICheepRepository _cheepService;
-        private readonly UserManager<Author> _userManager;
+        private readonly IAuthorService _authorService;
+        private readonly ICheepService _cheepService;
         
         public List<CheepDTO> CurrentPageCheeps { get; set; } = new();
         
@@ -30,11 +29,10 @@ namespace Chirp.Web.Pages
 
         [BindProperty] public required string Message { get; set; } = "";
 
-        public PublicModel(ICheepRepository cheepService, IAuthorRepository authorService, UserManager<Author> userManager)
+        public PublicModel(ICheepService cheepService, IAuthorService authorService)
         {
             _authorService = authorService;
             _cheepService = cheepService;
-            _userManager = userManager;
             NumberOfCheeps = Cheeps.Count;
             Message = "";
         }
@@ -87,7 +85,7 @@ namespace Chirp.Web.Pages
         public async Task<IActionResult> OnPostLike(int cheepId)
         {
             Console.WriteLine("I AM LIKING CHEEP: " + cheepId);
-            //var cheepid =  
+            
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
@@ -143,7 +141,6 @@ namespace Chirp.Web.Pages
                 return RedirectToPage();
             }
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = await _userManager.GetUserAsync(User);
             if (currentUserId == null)
             {
                 return Challenge();

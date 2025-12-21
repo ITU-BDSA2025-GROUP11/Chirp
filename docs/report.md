@@ -10,34 +10,34 @@ author:
 numbersections: true
 ---
 
+**Planlagt aflevering d. 30 december**
+
 # Design and Architecture of _Chirp!_
 
-## Domain model
+## Domain model (Therese)
 
 Here comes a description of our domain model.
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](docs/images/domain_model.png)
+## Architecture — In the small (Morten)
 
-## Architecture — In the small
+## Architecture of deployed application (Milja)
 
-## Architecture of deployed application
+## User activities (Joakim)
 
-## User activities
-
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls trough _Chirp!_ (Emilie)
 
 # Process
 
-## Build, test, release, and deployment
+## Build, test, release, and deployment (Therese og Milja)
 
-## Team work
+## Team work (Emilie og Milja)
 
-## How to make _Chirp!_ work locally
+## How to make _Chirp!_ work locally (Morten)
 
-## How to run test suite locally
+## How to run test suite locally (Morten)
 
 # Ethics
 
-## License
+## License (Joakim)
 
-## LLMs, ChatGPT, CoPilot, and others
+## LLMs, ChatGPT, CoPilot, and others (Joakim)

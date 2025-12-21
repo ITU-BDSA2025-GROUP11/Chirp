@@ -10,9 +10,8 @@ namespace Chirp.Web.Pages
 {
     public class UserTimelineModel : PaginationModel
     {
-        private readonly IAuthorRepository _authorService;
-        private readonly ICheepRepository _cheepService;
-        private readonly UserManager<Author> _userManager;
+        private readonly IAuthorService _authorService;
+        private readonly ICheepService _cheepService;
         
         public List<string> Following { get; set; } = new();
         public List<CheepDTO> Cheeps { get; set; }  = new();
@@ -22,11 +21,10 @@ namespace Chirp.Web.Pages
         
         [BindProperty]
         public required string Message { get; set; } = "";
-        public UserTimelineModel(ICheepRepository cheepService,IAuthorRepository authorService, UserManager<Author> userManager)
+        public UserTimelineModel(ICheepService cheepService,IAuthorService authorService)
         {
             _authorService = authorService;
             _cheepService = cheepService;
-            _userManager = userManager;
             NumberOfCheeps = Cheeps?.Count ?? 0;
         }
 
@@ -39,14 +37,14 @@ namespace Chirp.Web.Pages
             if (ownTimeline)
             {
                 NumberOfCheeps = await _cheepService.GetCheepCountFromAuthorAndFollowing(author); 
-                CurrentPageCheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(CurrentPage, 32, author);
+                CurrentPageCheeps = await _cheepService.GetPaginatedCheepsFromAuthorAndFollowing(CurrentPage, 32, author);
+                Cheeps = await _cheepService.GetCheepsFromAuthorAndFollowing(author);
             }
             else
             {
-                var allCheeps = await _cheepService.GetCheeps(author); 
-                NumberOfCheeps = allCheeps.Count;
+                NumberOfCheeps = Cheeps.Count;
         
-                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, 32, author);
+                CurrentPageCheeps = await _cheepService.GetPaginatedCheeps(CurrentPage, PageSize, author);
             }
 
             if (User.Identity?.IsAuthenticated == true)
@@ -56,7 +54,7 @@ namespace Chirp.Web.Pages
                 {
                     ViewData["Following"] = await _authorService.GetFollowedIds(currentUserId);
                     ViewData["LikedCheeps"] = await _authorService.GetLikedCheepIds(currentUserId);
-                    ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
+                    ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId); 
                 }
             }
 
@@ -103,8 +101,6 @@ namespace Chirp.Web.Pages
         }
         public async Task<IActionResult> OnPostLike(int cheepId)
         {
-            Console.WriteLine("I AM LIKING CHEEP: " + cheepId);
-            //var cheepid =  
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != null)
             {
