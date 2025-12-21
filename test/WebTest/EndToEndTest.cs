@@ -31,42 +31,42 @@ public class EndToEndTest : PageTest
         };
     }
 
-    // private Process? _server;
-    //
-    // [OneTimeTearDown]
-    // public void TeardownServer()
-    // {
-    //     // _server?.Kill();
-    //     _server?.Dispose();
-    // }
+     private Process? _server;
+    
+   /*  [OneTimeTearDown]
+     public void TeardownServer()
+    {
+         _server?.Kill();
+        _server?.Dispose();
+     }
 
 
-    // [OneTimeSetUp]
-    // public void StartServer()
-    // {
-    //     var psi = new ProcessStartInfo
-    //     {
-    //         FileName = "dotnet",
-    //         Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
-    //         RedirectStandardOutput = true,
-    //         RedirectStandardError = true,
-    //         UseShellExecute = false
-    //     };
-    //     Console.WriteLine(Path.GetFullPath("../../../../../src/Chirp.Web/Chirp.Web.csproj"));
-    //
-    //
-    //     _server = new Process { StartInfo = psi };
-    //
-    //     _server.OutputDataReceived += (_, e) => Console.WriteLine("[SERVER OUT] " + e.Data);
-    //     _server.ErrorDataReceived += (_, e) => Console.WriteLine("[SERVER ERR] " + e.Data);
-    //
-    //     _server.Start();
-    //
-    //     _server.BeginOutputReadLine();
-    //     _server.BeginErrorReadLine();
-    //
-    //     Thread.Sleep(25000); // wait for it to start
-    // }
+     [OneTimeSetUp]
+     public void StartServer()
+     {
+         var psi = new ProcessStartInfo
+         {
+             FileName = "dotnet",
+             Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
+           RedirectStandardOutput = true,
+             RedirectStandardError = true,
+             UseShellExecute = false
+         };
+         Console.WriteLine(Path.GetFullPath("../../../../../src/Chirp.Web/Chirp.Web.csproj"));
+    
+    
+         _server = new Process { StartInfo = psi };
+    
+         _server.OutputDataReceived += (_, e) => Console.WriteLine("[SERVER OUT] " + e.Data);
+         _server.ErrorDataReceived += (_, e) => Console.WriteLine("[SERVER ERR] " + e.Data);
+    
+        _server.Start();
+    
+       _server.BeginOutputReadLine();
+         _server.BeginErrorReadLine();
+    
+         Thread.Sleep(25000); // wait for it to start
+     }*/
 
     [SetUp]
     public async Task Init()
