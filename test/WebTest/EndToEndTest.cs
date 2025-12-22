@@ -18,10 +18,10 @@ namespace WebTest;
 [TestFixture]
 public class EndToEndTest : PageTest
 {
-    private string _Username;
-    private string _Email;
-    private string _Password;
-    private string BaseUrl = "https://localhost:7103";
+    private string _username;
+    private string _email;
+    private string _password;
+    private string _baseUrl = "https://localhost:7103";
     
     public override BrowserNewContextOptions ContextOptions()
     {
@@ -32,6 +32,32 @@ public class EndToEndTest : PageTest
     }
 
      private Process? _server;
+     
+     [OneTimeTearDown]
+     public void StopServer()
+     {
+         _server?.Kill(true);
+         _server?.Dispose();
+     }
+     
+     [OneTimeSetUp]
+     public void StartServer()
+     {
+         var psi = new ProcessStartInfo
+         {
+             FileName = "dotnet",
+             Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
+             RedirectStandardOutput = true,
+             RedirectStandardError = true,
+             UseShellExecute = false
+         };
+
+         _server = new Process { StartInfo = psi };
+         _server.Start();
+
+         Thread.Sleep(20000); // wait for Kestrel
+     }
+     
     
    /*  [OneTimeTearDown]
      public void TeardownServer()
@@ -71,11 +97,11 @@ public class EndToEndTest : PageTest
     [SetUp]
     public async Task Init()
     {
-        await Page.GotoAsync(BaseUrl);
+        await Page.GotoAsync(_baseUrl);
 
-        _Username = Guid.NewGuid().ToString();
-        _Email = $"user_{Guid.NewGuid()}@test.com";
-        _Password = "Abc123!";
+        _username = Guid.NewGuid().ToString();
+        _email = $"user_{Guid.NewGuid()}@test.com";
+        _password = "Abc123!";
     }
     
     [Test]
@@ -114,9 +140,9 @@ public class EndToEndTest : PageTest
         await Page.GetByText("Login").ClickAsync();
         await Expect(Page.Locator("#Input_Email")).ToBeVisibleAsync();
 
-        await Page.Locator("#Input_Email").FillAsync(_Email);
+        await Page.Locator("#Input_Email").FillAsync(_email);
 
-        await Page.Locator("#Input_Password").FillAsync(_Password);
+        await Page.Locator("#Input_Password").FillAsync(_password);
 
         await Page.Locator("#login-submit").ClickAsync();
 
@@ -131,7 +157,7 @@ public class EndToEndTest : PageTest
         await Page.GetByRole(AriaRole.Textbox).FillAsync(testCheep);
         await Page.GetByRole(AriaRole.Button).And(Page.GetByText("Post")).ClickAsync();
 
-        await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username, testCheep]);
+        await Expect(Page.Locator("ul > li")).ToContainTextAsync([_username, testCheep]);
     }
 
     [Test]
@@ -149,7 +175,7 @@ public class EndToEndTest : PageTest
         var firstCheep = Page.Locator("ul.cheeps > li").First;
 
         // await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username,testCheep,]);
-        await Expect(firstCheep).ToContainTextAsync(_Username);
+        await Expect(firstCheep).ToContainTextAsync(_username);
         await Expect(firstCheep).ToContainTextAsync(testCheep);
     }
 
@@ -157,10 +183,10 @@ public class EndToEndTest : PageTest
     {
         await Page.GetByText("Register").ClickAsync();
 
-        await Page.GetByLabel("Username").FillAsync(_Username);
-        await Page.GetByLabel("Email").FillAsync(_Email);
-        await Page.Locator("#Input_Password").FillAsync(_Password);
-        await Page.Locator("#Input_ConfirmPassword").FillAsync(_Password);
+        await Page.GetByLabel("Username").FillAsync(_username);
+        await Page.GetByLabel("Email").FillAsync(_email);
+        await Page.Locator("#Input_Password").FillAsync(_password);
+        await Page.Locator("#Input_ConfirmPassword").FillAsync(_password);
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         
