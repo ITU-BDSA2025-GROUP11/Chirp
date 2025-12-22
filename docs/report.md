@@ -55,6 +55,10 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 ## How to run test suite locally (Morten)
 
 # Ethics
+The development of modern software systems requires careful ethical consideration. This chapter examines the ethical framework adopted for the Chirp project focusing on two primary areas.
+the selection of an appropriate open-source license and importantly the integrity of authorship in the age of AI.
+With the growing prevalence of Large Language Models (LLMs) in software engineering establishing clear boundaries for AI assistance was paramount. This section details the group's policy on transparency and evaluates adherence to these guidelines throughout the development lifecycle.
+
 
 ## License (Joakim)
 The decision to adopt the MIT License for the project was based on two primary factors:
@@ -81,3 +85,9 @@ Troubles also arose during the deployment of the application to Azure where LMMs
 When consulted, the LLM were used as a substitute for a teaching assistant providing guidance and explanations rather than generating concrete code implementations.
 
 LLMs would also prove useful for interpreting and understanding large and complex error messages produced by JetBrains Rider, particularly during migration related issues encountered in the first half of the development process.
+
+## Ethical conclusion
+In the end the group successfully adhered to the core ethical principle set out for ourselves maintaining intellectual ownership. 
+While the technical method of attribution had to be changed from co-authorship to commit message citations due to platform limitations the role of AI remained strictly supplementary. 
+By treating LLMs as "teaching assistants" for debugging and explanations rather than code generators
+we ensured that the final codebase remains a product of our own understanding and effort.
