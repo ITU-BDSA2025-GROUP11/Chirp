@@ -1,29 +1,25 @@
-using Chirp.Core.DomainModel;
 using Chirp.Infrastructure;
 using Chirp.Web.Pages;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Identity.Client;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 using Xunit;
 
 
-namespace PagesTest;
+namespace WebTest;
 
 
 public class PublicPagesTest
 {
-    ICheepRepository _cheepRepo;
-    IAuthorRepository _authorRepo;
-    PublicModel publicPage;
-    ChirpDbContext _context;
-    private readonly UserManager<Author> _userManager;
-    public required CheepService _cheepService;
-    public required AuthorService _authorService;
-    private readonly ITestOutputHelper output;
+    ICheepRepository? _cheepRepo;
+    IAuthorRepository? _authorRepo;
+    PublicModel? _publicPage;
+    ChirpDbContext? _context;
+    public required CheepService? CheepService;
+    public required AuthorService? AuthorService;
+    private readonly ITestOutputHelper? _output = new TestOutputHelper();
 
     private void Before()
     {
@@ -37,18 +33,18 @@ public class PublicPagesTest
 
         _cheepRepo = new CheepRepository(_context, new LoggerFactory());
         _authorRepo = new AuthorRepository(_context, new LoggerFactory());
-        _authorService = new AuthorService(_authorRepo, NullLogger<AuthorService>.Instance);
-        _cheepService = new CheepService(_cheepRepo, NullLogger<CheepService>.Instance);
+        AuthorService = new AuthorService(_authorRepo, NullLogger<AuthorService>.Instance);
+        CheepService = new CheepService(_cheepRepo, NullLogger<CheepService>.Instance);
     }
     [Fact]
     public void PublicPageInstantiationTest()
     {
         Before();
-        publicPage = new PublicModel(_cheepService, _authorService, _userManager)
+        _publicPage = new PublicModel(CheepService!, AuthorService!)
         {
             Message = "What should this say"
         };
-        Assert.NotNull(publicPage);
+        Assert.NotNull(_publicPage);
     }
     
     
@@ -58,18 +54,18 @@ public class PublicPagesTest
         try
         {
             Before();
-            publicPage = new PublicModel(_cheepService, _authorService, _userManager)
+            _publicPage = new PublicModel(CheepService!, AuthorService!)
             {
                 Message = "What should this say"
             };
-            var cheeps = await _cheepRepo.GetCheeps();
+            var cheeps = await _cheepRepo!.GetCheeps();
             var numberOfCheeps = cheeps.Count;
-            Assert.Equal(numberOfCheeps, publicPage.NumberOfCheeps);
+            Assert.Equal(numberOfCheeps, _publicPage.NumberOfCheeps);
         }
         catch (Exception ex)
         {
 
-           output.WriteLine(ex.Message);
+           _output!.WriteLine(ex.Message);
         }
         
     }
@@ -81,7 +77,7 @@ public class PublicPagesTest
     public void TotalNumberOfPagesLogicTest(int numberOfCheeps, int cheepsPerPage)
     {
         Before();
-        publicPage = new PublicModel(_cheepService, _authorService, _userManager)
+        _publicPage = new PublicModel(CheepService!, AuthorService!)
         {
             Message = "What should this say"
         };
@@ -89,7 +85,7 @@ public class PublicPagesTest
         var excessCheeps = numberOfCheeps % cheepsPerPage;
         var expectedNumberOfPages = excessCheeps > 0 ? numberOfFullPages+1 : numberOfFullPages;
         
-        Assert.Equal(expectedNumberOfPages, publicPage.GetTotalPages(numberOfCheeps, cheepsPerPage));
+        Assert.Equal(expectedNumberOfPages, _publicPage.GetTotalPages(numberOfCheeps, cheepsPerPage));
         
     }
 }
