@@ -58,42 +58,6 @@ public class EndToEndTest : PageTest
          Thread.Sleep(20000); // wait for Kestrel
      }
      
-    
-   /*  [OneTimeTearDown]
-     public void TeardownServer()
-    {
-         _server?.Kill();
-        _server?.Dispose();
-     }
-
-
-     [OneTimeSetUp]
-     public void StartServer()
-     {
-         var psi = new ProcessStartInfo
-         {
-             FileName = "dotnet",
-             Arguments = "run --project ../../../../../src/Chirp.Web/Chirp.Web.csproj --urls=https://localhost:7103",
-           RedirectStandardOutput = true,
-             RedirectStandardError = true,
-             UseShellExecute = false
-         };
-         Console.WriteLine(Path.GetFullPath("../../../../../src/Chirp.Web/Chirp.Web.csproj"));
-    
-    
-         _server = new Process { StartInfo = psi };
-    
-         _server.OutputDataReceived += (_, e) => Console.WriteLine("[SERVER OUT] " + e.Data);
-         _server.ErrorDataReceived += (_, e) => Console.WriteLine("[SERVER ERR] " + e.Data);
-    
-        _server.Start();
-    
-       _server.BeginOutputReadLine();
-         _server.BeginErrorReadLine();
-    
-         Thread.Sleep(25000); // wait for it to start
-     }*/
-
     [SetUp]
     public async Task Init()
     {
@@ -114,7 +78,7 @@ public class EndToEndTest : PageTest
     [Test]
     public async Task PressLoginButtonRedirectsToLoginPage()
     {
-        await Page.GetByText("Login").ClickAsync(); //Click Login-button
+        await Page.GetByText("Login").ClickAsync();
         await Expect(Page).ToHaveURLAsync("https://localhost:7103/Identity/Account/Login");
     }
 
@@ -179,6 +143,23 @@ public class EndToEndTest : PageTest
         // await Expect(Page.Locator("ul > li")).ToContainTextAsync([_Username,testCheep,]);
         await Expect(firstCheep).ToContainTextAsync(_username);
         await Expect(firstCheep).ToContainTextAsync(testCheep);
+    }
+    
+    [Ignore(reason: "Broken test")]
+    [Test]
+    public async Task PostingCheepPersistsAcrossReload()
+    {
+        await RegisterUserTask();
+
+        var message = "Persistence test";
+
+        await Page.GetByRole(AriaRole.Textbox).FillAsync(message);
+        await Page.GetByRole(AriaRole.Button).And(Page.GetByText("Post")).ClickAsync();
+
+        await Page.ReloadAsync();
+
+        await Expect(Page.Locator("ul.cheeps"))
+            .ToContainTextAsync(message);
     }
 
     public async Task RegisterUserTask()

@@ -3,6 +3,7 @@ using Chirp.Core.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SQLitePCL;
+using System.Security.Claims;
 
 namespace Chirp.Infrastructure;
 
@@ -55,6 +56,15 @@ public class CheepService : ICheepService
 
     public async Task PostCheep(string text, string authorId)
     {
+        if (_cheepRepository == null)
+            throw new InvalidOperationException("_cheepRepository is NULL");
+
+        if (authorId == null)
+            throw new InvalidOperationException("authorId is NULL in CheepService");
+
+        if (text == null)
+            throw new InvalidOperationException("text is NULL in CheepService");
+        
         if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
         var author = await _cheepRepository.GetAuthorAndCheepsFromId(authorId);
         if (author == null) throw new ArgumentException("Author not found");
