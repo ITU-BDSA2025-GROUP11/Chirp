@@ -56,7 +56,7 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 
 # Ethics
 The development of modern software systems requires careful ethical consideration. This chapter examines the ethical framework adopted for the Chirp project focusing on two primary areas.
-the selection of an appropriate open-source license and importantly the integrity of authorship in the age of AI.
+the selection of an appropriate open-source license and the integrity of authorship in the age of AI.
 With the growing prevalence of Large Language Models (LLMs) in software engineering establishing clear boundaries for AI assistance was paramount. This section details the group's policy on transparency and evaluates adherence to these guidelines throughout the development lifecycle.
 
 
@@ -66,9 +66,9 @@ The decision to adopt the MIT License for the project was based on two primary f
 * The scope of the application
 * The educational nature of the project
 
-With these two factors in mind, the simplicity of the MIT license was ideal for a project of relatively small scope as it is easy to implement and future developers only needs to read a small paragraph to fully understand the parameters of the license.
+With these two factors in mind, the simplicity of the MIT license was ideal for a project of relatively small scope as it is easy to implement, and future developers only need to read a small paragraph to fully understand the parameters of the license.
 
-The most significant consideration however was the project’s educational context. As it is unlikely parts of Chirp would be used in a high-stakes commercial environment it was prioritized to take future students of the course into consideration. The MIT license ensures that future students can study, modify, and take inspiration from our implementation without fear of legal repercussions.
+The most significant consideration, however, was the project’s educational context. As it is unlikely, parts of Chirp would be used in a high-stakes commercial environment it was prioritized to take future students of the course into consideration. The MIT license ensures that future students can study, modify, and take inspiration from our implementation without fear of legal repercussions.
 
 
 ## LLMs, ChatGPT, CoPilot, and others (Joakim)
