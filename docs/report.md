@@ -55,7 +55,39 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 ## How to run test suite locally (Morten)
 
 # Ethics
+The development of modern software systems requires careful ethical consideration. This chapter examines the ethical framework adopted for the Chirp project focusing on two primary areas.
+the selection of an appropriate open-source license and the integrity of authorship in the age of AI.
+With the growing prevalence of Large Language Models (LLMs) in software engineering establishing clear boundaries for AI assistance was paramount. This section details the group's policy on transparency and evaluates adherence to these guidelines throughout the development lifecycle.
+
 
 ## License (Joakim)
+The decision to adopt the MIT License for the project was based on two primary factors:
+
+* The scope of the application
+* The educational nature of the project
+
+With these two factors in mind, the simplicity of the MIT license was ideal for a project of relatively small scope as it is easy to implement, and future developers only need to read a small paragraph to fully understand the parameters of the license.
+
+The most significant consideration, however, was the project’s educational context. As it is unlikely, parts of Chirp would be used in a high-stakes commercial environment it was prioritized to take future students of the course into consideration. The MIT license ensures that future students can study, modify, and take inspiration from our implementation without fear of legal repercussions.
+
 
 ## LLMs, ChatGPT, CoPilot, and others (Joakim)
+From the outset of the project the decision was made to keep the use of Large language models (LLMs) to a minimum during the development of the Chrip application.
+Should the need for AI assistance arise during development the group would handle it with transparency both internally
+and by crediting the LLM as co-author in the given part of the code. 
+This approach however, proved challenging in practice as ChatGPT does not have an associated GitHub account. As an alternative solution, the LLM was credited in writing within Git commit messages whenever its assistance was relevant.
+
+The use of AI would turn out to be mostly unnecessary, however in some instances the development would reach a bottleneck and the group decided to consult ChatGPT. 
+This was done during the creation of the chripDbContextFactory and the initial implementation of identity package.
+
+Troubles also arose during the deployment of the application to Azure where LMMs were consulted but ultimately yielded no tangible solutions so here it was discarded.
+
+When consulted, the LLM were used as a substitute for a teaching assistant providing guidance and explanations rather than generating concrete code implementations.
+
+LLMs would also prove useful for interpreting and understanding large and complex error messages produced by JetBrains Rider, particularly during migration related issues encountered in the first half of the development process.
+
+## Ethical conclusion
+In the end the group successfully adhered to the core ethical principle set out for ourselves maintaining intellectual ownership. 
+While the technical method of attribution had to be changed from co-authorship to commit message citations due to platform limitations the role of AI remained strictly supplementary. 
+By treating LLMs as "teaching assistants" for debugging and explanations rather than code generators
+we ensured that the final codebase remains a product of our own understanding and effort.
