@@ -22,6 +22,16 @@ Here comes a description of our domain model.
 
 ## Architecture of deployed application (Milja)
 
+The deployed application is hosted on Azure Web Services. 
+The application is deployed from GitHub via an auto-generated workflow file.
+
+The SQLite database file is regenerated on every deployment, this means that user data and cheep data is only persistent within a deployment. 
+When a new feature is merged into, main resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
+
+As part of the deployment specifications on Azure, there is specified a startup-command.
+As the program would simply not be run by the Web App otherwise.
+
+
 ## User activities (Joakim)
 
 ## Sequence of functionality/calls trough _Chirp!_ (Emilie)
