@@ -25,11 +25,16 @@ Here comes a description of our domain model.
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
 
-The SQLite database file is regenerated on every deployment, this means that user data and cheep data is only persistent within a deployment. 
-When a new feature is merged into, main resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
+There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
+a startup command on Azure. Without this the Web App did not run the program.
 
-As part of the deployment specifications on Azure, there is specified a startup-command.
-As the program would simply not be run by the Web App otherwise.
+The startup command is simply `dotnet Chirp.Web.dll`.
+
+Secondly because the application relies on an SQLite database-file, which is not "sent" to Azure as part of the deployment,
+the database file should be created if the program is run without an existing file.
+This code was added in Chirp.Web.Program.cs.
+As a result of this the SQLite database file is regenerated on every deployment, this means that user data and cheep data is only persistent within a deployment. 
+When a new feature is merged into, main resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
 
 
 ## User activities (Joakim)
