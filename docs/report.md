@@ -113,6 +113,13 @@ Finally a user can choose to perform a standard logout. This returns them to the
 ## Build, test, release, and deployment (Therese og Milja)
 
 
+### Release
+
+
+
+### Deployment
+
+
 ## Team work (Emilie og Milja)
 
 ## How to make _Chirp!_ work locally (Morten)
