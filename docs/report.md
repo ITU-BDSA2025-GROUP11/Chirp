@@ -115,6 +115,11 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 ### Release
 
+Initially we thought we would be making new releases regularly using tags. But as time would tell git, or GitHUb, was 
+a new routine and the tags ended up being mostly forgotten. We were more focused on trying to improve how we write 
+issues as well as tracking progress using project boards.
+
+We made a final release before the submission date.
 
 
 ### Deployment
