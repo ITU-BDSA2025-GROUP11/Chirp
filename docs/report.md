@@ -42,17 +42,8 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
 
-There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
-a startup command on Azure. Without this the Web App did not run the program.
-
-The startup command is simply `dotnet Chirp.Web.dll`.
-
-Secondly because the application relies on an SQLite database-file, which is not "sent" to Azure as part of the deployment,
-the database file should be created if the program is run without an existing file.
-This code was added in Chirp.Web.Program.cs.
-As a result of this the SQLite database file is regenerated on every deployment, this means that user data and cheep data is only persistent within a deployment. 
-When a new feature is merged into, main resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
-
+The application relies on an SQLite database file which is regenerated on every deployment. 
+This means that user data and cheep data is only persistent within a deployment.
 
 ## User activities (Joakim)
 The following section describes how a user navigates through the Chirp application
@@ -123,6 +114,8 @@ We made a final release before the submission date.
 
 
 ### Deployment
+
+The deployment process was filled with a lot of technical issues as were also mention in the [cite architecture of deployed application]
 
 
 ## Team work (Emilie og Milja)
