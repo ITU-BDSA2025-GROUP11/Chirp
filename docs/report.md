@@ -115,11 +115,6 @@ We made a final release before the submission date.
 
 ### Deployment
 
-The deployment process was filled with a lot of technical issues as were also mention in the
-
-When a new feature is merged into, main resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
-
-
 There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
 a startup command on Azure. Without this the Web App did not run the program.
 
