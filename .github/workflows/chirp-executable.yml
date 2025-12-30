@@ -61,7 +61,7 @@ jobs:
   
   release:
     name: Release
-    needs: prep-release
+    needs: [prep-release, tag]
     
     strategy:
       matrix: 
@@ -89,6 +89,7 @@ jobs:
           rm -r "${release_name}"
 
       - name: Populate GitHub Release
+        
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.tag.outputs.tag_name }}
