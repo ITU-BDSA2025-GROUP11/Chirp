@@ -38,7 +38,7 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 ## Architecture — In the small (Morten)
 
 ## Architecture of deployed application (Milja)
-![Diagram of the architecture of deployed application](./docs/diagrams/DeploymentDiagram.jpg)
+![Diagram of the architecture of deployed application](./diagrams/DeploymentDiagram.jpg)
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
 
@@ -102,7 +102,7 @@ Finally a user can choose to perform a standard logout. This returns them to the
 # Process
 
 ## Build, test, release, and deployment (Therese og Milja)
-![diagram of the four main workflow files](./docs/diagrams/WorkflowDiagrams.jpg)
+![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
 ### Test
 There are two main workflows which test the program. These were used for automatically testing pull-requests, such that if the tests
 fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
