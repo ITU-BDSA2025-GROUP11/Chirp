@@ -60,6 +60,12 @@ who have liked and disliked the Cheep—all specific attributes for our applicat
 ## Architecture — In the small (Morten)
 
 ## Architecture of deployed application (Milja)
+![Diagram of the architecture of deployed application](./docs/diagrams/DeploymentDiagram.jpg)
+The deployed application is hosted on Azure Web Services. 
+The application is deployed from GitHub via an auto-generated workflow file.
+
+The application relies on an SQLite database file which is regenerated on every deployment. 
+This means that user data and cheep data is only persistent within a deployment.
 
 ## User activities (Joakim)
 The following section describes how a user navigates through the Chirp application
@@ -118,6 +124,33 @@ Finally a user can choose to perform a standard logout. This returns them to the
 # Process
 
 ## Build, test, release, and deployment (Therese og Milja)
+![diagram of the four main workflow files](./docs/diagrams/WorkflowDiagrams.jpg)
+### Test
+There are two main workflows which test the program. These were used for automatically testing pull-requests, such that if the tests
+fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
+therefore there is a separate workflow specifically for these tests.
+
+### Release
+
+The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
+But as time would tell git, or GitHUb, was a new routine and adding tags to pushes ended up being mostly forgotten. 
+We were more focused on trying to improve how we write issues as well as tracking progress using project boards.
+
+Therefore we decided to manually make a final release before the submission date.
+
+
+### Deployment
+
+There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
+a startup command on Azure. Without this the Web App did not run the program.
+
+The startup command is simply `dotnet Chirp.Web.dll`.
+
+Secondly because the application relies on an SQLite database-file, which is not "sent" to Azure as part of the deployment,
+the database file should be created if the program is run without an existing file.
+This code was added in Chirp.Web.Program.cs.
+As a result of this the SQLite database file is regenerated on every deployment, this means that user data and cheep data is only persistent within a deployment.
+When a new feature is merged into main, resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
 
 
 ## Team work (Emilie og Milja)
