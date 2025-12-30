@@ -58,6 +58,16 @@ who have liked and disliked the Cheep—all specific attributes for our applicat
 
 
 ## Architecture — In the small (Morten)
+![OnionArchitectureDiagram.png](diagrams/OnionArchitectureDiagram.png)
+
+Above figure illustrates the onion architecture which the Chirp! Codebase is built upon. Dependencies flow exclusively inward, ensuring loosely coupled layers with inverted control. The application is structured into the three following layers:
+
+- Chirp.Core: This layer is the innermost layer of Chirp. Containing the Domain Model and the Data transfer Objects. Chirp.Core has no external dependencies.
+- Chirp.Infrastructure: Manages data persistence and retrieval, this data access interface is implemented using Entity Framework Core. This layer also encapsulates application logic. It manages data flow between the user interface and the repositories. 
+- Chirp.Web: The outermost layer constraining the razor pages for user interaction.
+
+This structure ensures the application is loosely coupled, maintainable and testable
+
 
 ## Architecture of deployed application (Milja)
 ![Diagram of the architecture of deployed application](./docs/diagrams/DeploymentDiagram.jpg)
@@ -156,8 +166,64 @@ When a new feature is merged into main, resulting in a new deployment, all users
 ## Team work (Emilie og Milja)
 
 ## How to make _Chirp!_ work locally (Morten)
+Git must be installed, as a prerequisit for the following steps.
+Once installed, the following command can be run, to clone the repository.
+```
+git clone https://github.com/ITU-BDSA2025-GROUP11/Chirp.git
+```
+After cloning the repository, user-secrets must be set up to authorize third-party login.
+Locate the freshly cloned repository on your device and navigate to the ```src/Chirp.Web/``` directory.
+
+Before setting up user-secrets. Ensure dotnet-ef is installed. This step can be skipped, if ef is already configured.
+```
+dotnet tool install --global dotnet-ef
+```
+From the ```/Chirp.Web/``` directory, run the following commands to setup the user-secrets.
+```
+dotnet user-secrets init
+```
+```
+dotnet user-secrets set "authentication:github:clientId" "Ov23ctwQATqvMi87GmtN"
+```
+```
+- dotnet user-secrets set "authentication:github:clientSecret" "e04c4c4cf97ccb87946a3a0e9ee9080ac0528995"
+```
+To confirm thats user-secrets has been setup successfully, the fowllowing command can be run from the Chirp.Web directory.
+```
+dotnet user-secrets list
+```
+Which should output both the authentication:github:clientsecret and authentication:github:clientID
+
+With all the prerequisit for running the program locally done, the program can be run from the chirp.Web 
+directory in the terminal, using the following command
+```
+dotnet run program.cs
+```
 
 ## How to run test suite locally (Morten)
+This chapter assumes you have followed the previous chapter and setup user-secrets and the required dependencies.
+
+Tests should be run from the project rooty ```/Chirp/```. However First, build the test project to generate the installation script. 
+Run the following command from the root directory:
+```
+dotnet build
+```
+
+Playwright is required to successfully run the End2End-Tests. To install Playwright, run the following command from the ```
+/Chirp/``` directory
+```
+pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
+```
+The website msut be running locally, for the playwrigt test to successfully run. 
+Run the project from ```src/Chirp.Web/``` with the command ```dotnet run```
+
+Having completed the prerequisite for the test to run, we can finally execute the tests.
+Run the test from the ```/Chirp/``` directory, using the following command:
+```
+dotnet test --no-build
+```
+
+This should run the enitre test-suite, consisting of unit tests, Intergration tests and End2End tests.
 
 # Ethics
 The development of modern software systems requires careful ethical consideration. This chapter examines the ethical framework adopted for the Chirp project focusing on two primary areas.
