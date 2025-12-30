@@ -106,11 +106,11 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 ### Release
 
-Initially we thought we would be making new releases regularly using tags. But as time would tell git, or GitHUb, was 
-a new routine and the tags ended up being mostly forgotten. We were more focused on trying to improve how we write 
-issues as well as tracking progress using project boards.
+The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
+But as time would tell git, or GitHUb, was a new routine and adding tags to pushes ended up being mostly forgotten. 
+We were more focused on trying to improve how we write issues as well as tracking progress using project boards.
 
-We made a final release before the submission date.
+Therefore we decided to manually make a final release before the submission date.
 
 
 ### Deployment
@@ -124,7 +124,7 @@ Secondly because the application relies on an SQLite database-file, which is not
 the database file should be created if the program is run without an existing file.
 This code was added in Chirp.Web.Program.cs.
 As a result of this the SQLite database file is regenerated on every deployment, this means that user data and cheep data is only persistent within a deployment.
-When a new feature is merged into, main resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
+When a new feature is merged into main, resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
 
 
 ## Team work (Emilie og Milja)
