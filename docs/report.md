@@ -111,10 +111,12 @@ therefore there is a separate workflow specifically for these tests.
 ### Release
 
 The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
-But as time would tell git, or GitHUb, was a new routine and adding tags to pushes ended up being mostly forgotten. 
+But as time would tell git was a new routine and adding tags to pushes ended up being mostly forgotten. 
 We were more focused on trying to improve how we write issues as well as tracking progress using project boards.
 
-Therefore we decided to manually make a final release before the submission date.
+Near the end of the project we realised that it is actually possible to get the workflow to auto-generate tags, and 
+this would then have been a useful optimisation for us. So even though it is a bit late, we did remake the chirp_executable.yml
+workflow to autogenerate tags for releases.
 
 
 ### Deployment
