@@ -97,10 +97,12 @@ Finally a user can choose to perform a standard logout. This returns them to the
 Make sure that your illustration is complete. 
 > That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
 
-In the first UML sequence diagram, the flow of messages that occurs when an unauthorized user accesses 
-the public timeline on the Chirp! web app can be seen. Had the user been authenticated, the Razor page 
-responsible for the public timeline would prioritize showing cheeps made by followed users, then liked and lastly
-disliked cheeps. 
+
+The first UML sequence diagram shows the flow of messages that occurs when an unauthenticated user accesses
+the public timeline on the Chirp! web app. Although all messages passed along the lifelines are in reality asynchronous, 
+they are reflected as being synchronous in the diagrams, as it was not possible to change the look of the arrowheads.
+Had the user been authenticated, the Razor page responsible for the public timeline would prioritize showing cheeps 
+made by followed users, then liked and lastly disliked cheeps. 
 
 # Process
 
