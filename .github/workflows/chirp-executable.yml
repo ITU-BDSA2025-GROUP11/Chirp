@@ -25,6 +25,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
   tag:
+    name: Generate tag for release
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +39,7 @@ jobs:
 
   prep-release: 
     name: Prepare GitHub Release
-    needs: build
+    needs: tag
     
     runs-on: ubuntu-latest
     steps:
