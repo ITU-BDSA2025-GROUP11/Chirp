@@ -170,6 +170,28 @@ When a new feature is merged into main, resulting in a new deployment, all users
 
 The following chapter explains the working process and the decisions made while working on Chirp! as a team
 
+## GitHub
+
+The group used different functionalities on GitHub to help coordinate the responsibilities of different members as well as
+staying on track with regards to completing the weekly project requirements.
+
+The usage of project-boards, issues, code-review and actions enabled the group to coordinate its efforts as well as gaining
+familiarity with how to use these tools to write code and produce cohesive projects in larger groups.
+
+However, the GitHub functionalities were not all used equally right from the start as all group members were still quite new to working with git.
+
+To start with the issues were copy-pasted from the project-requirements, but after meeting with the TA there came an increased focus
+on rewriting the project-requirements in to actual issues. This helps keep track of why different changes are necessary, what
+smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
+pressing.
+
+Another beneficial rule to follow is keeping main protected. This way code changes can only be added to main after a minimum of one approving reviews.
+This is good because otherwise you might overeagerly push changes to main without double-checking whether these changes are actually sound. 
+
+
+
+
+
 ## Group Contract
 While working on a group project such as Chirp!, it is important for the group to reach a consensus regarding the work process and expectations for the final product. Usually, this is done via a group contract drafted before work on the project begins.
 A contract can be of great benefit in resolving issues that may arise during the working process. It provides individual members with a concrete reference point if one or more members are not living up to the agreed-upon standards.
