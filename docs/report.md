@@ -78,6 +78,7 @@ The application relies on an SQLite database file which is regenerated on every 
 This means that user data and cheep data is only persistent within a deployment.
 
 ## User activities (Joakim)
+![Diagram of user activities](./diagrams/ActivityDiagram.jpg)
 The following section describes how a user navigates through the Chirp application
 from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
 
@@ -166,6 +167,23 @@ When a new feature is merged into main, resulting in a new deployment, all users
 
 
 ## Team work (Emilie og Milja)
+
+The following chapter explains the working process and the decisions made while working on Chirp! as a team
+
+## Group Contract
+While working on a group project such as Chirp!, it is important for the group to reach a consensus regarding the work process and expectations for the final product. Usually, this is done via a group contract drafted before work on the project begins.
+A contract can be of great benefit in resolving issues that may arise during the working process. It provides individual members with a concrete reference point if one or more members are not living up to the agreed-upon standards.
+For Chirp! however, the group decided to forgo a physical contract and rely simply upon a verbal agreement. 
+
+This decision was based on the pre-existing relationships within the group and a history of previous group projects completed by several of the members. It was agreed that should problems arise during production, the ideal solution would be an internal dialogue to resolve them.
+Ultimately, the lack of a formal group contract did not present a problem, as no significant conflicts occurred during the work process.
+
+
+## Pair Programming 
+During the project, the groups were encouraged to make use of pair programming, a development style that involves a "Driver" and a "Navigator." The Driver writes the code, while the Navigator dictates what needs to be done and reviews the work. These roles should be swapped at frequent intervals.
+This method of coding resonated with the group and was heavily used during production.
+An important aspect of pair programming is that both parties should be credited on joint commits. This ended up being the only issue the group faced regarding this workflow as co-authorship was often forgotten during the first half of the project skewing the number of commits attributed to each member.
+
 
 ## How to make _Chirp!_ work locally (Morten)
 Git must be installed, as a prerequisit for the following steps.
