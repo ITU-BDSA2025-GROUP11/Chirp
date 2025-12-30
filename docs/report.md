@@ -103,6 +103,11 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 ## Build, test, release, and deployment (Therese og Milja)
 
+### Test
+
+There are two main workflows which test the program, which were used for automatically testing pull-requests, such that if the tests
+fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
+therefore there is another workflow specifically for these tests.
 
 ### Release
 
