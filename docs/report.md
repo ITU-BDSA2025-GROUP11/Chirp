@@ -70,7 +70,7 @@ This structure ensures the application is loosely coupled, maintainable and test
 
 
 ## Architecture of deployed application (Milja)
-![Diagram of the architecture of deployed application](./docs/diagrams/DeploymentDiagram.jpg)
+![Diagram of the architecture of deployed application](./diagrams/DeploymentDiagram.jpg)
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
 
@@ -134,7 +134,7 @@ Finally a user can choose to perform a standard logout. This returns them to the
 # Process
 
 ## Build, test, release, and deployment (Therese og Milja)
-![diagram of the four main workflow files](./docs/diagrams/WorkflowDiagrams.jpg)
+![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
 ### Test
 There are two main workflows which test the program. These were used for automatically testing pull-requests, such that if the tests
 fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
@@ -143,10 +143,12 @@ therefore there is a separate workflow specifically for these tests.
 ### Release
 
 The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
-But as time would tell git, or GitHUb, was a new routine and adding tags to pushes ended up being mostly forgotten. 
+But as time would tell git was a new routine and adding tags to pushes ended up being mostly forgotten. 
 We were more focused on trying to improve how we write issues as well as tracking progress using project boards.
 
-Therefore we decided to manually make a final release before the submission date.
+Near the end of the project we realised that it is actually possible to get the workflow to auto-generate tags, and 
+this would then have been a useful optimisation for us. So even though it is a bit late, we did remake the chirp_executable.yml
+workflow to autogenerate tags for releases.
 
 
 ### Deployment
