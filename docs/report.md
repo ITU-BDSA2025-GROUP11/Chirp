@@ -38,7 +38,7 @@ adds lists of cheeps such as the cheeps of an author and liked and disliked chee
 ## Architecture — In the small (Morten)
 
 ## Architecture of deployed application (Milja)
-
+![Diagram of the architecture of deployed application](./docs/diagrams/DeploymentDiagram.jpg)
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
 
