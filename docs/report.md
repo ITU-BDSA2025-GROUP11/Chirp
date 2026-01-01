@@ -137,14 +137,14 @@ Finally a user can choose to perform a standard logout. This returns them to the
 ![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
 
 ### Test
-PlayWrightTest.yml and dotnetTest.yml
-There are two main workflows which test the program. These were used for automatically testing pull-requests, such that if the tests
+
+There are two main workflows, PlayWrightTest.yml and dotnetTest.yml, which test the program. These were used for automatically testing pull-requests, such that if the tests
 fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
 therefore there is a separate workflow specifically for these tests.
 
 ### Release
-chirp-executable.yml
-The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
+
+The workflow responsible for generating releases, chirp-executable.yml, was originally only activated upon pushes to main with tags.
 But as time would tell git was a new routine and adding tags to pushes ended up being mostly forgotten.
 
 Near the end of the project we realised that it is actually possible to get the workflow to auto-generate tags, and 
@@ -153,7 +153,8 @@ workflow to autogenerate tags for releases.
 
 
 ### Deployment
-main_chirp.yml
+The workflow-file responsible for the deployment is main_chirp.yml.
+
 There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
 a startup command on Azure. Without this the Web App did not run the program.
 
