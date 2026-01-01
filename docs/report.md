@@ -173,19 +173,25 @@ The following chapter explains the working process and the decisions made while 
 ## GitHub
 
 The group used different functionalities on GitHub to help coordinate the responsibilities of different members as well as
-staying on track with regards to completing the weekly project requirements.
+keeping track of the weekly project requirements.
 
 The usage of project-boards, issues, code-review and actions enabled the group to coordinate its efforts as well as gaining
 familiarity with how to use these tools to write code and produce cohesive projects in larger groups.
 
-However, the GitHub functionalities were not all used equally right from the start as all group members were still quite new to working with git.
+To start with the main focus was in particular on following trunk-based-development. This meant trying to keep branches focused on smaller
+system changes and frequent pull requests. In the end this did not end up being proper trunk-based-development as branches were typically active
+for a few days up to a week. We felt this was okay considering we were balancing this project as well as other courses simultaneously.
 
-To start with the issues were copy-pasted from the project-requirements, but after meeting with the TA there came an increased focus
-on rewriting the project-requirements in to actual issues. This helps keep track of why different changes are necessary, what
-smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
+All group members had prior git experience from the first year project, but even so there was a bit of a difference with regards to how often changes
+would be commited. This can be seen in the uneven commit statistics on the GitHub repository page. Another factor in the uneven statistics is a result of
+forgetting co-authors when pair programming, but as will be mentioned later this was mainly an issue at the beginning of the project.
+
+Issues were a bit more unfamiliar to some members and to start with the issues were copy-pasted from the project-requirements. 
+But after meeting with the TA there came an increased focus on rewriting the project-requirements in to actual issues. 
+This helps keep track of why different changes are necessary, what smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
 pressing.
 
-Another beneficial rule to follow is keeping main protected. This way code changes can only be added to main after a minimum of one approving reviews.
+Another beneficial rule to follow is keeping main protected. This way code changes can only be added to main after a minimum of one approving review.
 This is good because otherwise you might overeagerly push changes to main without double-checking whether these changes are actually sound. 
 This also forces the reviewing group member(s) to take a critical look at the code and ensures that members feel more responsible for 
 all aspects of the code and are aware of changes made to the code and/or file structure of the project.
