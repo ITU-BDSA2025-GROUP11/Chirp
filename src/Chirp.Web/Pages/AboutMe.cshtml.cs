@@ -8,6 +8,9 @@ using Chirp.Core.DTO;
 
 namespace Chirp.Web.Pages
 {
+    /// <summary>
+    ///  class for handling user-interaction with the about me page
+    /// </summary>
     public class AboutMeModel : PageModel
     {
         private readonly ICheepService _cheepService;

@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Web.Pages
 {
+    /// <summary>
+    /// Class for handling userinteraction with the public page
+    /// </summary>
     public class PublicModel : PaginationModel
     {
         private readonly IAuthorService _authorService;
