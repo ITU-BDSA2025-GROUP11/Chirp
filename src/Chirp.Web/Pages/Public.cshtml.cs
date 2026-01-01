@@ -56,7 +56,6 @@ namespace Chirp.Web.Pages
                     ViewData["DislikedCheeps"] = await _authorService.GetDislikedCheepIds(currentUserId);
                 }
             }
-    
             return Page();
         }
         

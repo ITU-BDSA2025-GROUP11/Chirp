@@ -130,6 +130,18 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 
 ## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls trough _Chirp!_ 
+![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
+The first UML sequence diagram shows the flow of calls and responses that occurs when an unauthorized user accesses
+the public timeline on the Chirp! web app.
+Although all messages passed along the lifelines are in reality asynchronous, 
+they are reflected as being synchronous in the diagrams, as it was not possible to change the look of the arrowheads.
+When cheeps are retrieved from the database, each cheep's likes and dislikes are also fetched. Although unauthorized 
+users cannot like nor dislike cheeps, they are still viewable to the logged-out user.
+
+<br>![Sequence diagram Follow](./diagrams/SequenceDiagramFollow.jpg)
+The second UML sequence diagram shows the flow of messages that occur when an authorized user starts following another
+user. This example is included to show how the program handles an HTTP POST-request.
 
 # Process
 
