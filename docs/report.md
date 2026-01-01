@@ -129,11 +129,11 @@ All cheeps from the deleted account will also be invisible and inaccessible for 
 Finally a user can choose to perform a standard logout. This returns them to the initial unauthenticated state on the Public Timeline, where they can choose to log in again or register a new account.
 
 
-## Sequence of functionality/calls trough _Chirp!_ (Emilie)
+## Sequence of functionality/calls trough _Chirp!_
 
 # Process
 
-## Build, test, release, and deployment (Therese og Milja)
+## Build, test, release, and deployment
 ![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
 
 ### Test
@@ -166,7 +166,7 @@ As a result of this the SQLite database file is regenerated on every deployment,
 When a new feature is merged into main, resulting in a new deployment, all users and cheeps not specified in the DbInitializer-file are lost.
 
 
-## Team work (Emilie og Milja)
+## Team work
 
 The following chapter explains the working process and the decisions made while working on Chirp! as a team
 
@@ -211,7 +211,7 @@ This method of coding resonated with the group and was heavily used during produ
 An important aspect of pair programming is that both parties should be credited on joint commits. This ended up being the only issue the group faced regarding this workflow as co-authorship was often forgotten during the first half of the project skewing the number of commits attributed to each member.
 
 
-## How to make _Chirp!_ work locally (Morten)
+## How to make _Chirp!_ work locally
 Git must be installed, as a prerequisit for the following steps.
 Once installed, the following command can be run, to clone the repository.
 ```
@@ -246,7 +246,7 @@ directory in the terminal, using the following command
 dotnet run program.cs
 ```
 
-## How to run test suite locally (Morten)
+## How to run test suite locally 
 This chapter assumes you have followed the previous chapter and setup user-secrets and the required dependencies.
 
 Tests should be run from the project rooty ```/Chirp/```. However First, build the test project to generate the installation script. 
@@ -277,7 +277,7 @@ the selection of an appropriate open-source license and the integrity of authors
 With the growing prevalence of Large Language Models (LLMs) in software engineering establishing clear boundaries for AI assistance was paramount. This section details the group's policy on transparency and evaluates adherence to these guidelines throughout the development lifecycle.
 
 
-## License (Joakim)
+## License
 The decision to adopt the MIT License for the project was based on two primary factors:
 
 * The scope of the application
@@ -288,7 +288,7 @@ With these two factors in mind, the simplicity of the MIT license was ideal for 
 The most significant consideration, however, was the project’s educational context. As it is unlikely, parts of Chirp would be used in a high-stakes commercial environment it was prioritized to take future students of the course into consideration. The MIT license ensures that future students can study, modify, and take inspiration from our implementation without fear of legal repercussions.
 
 
-## LLMs, ChatGPT, CoPilot, and others (Joakim)
+## LLMs, ChatGPT, CoPilot, and others
 From the outset of the project the decision was made to keep the use of Large language models (LLMs) to a minimum during the development of the Chrip application.
 Should the need for AI assistance arise during development the group would handle it with transparency both internally
 and by crediting the LLM as co-author in the given part of the code. 
