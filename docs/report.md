@@ -196,10 +196,6 @@ This is good because otherwise you might overeagerly push changes to main withou
 This also forces the reviewing group member(s) to take a critical look at the code and ensures that members feel more responsible for 
 all aspects of the code and are aware of changes made to the code and/or file structure of the project.
 
-
-
-
-
 ## Group Contract
 While working on a group project such as Chirp!, it is important for the group to reach a consensus regarding the work process and expectations for the final product. Usually, this is done via a group contract drafted before work on the project begins.
 A contract can be of great benefit in resolving issues that may arise during the working process. It provides individual members with a concrete reference point if one or more members are not living up to the agreed-upon standards.
