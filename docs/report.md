@@ -187,6 +187,8 @@ pressing.
 
 Another beneficial rule to follow is keeping main protected. This way code changes can only be added to main after a minimum of one approving reviews.
 This is good because otherwise you might overeagerly push changes to main without double-checking whether these changes are actually sound. 
+This also forces the reviewing group member(s) to take a critical look at the code and ensures that members feel more responsible for 
+all aspects of the code and are aware of changes made to the code and/or file structure of the project.
 
 
 
