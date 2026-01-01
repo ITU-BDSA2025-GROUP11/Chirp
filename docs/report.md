@@ -15,14 +15,13 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 The architecture of the application follows an onion structure, partitioning the src folder into three subfolders: Chirp.Core, Chirp.Infrastructure and
 Chirp.Web. These represent the different layers of the program where Chirp.Core resides as the base of the program, defining the entity classes as well
-as their complementing Data Transfer Objects (DTOs) without having references to neither Chirp.Infrastructure nor Chirp.Web, keeping the core independant 
+as their complementing Data Transfer Objects (DTOs) without having references to Chirp.Infrastructure or Chirp.Web, keeping the core independent 
 from other classes. 
 
-This core is then used by Chirp.Infrastructure which queries the database, and furthermore transfers data to contain the data retrieved and queries the database, 
-giving functionality to the application.
+The core is then used by Chirp.Infrastructure which handles queries to the database, and transferal of data. This gives functionality to the application.
 
-This is used by the part of the program, Chirp.Web, which allows a user to interact with the application, applying the functionality defined in Chirp.Infrastructure
-and thus contains references to both the infrastructure and core folder.
+Chirp.Infrastructure is used by the main part of the program, Chirp.Web, which allows a user to interact with the application.
+Chirp.Web thus contains a reference to Chirp.Infrastructure
 
 All this will be explained in detail in the following chapter, beginning at the center of the onion: The domain model
 
