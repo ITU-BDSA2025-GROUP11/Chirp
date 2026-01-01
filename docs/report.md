@@ -180,6 +180,11 @@ When a new feature is merged into main, resulting in a new deployment, all users
 
 The following chapter explains the working process and the decisions made while working on Chirp! as a team
 
+## Development Process
+![diagram of the typical development flow](./diagrams/DevelopmentDiagram.png)
+The above diagram illustrates the typical flow from creation of a new issue to a push to main. As we strived to complete
+all issues the reject option on a pull request also leads back to work on the issue.
+
 ## GitHub
 
 The group used different functionalities on GitHub to help coordinate the responsibilities of different members as well as
@@ -187,6 +192,10 @@ keeping track of the weekly project requirements.
 
 The usage of project-boards, issues, code-review and actions enabled the group to coordinate its efforts as well as gaining
 familiarity with how to use these tools to write code and produce cohesive projects in larger groups.
+
+As can be seen from the picture of our project board mostly all issues have been resolved and at the writing of this
+only the finalizing of the report is missing as well as a bug which has been hard to replicate and therefore work on this bug was 
+not prioritised over the report.
 ![picture of project board right before hand-in](./diagrams/projectBoard.jpg)
 To start with the main focus was in particular on following trunk-based-development. This meant trying to keep branches focused on smaller
 system changes and frequent pull requests. In the end this did not end up being proper trunk-based-development as branches were typically active
