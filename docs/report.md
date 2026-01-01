@@ -98,12 +98,17 @@ Make sure that your illustration is complete.
 > That is, likely for many of you there will be different kinds of "calls" and responses. Some HTTP calls and responses, some calls and responses in C# and likely some more. (Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
 
 
-The first UML sequence diagram shows the flow of messages that occurs when an unauthenticated user accesses
+The first UML sequence diagram shows the flow of calls and responses that occurs when an unauthenticated user accesses
 the public timeline on the Chirp! web app. Although all messages passed along the lifelines are in reality asynchronous, 
-they are reflected as being synchronous in the diagrams, as it was not possible to change the look of the arrowheads.
+they are reflected as being synchronous in the diagrams, as it was not possible to change the look of the arrowheads. 
 Had the user been authenticated, the Razor page responsible for the public timeline would prioritize showing cheeps 
-made by followed users, then liked and lastly disliked cheeps. 
+made by followed users, then liked and lastly disliked cheeps.
+When cheeps are retrieved from the database each cheep's likes and dislikes are brought along. Although un-
+authenticated users cannot like nor dislike cheeps, they are still viewable to the unauthenticated user.
+belonging to each cheep are also retrieved. 
 
+The second UML sequence diagram shows the flow of messages when an authenticated user starts following another
+user. This example is included to show how the program
 # Process
 
 ## Build, test, release, and deployment (Therese og Milja)
