@@ -10,19 +10,16 @@ author:
 numbersections: true
 ---
 
-**Planlagt aflevering d. 30 december**
-
 # Design and Architecture of _Chirp!_
 The architecture of the application follows an onion structure, partitioning the src folder into three subfolders: Chirp.Core, Chirp.Infrastructure and
 Chirp.Web. These represent the different layers of the program where Chirp.Core resides as the base of the program, defining the entity classes as well
-as their complementing Data Transfer Objects (DTOs) without having references to neither Chirp.Infrastructure nor Chirp.Web, keeping the core independant 
+as their complementing Data Transfer Objects (DTOs) without having references to Chirp.Infrastructure or Chirp.Web, keeping the core independent 
 from other classes. 
 
-This core is then used by Chirp.Infrastructure which queries the database, and furthermore transfers data to contain the data retrieved and queries the database, 
-giving functionality to the application.
+The core is then used by Chirp.Infrastructure which handles queries to the database, and transferal of data. This gives functionality to the application.
 
-This is used by the part of the program, Chirp.Web, which allows a user to interact with the application, applying the functionality defined in Chirp.Infrastructure
-and thus contains references to both the infrastructure and core folder.
+Chirp.Infrastructure is used by the main part of the program, Chirp.Web, which allows a user to interact with the application.
+Chirp.Web thus contains a reference to Chirp.Infrastructure
 
 All this will be explained in detail in the following chapter, beginning at the center of the onion: The domain model
 
@@ -149,14 +146,14 @@ user. This example is included to show how the program handles an HTTP POST-requ
 ![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
 
 ### Test
-PlayWrightTest.yml and dotnetTest.yml
-There are two main workflows which test the program. These were used for automatically testing pull-requests, such that if the tests
+
+There are two main workflows, PlayWrightTest.yml and dotnetTest.yml, which test the program. These were used for automatically testing pull-requests, such that if the tests
 fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
 therefore there is a separate workflow specifically for these tests.
 
 ### Release
-chirp-executable.yml
-The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
+
+The workflow responsible for generating releases, chirp-executable.yml, was originally only activated upon pushes to main with tags.
 But as time would tell git was a new routine and adding tags to pushes ended up being mostly forgotten.
 
 Near the end of the project we realised that it is actually possible to get the workflow to auto-generate tags, and 
@@ -165,7 +162,8 @@ workflow to autogenerate tags for releases.
 
 
 ### Deployment
-main_chirp.yml
+The workflow-file responsible for the deployment is main_chirp.yml.
+
 There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
 a startup command on Azure. Without this the Web App did not run the program.
 
