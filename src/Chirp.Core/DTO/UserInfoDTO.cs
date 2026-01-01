@@ -1,5 +1,8 @@
 ﻿namespace Chirp.Core.DTO
 { 
+    /// <summary>
+    /// Class for configuration of how to transfer UserInfo-data from database to main application
+    /// </summary>
     public class UserInfoDTO
     {
         public string Name { get; set; } = string.Empty;

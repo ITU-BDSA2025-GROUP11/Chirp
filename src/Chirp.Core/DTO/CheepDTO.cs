@@ -2,6 +2,9 @@
 
 namespace Chirp.Core.DTO
 {
+    /// <summary>
+    /// Class for configuration of how to transfer Cheep-data from database to main application
+    /// </summary>
     public class CheepDTO
     {
         public int Id { get; set; }
