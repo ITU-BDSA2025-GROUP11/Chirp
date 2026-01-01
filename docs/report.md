@@ -26,7 +26,7 @@ and thus contains references to both the infrastructure and core folder.
 
 All this will be explained in detail in the following chapter, beginning at the center of the onion: The domain model
 
-## Domain model (Therese)
+## Domain model
 
 ![Chirp.Core Class Diagram](./diagrams/DomainModelClassDiagram.jpg)
 
@@ -57,8 +57,8 @@ Much like the Author entity, the Cheep entity also contains collections of autho
 who have liked and disliked the Cheep—all specific attributes for our application.
 
 
-## Architecture — In the small (Morten)
-![OnionArchitectureDiagram.png](diagrams/OnionArchitectureDiagram.png)
+## Architecture — In the small
+![OnionArchitectureDiagram.png](./diagrams/OnionArchitectureDiagram.png)
 
 Above figure illustrates the onion architecture which the Chirp! Codebase is built upon. Dependencies flow exclusively inward, ensuring loosely coupled layers with inverted control. The application is structured into the three following layers:
 
@@ -69,15 +69,14 @@ Above figure illustrates the onion architecture which the Chirp! Codebase is bui
 This structure ensures the application is loosely coupled, maintainable and testable
 
 
-## Architecture of deployed application (Milja)
+## Architecture of deployed application
 ![Diagram of the architecture of deployed application](./diagrams/DeploymentDiagram.jpg)
+
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
+The application relies on an SQLite database file.
 
-The application relies on an SQLite database file which is regenerated on every deployment. 
-This means that user data and cheep data is only persistent within a deployment.
-
-## User activities (Joakim)
+## User activities
 ![Diagram of user activities](./diagrams/ActivityDiagram.jpg)
 The following section describes how a user navigates through the Chirp application
 from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
@@ -136,16 +135,17 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 ## Build, test, release, and deployment (Therese og Milja)
 ![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
+
 ### Test
+PlayWrightTest.yml and dotnetTest.yml
 There are two main workflows which test the program. These were used for automatically testing pull-requests, such that if the tests
 fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
 therefore there is a separate workflow specifically for these tests.
 
 ### Release
-
+chirp-executable.yml
 The workflow responsible for generating releases was originally only activated upon pushes to main with tags.
-But as time would tell git was a new routine and adding tags to pushes ended up being mostly forgotten. 
-We were more focused on trying to improve how we write issues as well as tracking progress using project boards.
+But as time would tell git was a new routine and adding tags to pushes ended up being mostly forgotten.
 
 Near the end of the project we realised that it is actually possible to get the workflow to auto-generate tags, and 
 this would then have been a useful optimisation for us. So even though it is a bit late, we did remake the chirp_executable.yml
@@ -153,7 +153,7 @@ workflow to autogenerate tags for releases.
 
 
 ### Deployment
-
+main_chirp.yml
 There were a lot of issues with getting Azure to run the deployed application, this was solved by adding
 a startup command on Azure. Without this the Web App did not run the program.
 
@@ -177,7 +177,7 @@ keeping track of the weekly project requirements.
 
 The usage of project-boards, issues, code-review and actions enabled the group to coordinate its efforts as well as gaining
 familiarity with how to use these tools to write code and produce cohesive projects in larger groups.
-
+![picture of project board right before hand-in](./diagrams/projectBoard.jpg)
 To start with the main focus was in particular on following trunk-based-development. This meant trying to keep branches focused on smaller
 system changes and frequent pull requests. In the end this did not end up being proper trunk-based-development as branches were typically active
 for a few days up to a week. We felt this was okay considering we were balancing this project as well as other courses simultaneously.
@@ -185,7 +185,7 @@ for a few days up to a week. We felt this was okay considering we were balancing
 All group members had prior git experience from the first year project, but even so there was a bit of a difference with regards to how often changes
 would be commited. This can be seen in the uneven commit statistics on the GitHub repository page. Another factor in the uneven statistics is a result of
 forgetting co-authors when pair programming, but as will be mentioned later this was mainly an issue at the beginning of the project.
-
+![commit statistics](./diagrams/CommitStatistics.jpg)
 Issues were a bit more unfamiliar to some members and to start with the issues were copy-pasted from the project-requirements. 
 But after meeting with the TA there came an increased focus on rewriting the project-requirements in to actual issues. 
 This helps keep track of why different changes are necessary, what smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
