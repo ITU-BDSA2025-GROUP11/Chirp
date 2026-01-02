@@ -61,7 +61,7 @@ Above figure illustrates the onion architecture which the Chirp! Codebase is bui
 
 - Chirp.Core: This layer is the innermost layer of Chirp. Containing the Domain Model and the Data transfer Objects. Chirp.Core has no external dependencies.
 - Chirp.Infrastructure: Manages data persistence and retrieval, this data access interface is implemented using Entity Framework Core. This layer also encapsulates application logic. It manages data flow between the user interface and the repositories. 
-- Chirp.Web: The outermost layer constraining the razor pages for user interaction.
+- Chirp.Web: The outermost layer containing the razor pages for user interaction.
 
 This structure ensures the application is loosely coupled, maintainable and testable
 
