@@ -8,6 +8,11 @@ namespace Chirp.Infrastructure;
 
 public interface ICheepService
 {
+    /// <summary>
+    /// ICheepService is used for dependency injection and describes the method signatures which the CheepService contains
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
     Task<List<CheepDTO>> GetCheeps(string? author = null);        
     Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null);        
     Task PostCheep(string text, string authorId);        
@@ -20,7 +25,10 @@ public interface ICheepService
     public Task RemoveDislike(string currentUserId, int cheepIdToUndislike);
     public Task RemoveLike(string currentUserId, int cheepIdToUnLike);
 }
-
+/// <summary>
+/// CheepService is a class used by the application to interact with the database
+/// it provides the ability to query, create, update and delete
+/// </summary>
 public class CheepService : ICheepService
 {
     ICheepRepository _cheepRepository;
@@ -31,7 +39,12 @@ public class CheepService : ICheepService
         _cheepRepository = cheepRepository;
         _logger = logger;
     }
-
+    /// <summary>
+    /// Get all cheeps in the database
+    /// if an author is provided all cheeps written by that author are retrieved and only cheeps by that author
+    /// </summary>
+    /// <param name="author">optional specification</param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetCheeps(string? author = null)
     {
         {
@@ -52,10 +65,15 @@ public class CheepService : ICheepService
 
         }
     }        
-
+    /// <summary>
+    /// Method for posting a cheep, and adding it to the database
+    /// </summary>
+    /// <param name="text">the cheep text</param>
+    /// <param name="authorId">id of author posting cheep</param>
+    /// <exception cref="ArgumentException">throws an exception if non-existing author is trying to post a cheep</exception>
     public async Task PostCheep(string text, string authorId)
     {
-        if (text.Length > 160) return; //throw new ArgumentException("Your cheep is too long. Please keep it at 160 characters or less");
+        if (text.Length > 160) return;
         var author = await _cheepRepository.GetAuthorAndCheepsFromId(authorId);
         if (author == null) throw new ArgumentException("Author not found");
         var cheep = new Cheep
@@ -72,7 +90,11 @@ public class CheepService : ICheepService
     {
         return await _cheepRepository.IsFollowing(currentUserId, authorId);
     }
-
+    /// <summary>
+    /// method for liking a cheep
+    /// </summary>
+    /// <param name="currentUserId">user who is liking</param>
+    /// <param name="cheepIdToLike">cheep being liked</param>
     public async Task LikePost(string currentUserId, int cheepIdToLike)
     {
         var cheepToLike = await _cheepRepository.GetAuthorCheepAndLikes(cheepIdToLike);
@@ -87,7 +109,11 @@ public class CheepService : ICheepService
         cheepToLike.Likes.Add(userLiking);
         await _cheepRepository.SaveChanges();
     }
-
+    /// <summary>
+    /// method for removing a like
+    /// </summary>
+    /// <param name="currentUserId">user unliking</param>
+    /// <param name="cheepIdToUnLike">cheep to unlike</param>
     public async Task RemoveLike(string currentUserId, int cheepIdToUnLike)
     {
         var cheepToUnLike = await _cheepRepository.GetAuthorCheepAndLikes(cheepIdToUnLike);
@@ -101,7 +127,11 @@ public class CheepService : ICheepService
         cheepToUnLike.Likes.Remove(userUnliking);
         await _cheepRepository.SaveChanges();
     }
-
+    /// <summary>
+    /// method for disliking a post
+    /// </summary>
+    /// <param name="currentUserId">user disliking</param>
+    /// <param name="cheepIdToDislike">cheep to dislike</param>
     public async Task DislikePost(string currentUserId, int cheepIdToDislike)
     {
         var cheepToDislike = await _cheepRepository.GetAuthorCheepAndDislikes(cheepIdToDislike);
@@ -115,7 +145,11 @@ public class CheepService : ICheepService
         cheepToDislike.Dislikes.Add(userDisliking);
         await _cheepRepository.SaveChanges();
     }
-
+    /// <summary>
+    /// method for removing a dislike
+    /// </summary>
+    /// <param name="currentUserId">user undisliking</param>
+    /// <param name="cheepIdToUndislike">cheep to undislike</param>
     public async Task RemoveDislike(string currentUserId, int cheepIdToUndislike)
     {
         var cheepToUndislike = await _cheepRepository.GetAuthorCheepAndDislikes(cheepIdToUndislike);
@@ -128,7 +162,14 @@ public class CheepService : ICheepService
         cheepToUndislike.Dislikes.Remove(userUndisliking);
         await _cheepRepository.SaveChanges();
     }
-
+    /// <summary>
+    /// get all cheeps to be shown on a users own timeline on a single page (usually of length 32)
+    /// all cheeps written by the user and all cheeps from users followed by the logged in user
+    /// </summary>
+    /// <param name="page">current page</param>
+    /// <param name="pageSize">size of the page</param>
+    /// <param name="authorName">name of logged-in user</param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetPaginatedCheepsFromAuthorAndFollowing(int page, int pageSize, string authorName)
     {
         var author = await _cheepRepository.GetAuthorNameAndFollowing(authorName);
@@ -140,7 +181,11 @@ public class CheepService : ICheepService
 
         return await _cheepRepository.GetPaginatedCheepsFromAuthorAndFollowing(page, pageSize, followingIds);
     }
-
+    /// <summary>
+    /// get all cheeps from logged-in user and all cheeps from all users followed by logged-in user
+    /// </summary>
+    /// <param name="authorName">logged-in user</param>
+    /// <returns></returns>
     public async Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(string authorName)
     {
         var author = await _cheepRepository.GetAuthorNameAndFollowing(authorName);
@@ -152,7 +197,13 @@ public class CheepService : ICheepService
 
         return await _cheepRepository.GetCheepsFromAuthorAndFollowing(followingIds);
     }
-
+    /// <summary>
+    /// method for getting only the current page cheeps on the public timeline
+    /// </summary>
+    /// <param name="currentPage"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="author">optional parameter</param>
+    /// <returns></returns>
     public Task<List<CheepDTO>> GetPaginatedCheeps(int currentPage, int pageSize, string? author = null)
     {
         currentPage--;
@@ -163,16 +214,13 @@ public class CheepService : ICheepService
 
         return _cheepRepository.GetPaginatedCheeps(currentPage, pageSize, query);
     }
-    
-    // public async Task<List<string>> GetFollowedIds(string userId)
-    // {
-    //     var user = await _cheepRepository.(userId);
-    //
-    //     if (user == null) return new List<string>();
-    //
-    //     return user.Following.Select(a => a.Id).ToList();
-    // }
-
+    /// <summary>
+    /// get the number of cheeps from a logged-in user summed with the count of all cheeps
+    /// from all users followed by logged-in user
+    /// used for calculating how many pages there are in total, shown on the bottom of all pages
+    /// </summary>
+    /// <param name="authorName">logged-in user</param>
+    /// <returns></returns>
     public async Task<int> GetCheepCountFromAuthorAndFollowing(string authorName)
     {
         var author = await _cheepRepository.GetAuthorNameAndFollowing(authorName);
@@ -184,7 +232,12 @@ public class CheepService : ICheepService
 
         return await _cheepRepository.CountCheeps(followingIds);
     }
-
+    /// <summary>
+    /// method for getting the count of all cheeps in the entire database
+    /// used to calculate the number of pages on the public timeline
+    /// </summary>
+    /// <param name="author">optional param</param>
+    /// <returns></returns>
     public async Task<int> GetCheepCount(string? author = null)
     {
         IQueryable<Cheep> query = _cheepRepository.GetAllCheeps();

@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure
 {
+    /// <summary>
+    /// Interface used for dependency injection, contains all the method-signatures for the CheepRepository
+    /// </summary>
     public interface ICheepRepository
     {
         Task<Author?> GetAuthorAndCheeps(string authorName);
@@ -27,7 +30,11 @@ namespace Chirp.Infrastructure
         Task<List<CheepDTO>> GetCheepsFromAuthorAndFollowing(List<string> followingIds);
         Task<List<CheepDTO>> GetPaginatedCheepsFromAuthorAndFollowing(int page, int pageSize, List<string> followingIds);
     }
-
+    /// <summary>
+    /// CheepRepository is a class used to perform CRUD-operations on the database
+    /// specifically CRUD-operations regarding Cheeps
+    /// the methods are used by the CheepService
+    /// </summary>
     public class CheepRepository : ICheepRepository
     {
         private readonly ChirpDbContext _context;
@@ -63,13 +70,6 @@ namespace Chirp.Infrastructure
                 .Select(c => EntityToDTO.ToDTO(c))
                 .ToListAsync(); 
         }
-
-        // public async Task<Author?> GetAuthorIdAndFollowing(string username)
-        // {
-        //     return await _context.Authors
-        //         .Include(a => a.Following)
-        //         .FirstOrDefaultAsync(a => a.UserName == username);
-        // }
 
         public void AddCheep(Cheep cheep)
         {

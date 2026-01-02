@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure;
-
+/// <summary>
+/// Interface used for dependency injection, contains all the method-signatures for the AuthorRepository
+/// </summary>
 public interface IAuthorRepository
 {
     Task AddUser(Author author);
@@ -20,7 +22,11 @@ public interface IAuthorRepository
     Task<bool> IsUserDeleted(string username);
     Task<Author?> FindUserAndDislikedCheeps(string authorId);
 }
-
+/// <summary>
+/// AuthorRepository is a class used to perform CRUD-operations on the database
+/// specifically CRUD-operations regarding Authors
+/// the methods are used by the AuthorService
+/// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpDbContext _context;
