@@ -55,13 +55,13 @@ who have liked and disliked the Cheep—all specific attributes for our applicat
 
 
 ## Architecture — In the small
-![OnionArchitectureDiagram.png](./diagrams/OnionArchitectureDiagram.png)
+![OnionArchitectureDiagramFixed.png](./diagrams/OnionArchitectureDiagramFixed.png)
 
 Above figure illustrates the onion architecture which the Chirp! Codebase is built upon. Dependencies flow exclusively inward, ensuring loosely coupled layers with inverted control. The application is structured into the three following layers:
 
 - Chirp.Core: This layer is the innermost layer of Chirp. Containing the Domain Model and the Data transfer Objects. Chirp.Core has no external dependencies.
 - Chirp.Infrastructure: Manages data persistence and retrieval, this data access interface is implemented using Entity Framework Core. This layer also encapsulates application logic. It manages data flow between the user interface and the repositories. 
-- Chirp.Web: The outermost layer constraining the razor pages for user interaction.
+- Chirp.Web: The outermost layer containing the razor pages for user interaction.
 
 This structure ensures the application is loosely coupled, maintainable and testable
 
@@ -75,17 +75,18 @@ The application relies on an SQLite database file.
 
 ## User activities
 ![Diagram of user activities](./diagrams/ActivityDiagram.jpg)
+
 The following section describes how a user navigates through the Chirp application
 from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
 
 ### 1. Start up
-Upon opening the website the user is presented with the Public Timeline. Here the user can view Cheeps from other authors but is unable to interact with them. 
+Upon opening the website the user is presented with the Public Timeline. Here the user can view Cheeps from other authors, but is unable to interact with them. 
 Via the buttons in the banner the user is then presented with two options.
 * Login
 * Register
 
 Should the user choose the login option they are prompted to login with an existing account.
-If however the user chooses register they are prompted for a Username and Email both of which must be unique within the system. Additionally the user must create a password that meets the following security criteria:
+If however the user chooses register, they are prompted for a Username and Email both of which must be unique within the system. Additionally the user must create a password that meets the following security criteria:
 * Minimum 6 characters.
 * At least one uppercase and one lowercase letter.
 * At least one number.
@@ -111,13 +112,13 @@ The user can switch to their private timeline. This view filters the content to 
 If the user decides to unfollow an author while on their own private timeline the page refreshes and that author's Cheeps immediately disappear from the private timeline.
 
 Clicking on another author's username in either the public or private timeline will link directly to their timeline showing all their cheeps.
-### 3. About me.
-The user can access the about Me page from the banner at any time. This section displays the user's profile information
+### 3. About Me
+The user can access the About Me page from the banner at any time. This section displays the user's profile information
 * Username
 * Email
 * List of followed accounts.
 
-At the bottom of this page the user finds the forget me button.
+At the bottom of this page the user finds the Forget Me button.
 Once pressed The user's Name and Email are anonymized in the database effectively deleting their account,
 the user is then immediately logged out and the user will be unable to log back in with the anonymized credentials.
 
@@ -127,7 +128,7 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 To understand how Chirp! handles these changes in states the underlying communication between the client, application services and the databases with be explained in greater detail in the following section.
 
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls trough _Chirp!_ 
 
 The UML sequence diagram below shows the flow of calls and responses that occurs when an unauthorized user accesses
 the public timeline on the Chirp! web app.
@@ -147,6 +148,7 @@ When an authorized user interacts with the platform the system logic shifts as t
 in the following sequence
 
 <br>![Sequence diagram Follow](./diagrams/SequenceDiagramFollow.jpg)
+
 When an auhorized user presses "Follow" the program addresses an HTTP POST request. The AuthorService then verifies the tidentity of both
 the follower and the target author before adding the new relationship to the database. To ensure integrity of the data the system
 verifies completion of each task before issuing a 302 REDIRECT, returning the user to the timeline with the newly updated
@@ -207,15 +209,14 @@ all issues the reject option on a pull request also leads back to work on the is
 
 ## GitHub
 
-The group used different functionalities on GitHub to help coordinate the responsibilities of different members as well as
+The group used different features on GitHub to help coordinate the responsibilities of different members, as well as
 keeping track of the weekly project requirements.
 
 The usage of project-boards, issues, code-review and actions enabled the group to coordinate its efforts as well as gaining
 familiarity with how to use these tools to write code and produce cohesive projects in larger groups.
 
-As can be seen from the picture of our project board mostly all issues have been resolved and at the writing of this
-only the finalizing of the report is missing as well as a bug which has been hard to replicate and therefore work on this bug was 
-not prioritised over the report.
+As can be seen from the picture of our project board almost all issues have been resolved and at the writing of this
+only the finalizing of the report is missing.
 ![picture of project board right before hand-in](./diagrams/projectBoard.jpg)
 To start with the main focus was in particular on following trunk-based-development. This meant trying to keep branches focused on smaller
 system changes and frequent pull requests. In the end this did not end up being proper trunk-based-development as branches were typically active
@@ -225,6 +226,7 @@ All group members had prior git experience from the first year project, but even
 would be commited. This can be seen in the uneven commit statistics on the GitHub repository page. Another factor in the uneven statistics is a result of
 forgetting co-authors when pair programming, but as will be mentioned later this was mainly an issue at the beginning of the project.
 ![commit statistics](./diagrams/CommitStatistics.jpg)
+
 Issues were a bit more unfamiliar to some members and to start with the issues were copy-pasted from the project-requirements. 
 But after meeting with the TA there came an increased focus on rewriting the project-requirements in to actual issues. 
 This helps keep track of why different changes are necessary, what smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
