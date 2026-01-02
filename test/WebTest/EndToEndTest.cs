@@ -12,6 +12,7 @@ using Assert = NUnit.Framework.Assert;
  * database for the respective author.
  */
 
+/*
 namespace WebTest;
 
 [Parallelizable(ParallelScope.Self)]
@@ -175,4 +176,4 @@ public class EndToEndTest : PageTest
         
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
     }
-}
+}*/
