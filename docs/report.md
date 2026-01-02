@@ -61,7 +61,7 @@ Above figure illustrates the onion architecture which the Chirp! Codebase is bui
 
 - Chirp.Core: This layer is the innermost layer of Chirp. Containing the Domain Model and the Data transfer Objects. Chirp.Core has no external dependencies.
 - Chirp.Infrastructure: Manages data persistence and retrieval, this data access interface is implemented using Entity Framework Core. This layer also encapsulates application logic. It manages data flow between the user interface and the repositories. 
-- Chirp.Web: The outermost layer constraining the razor pages for user interaction.
+- Chirp.Web: The outermost layer containing the razor pages for user interaction.
 
 This structure ensures the application is loosely coupled, maintainable and testable
 
@@ -75,6 +75,7 @@ The application relies on an SQLite database file.
 
 ## User activities
 ![Diagram of user activities](./diagrams/ActivityDiagram.jpg)
+
 The following section describes how a user navigates through the Chirp application
 from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
 
@@ -126,9 +127,9 @@ All cheeps from the deleted account will also be invisible and inaccessible for 
 Finally a user can choose to perform a standard logout. This returns them to the initial unauthenticated state on the Public Timeline, where they can choose to log in again or register a new account.
 
 
-## Sequence of functionality/calls trough _Chirp!_
 ## Sequence of functionality/calls trough _Chirp!_ 
 ![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
+
 The first UML sequence diagram shows the flow of calls and responses that occurs when an unauthorized user accesses
 the public timeline on the Chirp! web app.
 Although all messages passed along the lifelines are in reality asynchronous, 
@@ -137,6 +138,7 @@ When cheeps are retrieved from the database, each cheep's likes and dislikes are
 users cannot like nor dislike cheeps, they are still viewable to the logged-out user.
 
 <br>![Sequence diagram Follow](./diagrams/SequenceDiagramFollow.jpg)
+
 The second UML sequence diagram shows the flow of messages that occur when an authorized user starts following another
 user. This example is included to show how the program handles an HTTP POST-request.
 
@@ -193,9 +195,8 @@ keeping track of the weekly project requirements.
 The usage of project-boards, issues, code-review and actions enabled the group to coordinate its efforts as well as gaining
 familiarity with how to use these tools to write code and produce cohesive projects in larger groups.
 
-As can be seen from the picture of our project board mostly all issues have been resolved and at the writing of this
-only the finalizing of the report is missing as well as a bug which has been hard to replicate and therefore work on this bug was 
-not prioritised over the report.
+As can be seen from the picture of our project board almost all issues have been resolved and at the writing of this
+only the finalizing of the report is missing.
 ![picture of project board right before hand-in](./diagrams/projectBoard.jpg)
 To start with the main focus was in particular on following trunk-based-development. This meant trying to keep branches focused on smaller
 system changes and frequent pull requests. In the end this did not end up being proper trunk-based-development as branches were typically active
@@ -205,6 +206,7 @@ All group members had prior git experience from the first year project, but even
 would be commited. This can be seen in the uneven commit statistics on the GitHub repository page. Another factor in the uneven statistics is a result of
 forgetting co-authors when pair programming, but as will be mentioned later this was mainly an issue at the beginning of the project.
 ![commit statistics](./diagrams/CommitStatistics.jpg)
+
 Issues were a bit more unfamiliar to some members and to start with the issues were copy-pasted from the project-requirements. 
 But after meeting with the TA there came an increased focus on rewriting the project-requirements in to actual issues. 
 This helps keep track of why different changes are necessary, what smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
