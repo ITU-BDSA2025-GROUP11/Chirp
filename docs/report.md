@@ -129,6 +129,7 @@ Finally a user can choose to perform a standard logout. This returns them to the
 
 ## Sequence of functionality/calls trough _Chirp!_ 
 ![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
+
 The first UML sequence diagram shows the flow of calls and responses that occurs when an unauthorized user accesses
 the public timeline on the Chirp! web app.
 Although all messages passed along the lifelines are in reality asynchronous, 
