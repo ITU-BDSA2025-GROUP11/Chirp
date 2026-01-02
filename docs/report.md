@@ -11,7 +11,7 @@ numbersections: true
 ---
 
 # Design and Architecture of _Chirp!_
-The architecture of the application follows an onion structure, partitioning the src folder into three subfolders: Chirp.Core, Chirp.Infrastructure and
+The architecture of the application follows an onion structure, partitioning the *src* folder into three subfolders: Chirp.Core, Chirp.Infrastructure and
 Chirp.Web. These represent the different layers of the program where Chirp.Core resides as the base of the program, defining the entity classes as well
 as their complementing Data Transfer Objects (DTOs) without having references to Chirp.Infrastructure or Chirp.Web, keeping the core independent 
 from other classes. 
@@ -125,24 +125,44 @@ All cheeps from the deleted account will also be invisible and inaccessible for 
 ### 4. Logout
 Finally a user can choose to perform a standard logout. This returns them to the initial unauthenticated state on the Public Timeline, where they can choose to log in again or register a new account.
 
+To understand how Chirp! handles these changes in states the underlying communication between the client, application services and the databases with be explained in greater detail in the following section.
 
 ## Sequence of functionality/calls trough _Chirp!_
-## Sequence of functionality/calls trough _Chirp!_ 
-![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
-The first UML sequence diagram shows the flow of calls and responses that occurs when an unauthorized user accesses
+
+The UML sequence diagram below shows the flow of calls and responses that occurs when an unauthorized user accesses
 the public timeline on the Chirp! web app.
+
+![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
+
+An initial GET request is rerouted to the Public.OnGet() met within the PageModel. The CheepService the coordinates with
+the CheepRepository to retrieve posts. When *cheeps* are retrieved from the database, the system also fetches the total
+likes and dislikes. Although unauthenticated users are restricted from the action of liking or disliking, they remain viewable to ensure the visual experience.
+
 Although all messages passed along the lifelines are in reality asynchronous, 
 they are reflected as being synchronous in the diagrams, as it was not possible to change the look of the arrowheads.
 When cheeps are retrieved from the database, each cheep's likes and dislikes are also fetched. Although unauthorized 
 users cannot like nor dislike cheeps, they are still viewable to the logged-out user.
 
+When an authorized user interacts with the platform the system logic shifts as the application now has to handle HTTP POST-requests
+in the following sequence
+
 <br>![Sequence diagram Follow](./diagrams/SequenceDiagramFollow.jpg)
-The second UML sequence diagram shows the flow of messages that occur when an authorized user starts following another
-user. This example is included to show how the program handles an HTTP POST-request.
+When an auhorized user presses "Follow" the program addresses an HTTP POST request. The AuthorService then verifies the tidentity of both
+the follower and the target author before adding the new relationship to the database. To ensure integrity of the data the system
+verifies completion of each task before issuing a 302 REDIRECT, returning the user to the timeline with the newly updated
+social data.
 
 # Process
 
+The following section covers the transition of code moves from development to production through a structured automation
+pipeline.
+
 ## Build, test, release, and deployment
+
+The reliability of our system is maintained through a CI/CD pipeline. To ensure that every update to Chirp! is functional
+we use four GitHub Action workflows that automate the movement of code from
+development to production
+
 ![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
 
 ### Test
