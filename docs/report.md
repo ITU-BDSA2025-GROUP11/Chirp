@@ -126,7 +126,6 @@ All cheeps from the deleted account will also be invisible and inaccessible for 
 Finally a user can choose to perform a standard logout. This returns them to the initial unauthenticated state on the Public Timeline, where they can choose to log in again or register a new account.
 
 
-## Sequence of functionality/calls trough _Chirp!_
 ## Sequence of functionality/calls trough _Chirp!_ 
 ![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
 The first UML sequence diagram shows the flow of calls and responses that occurs when an unauthorized user accesses
