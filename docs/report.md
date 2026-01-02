@@ -171,6 +171,12 @@ development to production which can be seen in the model below and will be expla
 There are two main workflows, PlayWrightTest.yml and dotnetTest.yml, which test the program. These were used for automatically testing pull-requests, such that if the tests
 fail the pull-request is automatically rejected until all tests pass. There were some issues with automatically testing the PlayWright-tests and
 therefore there is a separate workflow specifically for these tests.
+Although the end-to-end tests made using Playwright (found in /test/WebTest/EndToEndTest.cs) builds and
+yields 'Success' upon running them from the code editor, they yield 'Fail' when ran using the 
+GitHub Playwright workflow. The workflow in itself seemingly works fine, and this is why the choice was made to keep 
+it in the repository. The issue with the tests and the workflow working apart from each other, but not together, 
+could be caused by the choice to not set up a test database for the tests. This choice was made due to the fact that a lot
+of time consuming technical errors were met when trying to test with Playwright.
 
 ### Release
 

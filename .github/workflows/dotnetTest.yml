@@ -8,23 +8,66 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
   workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Run Unit & Integration Tests
+        run: |
+          dotnet test test/CoreTest/CoreTest.csproj --no-build
+          dotnet test test/InfrastructureTest/InfrastructureTest.csproj --no-build
+          dotnet test test/DatabaseTest/DatabaseTest.csproj --no-build
+
+      - name: Install Playwright Browsers
+        run: |
+          pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install
+          pwsh test/WebTest/bin/Debug/net8.0/playwright.ps1 install-deps
+
+      - name: Create Dev Certificate
+        run: dotnet dev-certs https
+
+      - name: Start Web App
+        shell: bash
+        env:
+          ASPNETCORE_URLS: https://localhost:7103
+        run: |
+          dotnet run --project src/Chirp.Web/Chirp.Web.csproj --no-build --no-launch-profile > webapp.log 2>&1 &
+          APP_PID=$!
+          
+          echo "Waiting for Web App to start (PID: $APP_PID)..."
+          
+          for i in {1..30}; do
+           if curl -s -k https://localhost:7103 > /dev/null; then
+             echo "✅ Web App started successfully!"
+             exit 0
+           fi
+           echo "Waiting... ($i/30)"
+           sleep 1
+          done
+          
+          echo "Web App failed to start within 30 seconds."
+          echo "---------------- APP LOGS ----------------"
+          cat webapp.log
+          echo "------------------------------------------"
+          
+          kill $APP_PID
+          exit 1
+
+      - name: Run End-to-End Tests
+        run: dotnet test test/WebTest/WebTest.csproj --no-build --verbosity normal

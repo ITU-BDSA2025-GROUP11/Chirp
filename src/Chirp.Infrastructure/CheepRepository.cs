@@ -73,6 +73,17 @@ namespace Chirp.Infrastructure
 
         public void AddCheep(Cheep cheep)
         {
+            if (_context == null)
+                throw new InvalidOperationException("_context is NULL in CheepRepository");
+
+            if (_context.Cheeps == null)
+                throw new InvalidOperationException("_context.Cheeps is NULL");
+
+            if (cheep.Author.Id == null)
+                throw new InvalidOperationException("authorId is NULL");
+
+            if (cheep.Text == null)
+                throw new InvalidOperationException("text is NULL");
             _context.Cheeps.Add(cheep);
         }
 
