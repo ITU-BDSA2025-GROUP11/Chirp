@@ -1,10 +1,3 @@
-Hejsa
+# _Chirp!_
 
-De vigtigt at vi holder den folder struktur som er 
-implementeret i projektet nu.
-
-Hvis i gerne vil lave nye projects, 
-så lav et ny project i solution og specificer, 
-at i vil oprette projektet i RazorChirp/src
-
-tak :)
+_Chirp!_ is a twitter-clone developped as part of the course Analysis, Design, and Software Architecture at the IT University of Copenhagen.
