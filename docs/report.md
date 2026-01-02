@@ -138,6 +138,7 @@ When cheeps are retrieved from the database, each cheep's likes and dislikes are
 users cannot like nor dislike cheeps, they are still viewable to the logged-out user.
 
 <br>![Sequence diagram Follow](./diagrams/SequenceDiagramFollow.jpg)
+
 The second UML sequence diagram shows the flow of messages that occur when an authorized user starts following another
 user. This example is included to show how the program handles an HTTP POST-request.
 
@@ -206,6 +207,7 @@ All group members had prior git experience from the first year project, but even
 would be commited. This can be seen in the uneven commit statistics on the GitHub repository page. Another factor in the uneven statistics is a result of
 forgetting co-authors when pair programming, but as will be mentioned later this was mainly an issue at the beginning of the project.
 ![commit statistics](./diagrams/CommitStatistics.jpg)
+
 Issues were a bit more unfamiliar to some members and to start with the issues were copy-pasted from the project-requirements. 
 But after meeting with the TA there came an increased focus on rewriting the project-requirements in to actual issues. 
 This helps keep track of why different changes are necessary, what smaller tasks are required to ensure that the overall issue is resolved as well as keeping track of which issues are the most
