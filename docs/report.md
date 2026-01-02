@@ -75,6 +75,7 @@ The application relies on an SQLite database file.
 
 ## User activities
 ![Diagram of user activities](./diagrams/ActivityDiagram.jpg)
+
 The following section describes how a user navigates through the Chirp application
 from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
 
