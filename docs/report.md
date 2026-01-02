@@ -10,6 +10,15 @@ author:
 numbersections: true
 ---
 
+# Foreword regarding Azure deployment
+The Azure site is down, as we reached the credit limit on our Azure for Students subscription. 
+In our portal, the status is currently showing as "Quota exceeded".
+
+Because of this, our live link isn't accessible.
+
+We have already been in contact with Eduard regarding this issue via email. 
+As agreed, please consider this the formal reminder that the issue has already been dicussed."
+
 # Design and Architecture of _Chirp!_
 The architecture of the application follows an onion structure, partitioning the *src* folder into three subfolders: Chirp.Core, Chirp.Infrastructure and
 Chirp.Web. These represent the different layers of the program where Chirp.Core resides as the base of the program, defining the entity classes as well
