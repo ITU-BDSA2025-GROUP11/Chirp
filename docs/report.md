@@ -34,7 +34,7 @@ All this will be explained in detail in the following chapter, beginning at the 
 
 ## Domain model
 
-![Chirp.Core Class Diagram](./diagrams/DomainModelClassDiagram.jpg)
+![Chirp.Core Class Diagram](./images/DomainModelClassDiagram.jpg)
 
 The domain model in Chirp.Core consists of two primary entities: Author and Cheep. 
 The Author class extends the standard ASP.NET Core Identity IdentityUser class.
@@ -64,7 +64,7 @@ who have liked and disliked the Cheep—all specific attributes for our applicat
 
 
 ## Architecture — In the small
-![OnionArchitectureDiagramFixed.png](./diagrams/OnionArchitectureDiagramFixed.png)
+![OnionArchitectureDiagramFixed.png](./images/OnionArchitectureDiagramFixed.png)
 
 Above figure illustrates the onion architecture which the Chirp! Codebase is built upon. Dependencies flow exclusively inward, ensuring loosely coupled layers with inverted control. The application is structured into the three following layers:
 
@@ -76,14 +76,14 @@ This structure ensures the application is loosely coupled, maintainable and test
 
 
 ## Architecture of deployed application
-![Diagram of the architecture of deployed application](./diagrams/DeploymentDiagram.jpg)
+![Diagram of the architecture of deployed application](./images/DeploymentDiagram.jpg)
 
 The deployed application is hosted on Azure Web Services. 
 The application is deployed from GitHub via an auto-generated workflow file.
 The application relies on an SQLite database file.
 
 ## User activities
-![Diagram of user activities](./diagrams/ActivityDiagram.jpg)
+![Diagram of user activities](./images/ActivityDiagram.jpg)
 
 The following section describes how a user navigates through the Chirp application
 from registering a new account to navigating the different timelines, interacting with other users and finally deleting an existing account.
@@ -142,7 +142,7 @@ To understand how Chirp! handles these changes in states the underlying communic
 The UML sequence diagram below shows the flow of calls and responses that occurs when an unauthorized user accesses
 the public timeline on the Chirp! web app.
 
-![Sequence diagram Public](./diagrams/SequenceDiagramPublic.jpg)
+![Sequence diagram Public](./images/SequenceDiagramPublic.jpg)
 Although all messages passed along the lifelines are in reality asynchronous,
 they are reflected as being synchronous in the diagrams, as it was not possible to change the look of the arrowheads.
 
@@ -153,7 +153,7 @@ Therefore, the system also fetches the total likes and dislikes.
 When an authorized user interacts with the platform, the system logic shifts as the application now has to handle HTTP POST-requests
 in the following sequence
 
-<br>![Sequence diagram Follow](./diagrams/SequenceDiagramFollow.jpg)
+<br>![Sequence diagram Follow](./images/SequenceDiagramFollow.jpg)
 
 When an auhorized user presses "Follow", the program addresses an HTTP POST request. The AuthorService then verifies the identity of both
 the follower and the target author before adding the new relationship to the database. To ensure integrity of the data, the system
@@ -171,7 +171,7 @@ The reliability of our system is maintained through a CI/CD pipeline. To ensure 
 we use four GitHub Action workflows that automate the movement of code from
 development to production which can be seen in the model below and will be explained in the following sections:
 
-![diagram of the four main workflow files](./diagrams/WorkflowDiagrams.jpg)
+![diagram of the four main workflow files](./images/WorkflowDiagrams.jpg)
 
 ### Test
 
@@ -215,7 +215,7 @@ When a new feature is merged into main, resulting in a new deployment, all users
 The following chapter explains the working process and the decisions made while working on Chirp! as a team
 
 ## Development Process
-![diagram of the typical development flow](./diagrams/DevelopmentDiagram.png)
+![diagram of the typical development flow](./images/DevelopmentDiagram.png)
 The above diagram illustrates the typical flow from creation of a new issue to a push to main. As we strived to complete
 all issues the reject option on a pull request also leads back to work on the issue.
 
@@ -229,7 +229,7 @@ familiarity with how to use these tools to write code and produce cohesive proje
 
 As can be seen from the picture of our project board almost all issues have been resolved and at the writing of this
 only the finalizing of the report is missing.
-![picture of project board right before hand-in](./diagrams/projectBoard.jpg)
+![picture of project board right before hand-in](./images/projectBoard.jpg)
 To start with the main focus was in particular on following trunk-based-development. This meant trying to keep branches focused on smaller
 system changes and frequent pull requests. In the end this did not end up being proper trunk-based-development as branches were typically active
 for a few days up to a week. We felt this was okay considering we were balancing this project as well as other courses simultaneously.
@@ -237,7 +237,7 @@ for a few days up to a week. We felt this was okay considering we were balancing
 All group members had prior git experience from the first year project, but even so there was a bit of a difference with regards to how often changes
 would be commited. This can be seen in the uneven commit statistics on the GitHub repository page. Another factor in the uneven statistics is a result of
 forgetting co-authors when pair programming, but as will be mentioned later this was mainly an issue at the beginning of the project.
-![commit statistics](./diagrams/CommitStatistics.jpg)
+![commit statistics](./images/CommitStatistics.jpg)
 
 Issues were a bit more unfamiliar to some members and to start with the issues were copy-pasted from the project-requirements. 
 But after meeting with the TA there came an increased focus on rewriting the project-requirements in to actual issues. 
