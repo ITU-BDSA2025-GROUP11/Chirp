@@ -3,7 +3,9 @@ using Chirp.Core.DTO;
 using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure;
-
+/// <summary>
+/// IAuthorService is used for dependency injection and describes the method signatures which the AuthorService contains
+/// </summary>
 public interface IAuthorService
 {
     Task CreateUser(string authorName, string authorEmail);
@@ -17,7 +19,10 @@ public interface IAuthorService
     public Task<List<int>> GetLikedCheepIds(string userId);
     public Task<List<int>> GetDislikedCheepIds(string userId);
 }
-
+/// <summary>
+/// AuthorService is a class used by the application to interact with the database
+/// it provides the ability to query, create, update and delete
+/// </summary>
 public class AuthorService : IAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
@@ -29,7 +34,11 @@ public class AuthorService : IAuthorService
         _authorRepository = authorRepository;
         _logger = logger;
     }
-
+/// <summary>
+/// Creates a new user in the database
+/// </summary>
+/// <param name="authorName"> name of the new user</param>
+/// <param name="authorEmail">email of the new user</param>
     public async Task CreateUser(string authorName, string authorEmail)
     {
         if (string.IsNullOrEmpty(authorName))
@@ -47,7 +56,11 @@ public class AuthorService : IAuthorService
 
         await _authorRepository.AddUser(author);
     }
-    
+    /// <summary>
+    /// Retrieves the Ids of all users followed by the specified UserId
+    /// </summary>
+    /// <param name="userId">the user who is following other users</param>
+    /// <returns></returns>
     public async Task<List<string>> GetFollowedIds(string userId)
     {
         var user = await _authorRepository.FindUserAndFollowing(userId);
@@ -56,7 +69,11 @@ public class AuthorService : IAuthorService
 
         return user.Following.Select(a => a.Id).ToList();
     }
-
+/// <summary>
+/// Method to follow other users
+/// </summary>
+/// <param name="currentUserId">user who wants to follow another user</param>
+/// <param name="authorIdToFollow">user to be followed by currentUserId</param>
     public async Task FollowUser(string currentUserId, string authorIdToFollow)
     {
         var userToFollow = await _authorRepository.FindUser(authorIdToFollow);
@@ -71,7 +88,11 @@ public class AuthorService : IAuthorService
             await _authorRepository.SaveChanges();
         }
     }
-
+/// <summary>
+/// method for unfollowing users
+/// </summary>
+/// <param name="currentUserId">user who wants to unfollow another user</param>
+/// <param name="authorIdToUnfollow">user to be unfollowed by currentUserId</param>
     public async Task UnfollowUser(string currentUserId, string authorIdToUnfollow)
     {
         var userToUnfollow = await _authorRepository.FindUser(authorIdToUnfollow);
@@ -83,7 +104,11 @@ public class AuthorService : IAuthorService
         currentUser.Following.Remove(userToUnfollow);
         await _authorRepository.SaveChanges();
     }
-    
+    /// <summary>
+    /// Retrieve information of a user, based on username
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
     public async Task<UserInfoDTO?> GetUserInfo(string username)
     {
         var author = await _authorRepository.GetUserInfo(username);
@@ -107,7 +132,11 @@ public class AuthorService : IAuthorService
     {
         return await _authorRepository.IsFollowing(currentUserId, authorId);
     }
-
+/// <summary>
+/// Method for "deleting" a user, users are not deleted they are anonymized
+/// </summary>
+/// <param name="username">user to delete</param>
+/// <returns></returns>
     public async Task<bool> DeleteUser(string username)
     {
         var author = await _authorRepository.GetAllUserInfo(username);
@@ -131,7 +160,11 @@ public class AuthorService : IAuthorService
     {
         return await GetUserInfo(username) == null;
     }
-    
+    /// <summary>
+    /// Get all cheeps a user has liked based on userId
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<List<int>> GetLikedCheepIds(string userId)
     {
         var user = await _authorRepository.FindUserAndLikedCheeps(userId);
@@ -140,7 +173,11 @@ public class AuthorService : IAuthorService
         
         return user.LikedCheeps.Select(c => c.CheepId).ToList();
     }
-
+    /// <summary>
+    /// Get all cheeps a user has disliked based on userId
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<List<int>> GetDislikedCheepIds(string userId)
     {
         var user = await _authorRepository.FindUserAndDislikedCheeps(userId);

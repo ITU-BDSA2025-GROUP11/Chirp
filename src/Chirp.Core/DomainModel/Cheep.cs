@@ -2,7 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Core.DomainModel;
-
+/// <summary>
+/// Entity class for the Concept of Cheeps in the Chirp program
+/// </summary>
 public class Cheep
 {
     [BindProperty]

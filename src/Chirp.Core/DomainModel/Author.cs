@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Core.DomainModel;
-
+/// <summary>
+/// Entity class for the concept of Authors and Users in the Chirp program
+/// Inherits from IdentityUser
+/// </summary>
 public class Author : IdentityUser
 {
     public required ICollection<Cheep> Cheeps { get; set; }

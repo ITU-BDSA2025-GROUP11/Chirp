@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
-
+/// <summary>
+/// Specifies the database context for the application
+/// provides extra-specifications on top of the ones generated in the migrations
+/// </summary>
 public class ChirpDbContext : IdentityDbContext<Author>
 {
     public DbSet<Cheep> Cheeps { get; set; } = null!;

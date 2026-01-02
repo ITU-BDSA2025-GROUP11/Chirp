@@ -2,6 +2,9 @@
 
 namespace Chirp.Core.DTO
 {
+    /// <summary>
+    /// Class for configuration of how to transfer Author-data from database to main application
+    /// </summary>
     public class AuthorDTO
     {
         public string Id { get; set; } = string.Empty;

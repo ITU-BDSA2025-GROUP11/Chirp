@@ -3,9 +3,6 @@ name: release chirp executable
 permissions:
   contents: write
 
-# on push w correct tag
-# build and test
-
 on:
   push:
    branches:
@@ -27,29 +24,35 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-      
-  test:
-    name: test
+  tag:
+    name: Generate tag for release
     needs: build
-    
     runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.tag.outputs.tag }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 8.0.x
-      - name: Test
-        run: dotnet test --no-build
+      - uses: actions/checkout@v2
+      - id: tag
+        name: Create Tag
+        run: |
+          TAG="v${{ github.run_number }}"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
   prep-release: 
     name: Prepare GitHub Release
-    needs: test
+    needs: tag
     
     runs-on: ubuntu-latest
     steps:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.tag.outputs.tag_name }}
+          name: Release ${{ needs.tag.outputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
@@ -57,7 +60,7 @@ jobs:
   
   release:
     name: Release
-    needs: prep-release
+    needs: [prep-release, tag]
     
     strategy:
       matrix: 
@@ -76,8 +79,8 @@ jobs:
       - name: Publish and package
         shell: bash 
         run: | 
-          release_name="Chirp-${{ github.ref_name }}-${{ matrix.os }}"
-          dotnet publish "Chirp.CLI/Chirp.CLI.csproj" -r "${{ matrix.os }}" -o "${release_name}" --sc false -p:PublishSingleFile=True
+          release_name="Chirp-${{ needs.tag.outputs.tag_name }}-${{ matrix.os }}"
+          dotnet publish "./src/Chirp.Web/Chirp.Web.csproj" -r "${{ matrix.os }}" -o "${release_name}" --sc false -p:PublishSingleFile=True
           
           7z a "${release_name}.zip" "${release_name}/."
           7z d "${release_name}.zip" "*.pdb"
@@ -85,8 +88,10 @@ jobs:
           rm -r "${release_name}"
 
       - name: Populate GitHub Release
+        
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ needs.tag.outputs.tag_name }}
           files: "Chirp-*" 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

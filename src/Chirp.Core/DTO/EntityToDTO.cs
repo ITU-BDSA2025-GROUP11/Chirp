@@ -2,6 +2,10 @@
 
 namespace Chirp.Core.DTO
 {
+    /// <summary>
+    /// Class for transforming a database-instance to a DTO-instance
+    /// provides method for transforming Author to AuthorDTO and Cheep to CheepDTO
+    /// </summary>
     public static class EntityToDTO
     {
         public static AuthorDTO ToDTO(Author author)
